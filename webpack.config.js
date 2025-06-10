@@ -3,9 +3,14 @@ const webpack = require('webpack');
 
 
 module.exports = {
+    mode: 'development',
+    performance: {
+        maxAssetSize: 1000000, // 1MB로 설정 (기본값은 244KB)
+        maxEntrypointSize: 1000000, // 엔트리포인트 크기 제한 설정
+    },
     context: path.resolve(__dirname, 'src/main/react'),
-    entry: {
-        main: './Main.js', //여러페이지 설정이 가능함
+    entry: { //이름에 대문자 쓰지 말기
+        main: './pages/main/Main.js', //여러페이지 설정이 가능함
         user: './User.js',
         signup: './pages/SignUp/SignUp.js'
 

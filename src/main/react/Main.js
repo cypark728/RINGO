@@ -7,9 +7,6 @@ function Main() {
     return (
         <div>
             <h3 className="app">이것이 멀티 페이지 렌더링 방식의 리액트다.</h3>
-
-
-
         </div>
 
     )
