@@ -14,8 +14,9 @@ module.exports = {
         user: './User.js',
         signup: './pages/SignUp/SignUp.js',
         noticelist: './Notice/NoticeList.js',
-        qnawrite: './Qna/QnaWrite.js'
-
+        qnawrite: './Qna/QnaWrite.js',
+        meeting: './pages/webrtc/Meeting.js',
+        chat: './pages/webrtc/Chat.js'
     },
     devtool: 'sourcemaps',
     cache: true,
@@ -56,6 +57,13 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'webfonts/[name][ext]'  // 웹폰트 폴더로 출력되게
+                }
             }
         ]
     },
