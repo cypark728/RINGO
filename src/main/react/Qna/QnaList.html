@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="QnaList.css">
+
+</head>
+
+
+
+<body>
+    
+    <div>
+        <!-- 제목/검색/아이콘 -->
+        <div class="contentTopBox"> 
+            <div class="textContentArea">
+                <div>
+                    <p>RINGO에 물어보세요</p>
+                </div>
+                <div class="qwer">
+                    <input type="text" class="qnaSearch" id="qnaSearchKeyword" placeholder="키워드를 검색하세요">
+                    <img src="/src/main/resources/static/img/Search_1.png" alt="검색" class="search-icon">
+                </div>
+            </div>
+            <div  class="imgContentArea">
+                <div>
+                    <img src="/src/main/resources/static/img/headsetandtalk.png" alt="문의리스트">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 자주묻는질문 -->
+        <div class="contentMiddleBox">
+            <div class="contentMiddleHeader">
+                <div class="contentMiddleTitle">자주 묻는 질문<div class="contentMiddleSubtitle">FAQ</div></div>
+                
+                <div class="contentMiddleMore">더보기></div>
+                
+            </div>
+            <div >
+                <div class="contentMiddleBody">
+                    <div>제자</div>
+                    <div>고수</div>
+                </div>
+                <div class="FAQContentBox">
+                    <!-- 제자자 -->
+                    <div class="FAQContentBoxStudent">
+                        <div >
+                            <div class="questionQMark">Q</div>
+                            <span>RINGO는 어떤 서비스 인가요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>수업은 어떻게 진행하나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>아이디와 비밀번호는 어떻게 찾나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>수업 리뷰는 어떻게 남기나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                    </div>
+                    <!-- 고수 -->
+                    <div class="FAQContentBoxTeacher">
+                        <div >
+                            <div class="questionQMark">Q</div>
+                            <span>고수는 어떻게 될 수 있나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>제자 모집은 어떻게 하나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>수업 상세페이지는 어떻게 구성하나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                        <div>
+                            <div class="questionQMark">Q</div>
+                            <span>수업은 어떻게 진행하나요?</span>
+                            <img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 문의사항 -->
+        <div class="contentBottomBox">
+            <div class="contentBottomHeader">
+                <div class="contentMiddleTitle">문의사항</div>
+                
+                <div class="contentMiddleMore">더보기></div>
+                
+            </div>
+
+            <div class="contentBottomBody">
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">번호</div>
+                    <div class="QnaAnswerTitle2">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+                <!-- 디비에서 정보 가져와서 반복 돌리기 -->
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">1</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">2</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">3</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">4</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">5</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+                <div class="QnaOneLine">
+                    <div class="QnaAnswerNumber">6</div>
+                    <div class="QnaAnswerTitle">공지 제목</div>
+                    <div class="QnaAnswerOther">
+                        <div>운영자</div>
+                        <div>시간간</div>
+                        <div><img src="/src/main/resources/static/img/buttom_arrow.png" alt="표시화살표" class="buttumArrow"></div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
