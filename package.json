@@ -1,8 +1,15 @@
 {
   "dependencies": {
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.16.0",
+    "postcss": "^8.5.4",
     "process": "^0.11.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-variants": "^1.0.0",
+    "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",
@@ -15,7 +22,7 @@
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
   },
-    "scripts": {
+  "scripts": {
     "start": "gradlew bootRun",
     "watch": "node_modules\\.bin\\webpack --watch --devtool inline-source-map"
   }
