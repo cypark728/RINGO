@@ -12,8 +12,9 @@ module.exports = {
     entry: { //이름에 대문자 쓰지 말기
         main: './pages/main/Main.js', //여러페이지 설정이 가능함
         user: './User.js',
-        signup: './pages/SignUp/SignUp.js'
-
+        signup: './pages/SignUp/SignUp.js',
+        noticelist: './Notice/NoticeList.js',
+        qnawrite: './Qna/QnaWrite.js'
 
     },
     devtool: 'sourcemaps',
