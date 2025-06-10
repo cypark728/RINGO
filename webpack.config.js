@@ -7,6 +7,8 @@ module.exports = {
     entry: {
         main: './Main.js', //여러페이지 설정이 가능함
         user: './User.js',
+        meeting: './pages/webrtc/Meeting.js',
+        chat: './pages/webrtc/Chat.js'
 
 
     },
@@ -49,6 +51,13 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'webfonts/[name][ext]'  // 웹폰트 폴더로 출력되게
+                }
             }
         ]
     },
