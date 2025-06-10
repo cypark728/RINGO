@@ -1,0 +1,210 @@
+
+.detailBox{
+    width: 70%;
+    min-width: 450px;
+    margin: auto;
+    padding-left: 10px;
+}
+
+.detailBox input {
+    padding-left: 10px;
+    width: 283px;
+}
+
+.background {
+    background-color: #FAFAFC;
+
+}
+
+.box {
+    width: 30%;
+    margin: auto;
+}
+.title {
+    margin: 0 auto;
+    border-bottom: 1px #777 solid;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.detail {
+    width: 100%;
+    margin: 0 auto;
+
+}
+
+.interest-row {
+    display: flex;
+    align-items: flex-start; /* 또는 center, baseline도 가능 */
+    margin-bottom: 20px;
+}
+
+.interest-label {
+    min-width: 80px;
+    line-height: 40px; /* 버튼 높이와 맞추기 */
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    margin-right: 34px;
+}
+
+.topic-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 0px;
+    width: 307px;
+}
+
+.topic-options button {
+    width: 90px;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #BABABA;
+    cursor: pointer;
+    font-size: 12px;
+    background: white;
+    transition: background 0.2s, border 0.2s;
+    margin: 0;
+    padding: 0;
+}
+
+.topic-options button.selected {
+    background-color: #FFEFE3;
+    border: 1.5px solid #FF8127;
+    font-weight: bold;
+    color: black;
+}
+
+.AgreeAll {
+    border: 0.5px #BABABA solid;
+    padding: 20px;
+
+}
+
+.Agree {
+    border: 0.5px #BABABA solid;
+    margin: 0 auto;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+
+
+.id  input {
+    margin-left: 70px;
+    height: 30px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.id  p {
+    margin-left: 114px;
+    font-size: 12px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.firstpw {
+    margin-left: 55px;
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.pw1 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pw > p {
+    margin-left: 114px;
+    font-size: 12px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.secondpw {
+    margin-left: 20px;
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.userInfo > .name {
+    margin-left: 83px;
+    height: 30px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+    margin-bottom: 20px;
+}
+
+.genderbox {
+    margin-bottom: 20px;
+}
+
+.gender {
+    margin-left: 85px;
+}
+
+.gender > .man > input {
+    width: 10px;
+    margin-right: 10px;
+}
+
+.gender > .woman {
+    margin-left: 30px;
+}
+
+.gender > .woman > input {
+    width: 10px;
+    margin-right: 10px;
+}
+
+.birth {
+    margin-bottom: 20px;
+}
+
+.birth > .year {
+    margin-left: 55px;
+    height: 30px;
+    width: 50px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.birth > .month {
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.birth > .day {
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+}
+
+.phone {
+    margin-left: 70px;
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+    margin-bottom: 20px;
+}
+
+.email {
+    margin-left: 70px;
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border: 0.5px #BABABA solid;
+    margin-bottom: 20px;
+}
