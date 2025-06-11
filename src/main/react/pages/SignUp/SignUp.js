@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './SignUp.css';
-import MyHeader from "../../components/MyHeader";
+import MyHeader from "../../components/header/Header";
 
 const allTopics = ['디자인', 'it·프로그래밍', '영상·사진', '마케팅', '주식·코인', '문서·글쓰기', '세무·법인·노무', '창업·사업', '기타'];
 
