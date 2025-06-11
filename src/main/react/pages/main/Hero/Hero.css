@@ -1,0 +1,80 @@
+/* Hero Section */
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    margin: 32px 150px;
+}
+
+.hero-section img {
+    height: 30%;
+    width: 30%;
+}
+
+.sub-heading {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.main-heading {
+    font-size: 70px;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.highlight-text {
+    color: #FF8127;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100vh;
+    height: 60px;
+    background: white;
+    border-radius: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 0 25px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #555;
+    background: transparent;
+}
+
+.search-bar input::placeholder{
+    color: #ccc
+}
+
+img.search-button {
+    width: 35px;
+    height: auto;
+    cursor: pointer;
+}
+
+.hero-categories {
+    display: flex;
+    place-content: space-between;
+    padding: 10px;
+}
+
+.hero-categories span{
+    padding: 5px 20px;
+    margin: 10px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 9999px;
+    font-size: 14px;
+    color: #222;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease;
+}
+
+.hero-categories span:hover {
+    background-color: #e2e2e2;
+}

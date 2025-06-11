@@ -1,14 +1,14 @@
 import React from "react";
-import './MyHeader.css';
+import './Header.css';
 
 
-function MyHeader() {
+function Header() {
 
     return (
         <div className="header-container">
             <header className="header">
                 <div className="logo">
-                    <img src="/ringoLogo.png" alt="로고"/>
+                    <img src="/img/logo.png" alt="로고"/>
                 </div>
 
                 <nav className="nav navCenter">
@@ -20,10 +20,10 @@ function MyHeader() {
 
                 <nav className="nav">
                     <a href="#">
-                        <img src="/message.png" alt="쪽지"/>
+                        <img src="/img/message.png" alt="쪽지"/>
                     </a>
                     <a href="#">
-                        <img src="/notification.png" alt="알림"/>
+                        <img src="/img/notification.png" alt="알림"/>
                     </a>
                     <a href="#">로그인</a>
                     <button className="signup-button">회원가입</button>
@@ -34,4 +34,4 @@ function MyHeader() {
     );
 }
 
-export default MyHeader;
+export default Header;
