@@ -12,8 +12,11 @@ module.exports = {
     entry: { //이름에 대문자 쓰지 말기
         main: './pages/main/Main.js', //여러페이지 설정이 가능함
         user: './User.js',
-
-
+        signup: './pages/SignUp/SignUp.js',
+        noticelist: './pages/Notice/NoticeList.js',
+        qnawrite: './pages/Qna/QnaWrite.js',
+        meeting: './pages/webrtc/Meeting.js',
+        chat: './pages/webrtc/Chat.js'
     },
     devtool: 'sourcemaps',
     cache: true,
@@ -54,6 +57,13 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'webfonts/[name][ext]'  // 웹폰트 폴더로 출력되게
+                }
             }
         ]
     },
