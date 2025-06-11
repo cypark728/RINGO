@@ -1,8 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './Main.css'; // CSS 파일을 import
+import MyHeader from "../../components/MyHeader";
 
-const categories = ["블로그", "PPT", "코딩", "로고 디자인", "PPT", "코딩", "로고 디자인"];
+const heroCategories = ["블로그", "PPT", "코딩", "로고 디자인", "PPT", "코딩", "로고 디자인"];
+const categories = [
+    { label: "디자인", filename: "design"},
+    { label: "IT•프로그래밍", filename: "programming"},
+    { label: "영상•사진", filename: "photo"},
+    { label: "마케팅", filename: "marketing"},
+    { label: "주식•코인", filename: "invest"},
+    { label: "문서•글쓰기", filename: "document"},
+    { label: "세무•법인•노무", filename: "tax"},
+    { label: "창업•사업", filename: "business"},
+    { label: "전체보기", filename: "all"}
+]
 const services = [
     { title: "블로그 제작", desc: "블로그를 제작해드립니다.", rating: 4.8 },
     { title: "Google GA4 설치", desc: "GA4 설치 도와드립니다.", rating: 4.9 },
@@ -13,29 +25,29 @@ function Main() {
     return (
         <div className="main-container">
             {/* Header */}
-            <header className="header">
-                <div className="logo">
-                    <img src="/ringoLogo.png" alt="로고"/>
-                </div>
+            {/*<header className="header">*/}
+            {/*    <div className="logo">*/}
+            {/*        <img src="/ringoLogo.png" alt="로고"/>*/}
+            {/*    </div>*/}
 
-                <nav className="nav navCenter">
-                    <a href="#">강의정보</a>
-                    <a href="#">커뮤니티</a>
-                    <a href="#">문의사항</a>
-                    <a href="#">공지사항</a>
-                </nav>
+            {/*    <nav className="nav navCenter">*/}
+            {/*        <a href="#">강의정보</a>*/}
+            {/*        <a href="#">커뮤니티</a>*/}
+            {/*        <a href="#">문의사항</a>*/}
+            {/*        <a href="#">공지사항</a>*/}
+            {/*    </nav>*/}
 
-                <nav className="nav">
-                    <a href="#">
-                        <img src="/message.png" alt="쪽지"/>
-                    </a>
-                    <a href="#">
-                        <img src="/notification.png" alt="알림"/>
-                    </a>
-                    <a href="#">로그인</a>
-                    <button className="signup-button">회원가입</button>
-                </nav>
-            </header>
+            {/*    <nav className="nav">*/}
+            {/*        <a href="#">*/}
+            {/*            <img src="/message.png" alt="쪽지"/>*/}
+            {/*        </a>*/}
+            {/*        <a href="#">*/}
+            {/*            <img src="/notification.png" alt="알림"/>*/}
+            {/*        </a>*/}
+            {/*        <a href="#">로그인</a>*/}
+            {/*        <button className="signup-button">회원가입</button>*/}
+            {/*    </nav>*/}
+            {/*</header>*/}
 
             {/* Hero Section */}
             <section className="hero-section">
@@ -54,7 +66,7 @@ function Main() {
                         <img className="search-button" src="/search.png" alt="검색"/>
                     </div>
                     <div className="hero-categories">
-                        {categories.map((cat, i) => (
+                        {heroCategories.map((cat, i) => (
                             <span key={i} className="category">{cat}</span>
                         ))}
                     </div>
@@ -65,7 +77,10 @@ function Main() {
             {/* Categories */}
             <div className="categories">
                 {categories.map((cat, i) => (
-                    <span key={i} className="category">{cat}</span>
+                    <div className="category">
+                        <img src={`/${cat.filename}.png`} alt={cat.label} data-category={cat.filename}/>
+                        <span key={i} className="category">{cat.label}</span>
+                    </div>
                 ))}
             </div>
 
@@ -202,10 +217,14 @@ function Main() {
             </footer>
 
         </div>
+
     );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Main />
+    <>
+        <MyHeader />
+        <Main />
+    </>
 );

@@ -6,33 +6,33 @@
     font-family: sans-serif;
 }
 
-/* Header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-}
+/*!* Header *!*/
+/*.header {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    font-size: 14px;*/
+/*}*/
 
-.nav a {
-    margin-right: 30px;
-    text-decoration: none;
-    color: black;
-}
+/*.nav a {*/
+/*    margin-right: 30px;*/
+/*    text-decoration: none;*/
+/*    color: black;*/
+/*}*/
 
-.nav .signup-button {
-    padding: 10px 20px;
-    background-color: #FF8127;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
+/*.nav .signup-button {*/
+/*    padding: 10px 20px;*/
+/*    background-color: #FF8127;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 8px;*/
+/*    font-weight: bold;*/
+/*    cursor: pointer;*/
+/*}*/
 
-.nav a img {
-    height: 20px;
-}
+/*.nav a img {*/
+/*    height: 20px;*/
+/*}*/
 
 /* Hero Section */
 .hero-section {
@@ -94,12 +94,12 @@ img.search-button {
 
 .hero-categories {
     display: flex;
-    place-content: center;
+    place-content: space-between;
     padding: 10px;
 }
 
 .hero-categories span{
-    padding: 5px 10px;
+    padding: 5px 20px;
     margin: 10px;
     background-color: #f1f1f1;
     border: none;
@@ -119,7 +119,7 @@ img.search-button {
 .categories {
     display: flex;
     padding: 10px;
-    justify-content: center;
+    justify-content: space-between;
     gap: 16px;
     font-size: 14px;
     color: #374151;
@@ -127,6 +127,19 @@ img.search-button {
 
 .category {
     cursor: pointer;
+    display: block;
+    height: 5%;
+    width: auto;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.category img {
+    height: 60px;
+}
+
+.category img[data-category="all"] {
+    height: 40px;
 }
 
 /* Interests Section */
