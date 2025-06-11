@@ -1,0 +1,33 @@
+/* General container */
+.header-container {
+    padding: 24px 150px;
+    font-family: sans-serif;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.nav a {
+    margin-right: 30px;
+    text-decoration: none;
+    color: black;
+}
+
+.nav .signup-button {
+    padding: 10px 20px;
+    background-color: #FF8127;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav a img {
+    height: 20px;
+}
