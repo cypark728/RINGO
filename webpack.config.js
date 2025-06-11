@@ -13,8 +13,8 @@ module.exports = {
         main: './pages/main/Main.js', //여러페이지 설정이 가능함
         user: './User.js',
         signup: './pages/SignUp/SignUp.js',
-        noticelist: './Notice/NoticeList.js',
-        qnawrite: './Qna/QnaWrite.js',
+        noticelist: './pages/Notice/NoticeList.js',
+        qnawrite: './pages/Qna/QnaWrite.js',
         meeting: './pages/webrtc/Meeting.js',
         chat: './pages/webrtc/Chat.js'
     },
