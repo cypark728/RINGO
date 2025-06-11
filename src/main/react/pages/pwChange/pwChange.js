@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './pwChange.css';
-import MyHeader from "../../components/MyHeader";
+import MyHeader from "../../components/header/Header";
 
 function PasswordChange() {
     const [phone, setPhone] = useState('');
