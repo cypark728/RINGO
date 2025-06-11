@@ -18,9 +18,9 @@ img {
     vertical-align: top;
 }
 
-body {
-    background-color: #F5F5F0;
-}
+/*body {*/
+/*    background-color: #F5F5F0;*/
+/*}*/
 
 body > div {
     width: 60%;
@@ -76,8 +76,8 @@ body > div {
 
 .search-icon {
     position: absolute;
-    left: 455px;
-    top: 32px;
+    left: 455px !important;
+    top: 30px !important;;
     transform: translateY(-50%);
     width: 30px;
     height: 30px;
@@ -134,16 +134,32 @@ body > div {
     font-size: 25px;
     text-align: center;
     width:50%;
-    border: 1px solid #777;
     padding: 20px 0;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-
+    cursor: pointer;
 }
 
-.contentMiddleBody > div:nth-of-type(1) {
+.FAQContentStudentTabActive {
+    border: 1px solid #777;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     border-bottom: none;
+}
 
+.FAQContentStudentTab {
+    border: none;
+    border-bottom: 1px solid #777;
+}
+
+.FAQContentTeacherTabActive {
+    border: 1px solid #777;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom: none;
+}
+
+.FAQContentTeacherTab {
+    border: none;
+    border-bottom: 1px solid #777;
 }
 
 .FAQContentBox {
@@ -152,25 +168,51 @@ body > div {
     padding: 30px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    
+
 }
 
-.FAQContentBoxStudent > div {
+.FAQContentBoxStudentActive {
+    display: block;
+}
+
+.FAQContentBoxStudent {
+    display: none;
+}
+
+.FAQContentBoxStudentActive > div > div {
     margin: 20px 0;
     display: flex;
     justify-content: space-between
 }
 
-
-
-.buttumArrow {
-    width: 36px;
-    height: 24px;
+.FAQContentBoxTeacher {
+    display: none;
 }
 
-.FAQContentBoxStudent > div > span:nth-of-type(1) {
+.FAQContentBoxTeacherActive {
+    display: block;
+}
+
+.FAQContentBoxTeacherActive > div > div {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between
+}
+
+.bottomArrow {
+    width: 36px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.FAQContentBoxStudentActive > div > div > span:nth-of-type(1) {
     width: 90%;
-    
+    cursor: pointer;
+}
+
+.FAQContentBoxTeacherActive > div > div > span:nth-of-type(1) {
+    width: 90%;
+    cursor: pointer;
 }
 
 .questionQMark {
@@ -180,17 +222,32 @@ body > div {
     font-weight: 900;
     text-align: center;
     line-height: 24px;
-    
 }
 
-.FAQContentBoxTeacher {
-    display: none;
+.FAQContentPost {
+    border-bottom: 2px solid #777;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #F5F5F0;
+    white-space: pre-line;
+    padding: 20px 30px;
+    margin: 10px;
+    min-height: 300px;
+}
+
+.on {
+    display: block !important;
+}
+
+.off {
+    display: none !important;
 }
 
 .contentBottomBox {
     width: 80%;
-    margin: 0 auto;
-    margin-top: 70px;
+    margin: 70px auto;
+    margin-bottom: 300px;
+
 }
 
 .contentBottomHeader {
@@ -199,13 +256,19 @@ body > div {
     align-items: center; /* 수직 정렬 */
     margin: 0px 10px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #4e4e4e;
 }
-
-
 
 .contentBottomBody {
     margin-top: 10px;
+
+}
+
+.contentBottomBody > div:nth-of-type(1) {
+    margin-top: 10px;
+}
+
+.contentBottomBody > div {
     display: flex;
     flex-direction: column; /* 수직 방향으로 정렬 */
     gap: 8px; /* 줄 간격(optional) */
@@ -219,6 +282,7 @@ body > div {
 .QnaAnswerTitle2 {
     width: 55%;
     text-align: center;
+    
 }
 
 .QnaAnswerTitle {
@@ -240,4 +304,17 @@ body > div {
 .QnaOneLine {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 10px ;
+    border-bottom: 1px solid rgb(192, 192, 192);
+}
+
+.qnaContentPost {
+    border-bottom: 2px solid #777;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #F5F5F0;
+    white-space: pre-line;
+    padding: 20px 30px;
+    margin: 10px;
+    min-height: 300px;
 }
