@@ -1,52 +1,143 @@
-
-.detailBox{
-    width: 70%;
-    min-width: 450px;
-    margin: auto;
-    padding-left: 10px;
-}
-
-.detailBox input {
-    padding-left: 10px;
-    width: 283px;
-}
-
 .background {
-    background-color: #FAFAFC;
-
+    background: #fafafc;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .box {
-    width: 30%;
-    margin: auto;
+    width: 480px;
+    margin: 60px auto 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    padding: 40px 40px 48px 40px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
+
 .title {
-    margin: 0 auto;
-    border-bottom: 1px #777 solid;
     text-align: center;
-    padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
+    border-bottom: 1px #eee solid;
+    padding-bottom: 18px;
 }
 
-.detail {
-    width: 100%;
-    margin: 0 auto;
+.title h1 {
+    font-size: 28px;
+    margin-bottom: 0;
+}
 
+.detailBox {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.form-label {
+    width: 100px;
+    font-size: 14px;
+    color: #222;
+    font-weight: 500;
+}
+
+.form-input {
+    flex: 1;
+    height: 40px;
+    border: 1px solid #bababa;
+    border-width: 0 0 2px 0;
+    padding-left: 14px;
+    font-size: 14px;
+    margin-left: 18px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-bottom: 2px solid #ff8127;
+}
+
+.form-input::placeholder {
+    font-size: 14px;
+    color: #bababa;
+}
+
+.radio-group {
+    display: flex;
+    gap: 24px;
+    margin-left: 18px;
+}
+
+.birth-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.terms {
+    margin: 36px 0 24px 0;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 18px 16px;
+    background: #fafafc;
+}
+
+.terms > p{
+    padding-left: 10px;
+}
+
+.AgreeAll {
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.AgreeAll .check {
+    margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    margin-bottom: 10px;
+}
+
+.AllAgree {
+    padding-left: 10px;
+}
+
+.AllAgree > span {
+    padding-left: 5px;
+}
+
+.AllAgree > p {
+    font-size: 10px;
+    color: #888;
+}
+
+.Agree {
+    border-radius: 5px;
+    font-size: 13px;
+    padding-left: 10px;
 }
 
 .interest-row {
     display: flex;
-    align-items: flex-start; /* 또는 center, baseline도 가능 */
+    align-items: flex-start;
     margin-bottom: 20px;
+    margin-top: 24px;
 }
 
 .interest-label {
     min-width: 80px;
-    line-height: 40px; /* 버튼 높이와 맞추기 */
+    line-height: 40px;
     white-space: nowrap;
     display: flex;
     align-items: center;
     margin-right: 34px;
+    font-weight: 500;
 }
 
 .topic-options {
@@ -76,135 +167,30 @@
     color: black;
 }
 
-.AgreeAll {
-    border: 0.5px #BABABA solid;
-    padding: 20px;
-
+.signup {
+    text-align: center;
+    margin-top: 32px;
 }
 
-.Agree {
-    border: 0.5px #BABABA solid;
-    margin: 0 auto;
-    padding: 10px;
-    margin-bottom: 10px;
+.signup_button {
+    width: 100%;
+    max-width: 320px;
+    height: 50px;
+    background-color: #FF8127;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-
-
-.id  input {
-    margin-left: 70px;
-    height: 30px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
+.signup_button:hover {
+    background: #ff9e53;
 }
 
-.id  p {
-    margin-left: 114px;
-    font-size: 12px;
-    opacity: 0.5;
-    margin-bottom: 20px;
-}
-
-.firstpw {
-    margin-left: 55px;
-    height: 30px;
-    width: 200px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-}
-
-.pw1 {
-    display: flex;
-    justify-content: space-between;
-}
-
-.pw > p {
-    margin-left: 114px;
-    font-size: 12px;
-    opacity: 0.5;
-    margin-bottom: 20px;
-}
-
-.secondpw {
-    margin-left: 20px;
-    height: 30px;
-    width: 200px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-}
-
-.userInfo > .name {
-    margin-left: 83px;
-    height: 30px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-    margin-bottom: 20px;
-}
-
-.genderbox {
-    margin-bottom: 20px;
-}
-
-.gender {
-    margin-left: 85px;
-}
-
-.gender > .man > input {
-    width: 10px;
-    margin-right: 10px;
-}
-
-.gender > .woman {
-    margin-left: 30px;
-}
-
-.gender > .woman > input {
-    width: 10px;
-    margin-right: 10px;
-}
-
-.birth {
-    margin-bottom: 20px;
-}
-
-.birth > .year {
-    margin-left: 55px;
-    height: 30px;
-    width: 50px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-}
-
-.birth > .month {
-    margin-left: 10px;
-    height: 30px;
-    width: 30px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-}
-
-.birth > .day {
-    margin-left: 10px;
-    height: 30px;
-    width: 30px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-}
-
-.phone {
-    margin-left: 70px;
-    height: 30px;
-    width: 200px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-    margin-bottom: 20px;
-}
-
-.email {
-    margin-left: 70px;
-    height: 30px;
-    width: 200px;
-    border-radius: 5px;
-    border: 0.5px #BABABA solid;
-    margin-bottom: 20px;
+.pw-error {
+    color: #ff3b3b;
+    font-size: 13px;
+    margin: -12px 0 16px 120px; /* label width + margin-left에 맞게 조정 */
 }
