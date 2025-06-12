@@ -38,3 +38,6 @@ out/
 
 ### node modules ###
 /node_modules
+
+### bundle ###
+/src/main/resources/static/bundle/
