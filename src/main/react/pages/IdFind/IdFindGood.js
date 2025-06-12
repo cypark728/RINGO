@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'; //root에 리액트 돔방식으로 렌더링시 필요합니다.
 import '../first.css'
 import './IdFindGood.css';
-import MyHeader from "../../components/MyHeader";
+import MyHeader from "../../components/header/Header";
 
 const idList = [
     { id: 'sdfs46dsjio', date: '2000-10-10' },
