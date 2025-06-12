@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './pwChange.css';
 import MyHeader from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 function PasswordChange() {
     const [phone, setPhone] = useState('');
@@ -64,5 +65,6 @@ root.render(
     <>
         <MyHeader/>
         <PasswordChange/>
+        <Footer/>
     </>
 );

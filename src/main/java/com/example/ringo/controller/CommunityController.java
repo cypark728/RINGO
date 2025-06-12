@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class SignController {
+public class CommunityController {
 
-    @GetMapping("/Sign/{pageName}") //.do 해주세요
+    @GetMapping("/Community/{pageName}") //.do 해주세요
     public String page(@PathVariable String pageName, Model model) {
         model.addAttribute("pageName", pageName);
         System.out.println("뷰이름:" + pageName);
 
-        return "sign"; //언제나 view화면으로 이동합니다.
+        return "community"; //언제나 view화면으로 이동합니다.
     }
 
 }

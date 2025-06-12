@@ -23,7 +23,11 @@ module.exports = {
         idfindGood: './pages/IdFind/IdFindGood.js',
         pwchange: './pages/pwChange/pwChange.js',
         pwreset: './pages/pwChange/pwReset.js',
-        login: './pages/Login/Login.js'
+        login: './pages/Login/Login.js',
+        userinfo: './pages/UserInfo/UserInfo.js',
+        community: './pages/Community/Community.js',
+        communitywrite: './pages/Community/CommunityWrite.js',
+        communitydetail: './pages/Community/CommunityDetail.js'
 
     },
     devtool: 'sourcemaps',
