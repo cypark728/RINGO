@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0; 
     box-sizing: border-box;
-    font-family: 'Pretendard-Regular';
+
 }
 
 li, ol, ul, dd, dl {
@@ -24,7 +24,7 @@ img {
 
 body > div {
     width: 60%;
-    margin: 200px auto;
+    margin: 20px auto;
 }
 
 .contentTopBox {
@@ -246,7 +246,7 @@ body > div {
 .contentBottomBox {
     width: 80%;
     margin: 70px auto;
-    margin-bottom: 300px;
+    margin-bottom: 100px;
 
 }
 
@@ -254,7 +254,7 @@ body > div {
     display: flex;
     justify-content: space-between;
     align-items: center; /* 수직 정렬 */
-    margin: 0px 10px;
+    margin: 0 10px;
     padding-bottom: 20px;
     border-bottom: 1px solid #4e4e4e;
 }

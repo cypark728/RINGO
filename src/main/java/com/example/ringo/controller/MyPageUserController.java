@@ -8,6 +8,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class MyPageUserController {
 
+    @GetMapping("/MyPage/mypageuser") //.do 해주세요
+    public String myPageUser(Model model) {
+        model.addAttribute("pageName", "mypageuser");
+        System.out.println("뷰이름:" + "mypageuser");
+
+        return "mypage"; //언제나 view화면으로 이동합니다.
+    }
+
+    @GetMapping("/MyPage/mypagegosu") //.do 해주세요
+    public String myPageGosu(Model model) {
+        model.addAttribute("pageName", "mypagegosu");
+        System.out.println("뷰이름:" + "mypagegosu");
+
+        return "mypage"; //언제나 view화면으로 이동합니다.
+    }
+
+
     @GetMapping("/MyPage/{pageName}") //.do 해주세요
     public String page(@PathVariable String pageName, Model model) {
         model.addAttribute("pageName", pageName);

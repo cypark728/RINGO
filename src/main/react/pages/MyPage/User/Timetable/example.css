@@ -1,0 +1,110 @@
+.timetable-container {
+    font-family: sans-serif;
+    padding: 1rem;
+}
+
+button {
+    margin: 0 8px 8px 0;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+/* 그리드 전체 영역 */
+.timetable-grid-editable {
+    position: relative;
+    width: calc(100px * 7 + 80px); /* 요일 7칸 + 시간 열 */
+    height: calc(60px * 16 + 30px); /* 16시간 + 헤더 */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+/* 왼쪽 시간 열 */
+.time-column {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    z-index: 2;
+}
+
+.corner-cell {
+    height: 30px;
+    background: #f8f8f8;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+/* 각 시간 라벨 */
+.time-label {
+    height: 60px;
+    line-height: 60px;
+    text-align: right;
+    padding-right: 8px;
+    font-size: 12px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #ccc;
+}
+
+/* 상단 요일 헤더 */
+.days-column {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    display: flex;
+    height: 30px;
+    width: 700px;
+    background: #f8f8f8;
+    border-bottom: 1px solid #ccc;
+    z-index: 2;
+}
+
+.day-label {
+    text-align: center;
+    line-height: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    width: 100px;
+    border-right: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+/* 배경 격자 */
+.grid-background {
+    position: absolute;
+    top: 30px;
+    left: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 700px;
+    height: 960px;
+    z-index: 1;
+}
+
+.grid-cell {
+    box-sizing: border-box;
+    border: 1px solid #f0f0f0;
+    width: 100px;
+    height: 60px;
+    background: #fff;
+    pointer-events: none;
+}
+
+/* 일정 블록 */
+.block-editable {
+    position: absolute;
+    background-color: rgba(65, 105, 225, 0.75);
+    border: 1px solid royalblue;
+    color: white;
+    padding: 6px;
+    font-size: 13px;
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    cursor: move;
+    z-index: 3;
+}
+
+.block-content {
+    user-select: none;
+}
