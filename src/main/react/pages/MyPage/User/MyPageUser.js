@@ -11,14 +11,14 @@ import Timetable from "./Timetable/Timetable";
 import Example from "./Timetable/example";
 
 
-export default function MyPageUser() {
+export default function MyPageUser({onConvert}) {
     const [activeTab, setActiveTab] = useState("home");
 
     return (
         <div className="container">
             <div className="content-wrapper">
                 {/* Sidebar */}
-                <LeftBar activeTab={activeTab} setActiveTab={setActiveTab} />
+                <LeftBar activeTab={activeTab} setActiveTab={setActiveTab} onConvert={onConvert} />
 
                 {/* Main Content */}
                 <main className="main">
@@ -48,7 +48,7 @@ export default function MyPageUser() {
                     <Timetable />
                     }
 
-                    <Example />
+                    {/*<Example />*/}
 
 
                 </main>
@@ -57,11 +57,11 @@ export default function MyPageUser() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <Header />
-        <MyPageUser />
-        <Footer />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <Header />
+//         <MyPageUser />
+//         <Footer />
+//     </>
+// );
