@@ -3,6 +3,8 @@ import "./QnaList.css";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactDOM from "react-dom/client";
 import NoticeList from "../Notice/NoticeList";
+import Footer from "../../components/footer/Footer";
+import Header from "../../components/header/Header";
 
 
 export default function QnaList() {
@@ -356,7 +358,7 @@ export default function QnaList() {
             {/*        </div>*/}
                 </div>
             </div>
-            <div>footer</div>
+
 
         </div>
 
@@ -366,5 +368,9 @@ export default function QnaList() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <QnaList/>
+    <>
+        <Header />
+        <QnaList/>
+        <Footer />
+    </>
 );
