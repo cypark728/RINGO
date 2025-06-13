@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './pwRest.css';
 import MyHeader from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 function PasswordReset() {
     const [password, setPassword] = useState('');
@@ -74,5 +75,6 @@ root.render(
     <>
         <MyHeader/>
         <PasswordReset/>
+        <Footer/>
     </>
 );
