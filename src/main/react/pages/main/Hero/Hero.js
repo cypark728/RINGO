@@ -1,11 +1,43 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Hero.css";
 
 const heroCategories = ["블로그", "PPT", "코딩", "로고 디자인", "PPT", "코딩", "로고 디자인"];
 
-function Hero() {
+const images = [
+    "/img/Carousel1.png",
+    "/img/Carousel2.png",
+    "/img/Carousel3.png",
+    "/img/Carousel4.png",
+    // ...이미지 경로 추가
+];
 
-    return(
+function Hero() {
+    const [index, setIndex] = useState(0);
+    const timerRef = useRef(null);
+
+    // 자동 슬라이드 타이머 시작 함수
+    const startTimer = () => {
+        timerRef.current = setInterval(() => {
+            setIndex(prev => (prev + 1) % images.length);
+        }, 2000);
+    };
+
+    // 마운트 시 타이머 시작, 언마운트 시 정리
+    useEffect(() => {
+        startTimer();
+        return () => clearInterval(timerRef.current);
+    }, []);
+
+    // 버튼 클릭 시: 다음 이미지 + 타이머 리셋
+    const goToNext = () => {
+        setIndex(prev => (prev + 1) % images.length);
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+        }
+        startTimer();
+    };
+
+    return (
         <section className="hero-section">
             <div>
                 <p className="sub-heading">지금 인기 있는 고수</p>
@@ -19,7 +51,7 @@ function Hero() {
                         placeholder="원하는 서비스를 검색해보세요"
                         className="search-input"
                     />
-                    <img className="search-button" src="/img/search.png" alt="검색"/>
+                    <img className="search-button" src="/img/search.png" alt="검색" />
                 </div>
                 <div className="hero-categories">
                     {heroCategories.map((cat, i) => (
@@ -27,9 +59,21 @@ function Hero() {
                     ))}
                 </div>
             </div>
-            <img src="/img/hero.png" alt="영웅이미지"/>
+            <div className="carousel-container">
+                {images.map((img, i) => (
+                    <img
+                        key={img}
+                        src={img}
+                        alt={`slide-${i}`}
+                        className={`carousel-image ${i === index ? "active" : ""}`}
+                    />
+                ))}
+                <button className="carousel-next-btn" onClick={goToNext}>
+                    {index + 1} / {images.length} <span style={{fontWeight: "bold"}}>{"\u25B6"}</span>
+                </button>
+            </div>
         </section>
-    )
+    );
 }
 
 export default Hero;
