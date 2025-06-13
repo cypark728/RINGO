@@ -5,6 +5,7 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import Category from "../../components/Category/Category";
 import SearchBar from "./SearchBar/SearchBar";
+import Lectures from "./Lectures/Lectures";
 
 
 function LectureInfo() {
@@ -13,7 +14,7 @@ function LectureInfo() {
         <div className="LectureInfo-container">
             <SearchBar/>
             <Category/>
-
+            <Lectures/>
         </div>
     );
 }
