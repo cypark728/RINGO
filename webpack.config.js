@@ -23,6 +23,7 @@ module.exports = {
         pwchange: './pages/pwChange/pwChange.js',
         pwreset: './pages/pwChange/pwReset.js',
         login: './pages/Login/Login.js',
+        lectureinfo: './pages/LectureInfo/LectureInfo.js'
         userinfo: './pages/UserInfo/UserInfo.js',
         community: './pages/Community/Community.js',
         communitywrite: './pages/Community/CommunityWrite.js',
