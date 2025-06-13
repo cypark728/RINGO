@@ -47,7 +47,7 @@ const services = [
 function Lectures() {
 
     return(
-        <div className="lectures-cards">
+        <div className="lectures-cards" >
             {services.map((service, idx) => (
                 <div className="service-card" key={idx}>
                     <img src={service.img} alt={service.title} />
