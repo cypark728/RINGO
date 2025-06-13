@@ -10,17 +10,18 @@ import Introduction from "./Introduction/Introduction";
 import MyStudyClass from "../User/MyStudyClass/MyStudyClass";
 import MyBookmark from "../User/MyBookmark/MyBookmark";
 import MyReview from "../User/MyReview/MyReview";
+import Timetable from "../User/Timetable/Timetable";
 
 
 
-export default function MyPageGosu() {
+export default function MyPageGosu({onBack}) {
     const [activeTab, setActiveTab] = useState("home");
 
     return (
         <div className="container">
             <div className="content-wrapper">
                 {/* Sidebar */}
-                <LeftBar activeTab={activeTab} setActiveTab={setActiveTab} />
+                <LeftBar activeTab={activeTab} setActiveTab={setActiveTab} onBack={onBack} />
 
                 {/* Main Content */}
                 <main className="main">
@@ -30,6 +31,7 @@ export default function MyPageGosu() {
                             <Introduction />
                             <MyClass />
                             <MyClassReview />
+                            <Timetable />
                         </>
                     }
                     {activeTab === "intro" &&
@@ -44,6 +46,10 @@ export default function MyPageGosu() {
                         // 내 수업 리뷰
                         <MyClassReview />
                     }
+                    {activeTab === "timetable" &&
+                        // 시간표
+                        <Timetable />
+                    }
 
                 </main>
             </div>
@@ -51,11 +57,11 @@ export default function MyPageGosu() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <Header />
-        <MyPageGosu />
-        <Footer />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <Header />
+//         <MyPageGosu />
+//         <Footer />
+//     </>
+// );

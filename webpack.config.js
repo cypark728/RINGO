@@ -31,7 +31,8 @@ module.exports = {
         mypageuser: './pages/MyPage/User/MyPageUser.js',
         mypagegosu: './pages/MyPage/Gosu/MyPageGosu.js',
         meeting: './pages/webrtc/Meeting.js',
-        chat: './pages/webrtc/Chat.js'
+        chat: './pages/webrtc/Chat.js',
+        mypage: './pages/MyPage/MyPageApp.js'
     },
     devtool: 'sourcemaps',
     cache: true,

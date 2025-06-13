@@ -2,7 +2,7 @@ import React from "react";
 import './LeftBar.css';
 import ReactDOM from "react-dom/client";
 
-export default function LeftBar({activeTab, setActiveTab }) {
+export default function LeftBar({activeTab, setActiveTab, onConvert }) {
 
     return (
         <aside className="sidebar">
@@ -35,7 +35,9 @@ export default function LeftBar({activeTab, setActiveTab }) {
                         시간표
                     </li>
                 </ul>
-                <button className="convert-button">고수 전환</button>
+                <button className="convert-button" onClick={onConvert}>
+                    고수 전환
+                </button>
             </div>
         </aside>
     )

@@ -36,9 +36,10 @@
     margin-top: 16px;
     display: flex;
     gap: 16px;
+
+
 }
 
 .footer-links a{
     text-decoration: none;
-
 }
