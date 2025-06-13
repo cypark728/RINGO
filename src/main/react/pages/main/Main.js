@@ -5,9 +5,8 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import Interest from "./Interest/Interest";
 import Hero from "./Hero/Hero";
-import Category from "./Category/Category";
+import Category from "../../components/Category/Category";
 import HighScoreService from "./HighScoreService/HighScoreService";
-
 import PopularService from "./PopularService/PopularService";
 import PopularGosu from "./PopularGosu/PopularGosu";
 import AskRingo from "./AskRingo/AskRingo";

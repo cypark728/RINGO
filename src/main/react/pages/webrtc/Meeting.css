@@ -23,6 +23,75 @@ img {
     display: none !important;
 }
 
+/* 숨김 처리 */
+.video-section.hidden,
+.code-container.hidden {
+    display: none;
+}
+
+/* 전체화면 모드 */
+.container.full-screen {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.container.full-screen .main-content {
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container.full-screen .video-section,
+.container.full-screen .code-container {
+    flex: 1; /* video-section과 비슷하게 크기 조절 */
+    min-height: 200px; /* 최소 높이 지정 */
+    overflow: auto; /* 내용 넘치면 스크롤 */
+    background: #f5f5f5; /* 배경 예시 */
+    border-radius: 20px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.code-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: #f5f5f5;
+    border-radius: 20px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 99;
+}
+
+.white-container{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: #f5f5f5;
+    border-radius: 20px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 99;
+}
+
+.code-container>div{
+    height: 100%;
+    width: 100%;
+}
+
+/* 전체화면일 때 헤더, 기타 UI 숨기기 */
+.container.full-screen .header,
+.container.full-screen .sidebar,
+.container.full-screen .side-panel,
+.container.full-screen .top {
+    display: none;
+}
+
 .contents.height {
     height: 100%;
 }
@@ -109,19 +178,12 @@ img {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    width: 200px;
+    width: 170px;
     font-size: 14px;
 }
 
-.close-btn {
-    position: absolute;
-    top: -10px;
-    right: 6px;
-    border: none;
-    background: white;
-    font-size: 14px;
-    cursor: pointer;
-    color: #666;
+.tooltip p{
+    font-size: 13px;
 }
 
 .close-btn:hover {
@@ -205,6 +267,7 @@ img {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    width: 50%;
 }
 
 .header {
@@ -249,6 +312,7 @@ img {
     gap: 40px;
     align-items: flex-end;
     transition: .6s;
+    z-index: 111;
 }
 
 .video-controls button.center {
@@ -286,6 +350,7 @@ img {
     height: 150px;
     justify-content: center;
     transition: .4s;
+    z-index: 111;
 }
 
 .volume-slider {
@@ -361,6 +426,7 @@ img {
     border-radius: 50%;
     transition: .8s;
     cursor: pointer;
+    z-index: 111;
 }
 
 .seeAll img {
