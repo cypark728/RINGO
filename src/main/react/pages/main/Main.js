@@ -12,11 +12,13 @@ import PopularGosu from "./PopularGosu/PopularGosu";
 import AskRingo from "./AskRingo/AskRingo";
 import Gosu from "./Gosu/Gosu";
 
+
 function Main() {
     return (
         <div className="main-container">
             {/* Hero Section */}
             <Hero />
+
             {/* Categories */}
             <Category />
             {/* Interests Section */}
@@ -27,10 +29,13 @@ function Main() {
             <PopularService />
             {/* 지금 인기 있는 고수 섹션 */}
             <PopularGosu/>
+
             {/* 링고에게 물어보세요 섹션 */}
             <AskRingo/>
             {/* 전문가 활동 유도 섹션 */}
+
             <Gosu/>
+
         </div>
 
     );
