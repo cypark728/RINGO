@@ -8,7 +8,7 @@
     margin: 0 auto;
 }
 
-.service-card {
+.lectures-cards .service-card {
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -18,38 +18,38 @@
     min-width: 0;
 }
 
-.service-card img {
+.lectures-cards .service-card img {
     width: 100%;
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 10px;
 }
 
-.service-title {
+.lectures-cards .service-card .service-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-.service-info {
+.lectures-cards .service-card .service-info {
     font-size: 13px;
     color: #888;
     margin-bottom: 4px;
 }
 
-.service-rating {
+.lectures-cards .service-card .service-info .service-rating {
     color: #facc15;
     font-weight: bold;
 }
 
-.service-meta {
+.lectures-cards .service-card .service-meta {
     font-size: 12px;
     color: #888;
     display: flex;
     justify-content: space-between;
 }
 
-.service-provider {
+.lectures-cards .service-card .service-meta .service-provider {
     color: #222;
     font-weight: 600;
 }
