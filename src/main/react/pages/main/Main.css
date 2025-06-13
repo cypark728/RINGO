@@ -1,122 +1,12 @@
 /* Main.css */
-
+html, body{
+    height: 100%;
+    margin: 0;
+}
 /* General container */
 .main-container {
     /*padding: 24px 150px;*/
     font-family: sans-serif;
-}
-
-/* 인기 있는 서비스 */
-.popular-services, .popular-experts {
-    margin-top: 48px;
-}
-
-.section-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.highlight-purple {
-    color: #6d28d9;
-}
-
-.highlight-green {
-    color: #10b981;
-}
-
-.service-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-}
-
-.service-item {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    padding: 16px;
-    text-align: center;
-}
-
-.service-item img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-/* 인기 있는 고수 */
-.expert-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.expert-card {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    padding: 16px;
-}
-
-.expert-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.expert-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.expert-info {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Ask Section */
-.ask-section {
-    margin-top: 60px;
-    padding: 24px 0;
-    background-color: #f9fafb;
-}
-
-.ask-grid {
-    display: flex;
-    justify-content: space-between;
-    gap: 32px;
-}
-
-.ask-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.ask-item p {
-    margin: 0;
-}
-
-.ask-sub {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-.ask-images {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ask-images img {
-    width: 100%;
-    border-radius: 8px;
 }
 
 /* Expert Join CTA */
