@@ -1,5 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import * as fabric from "fabric";
+// import { fabric } from 'fabric';
+// import { fabric } from 'fabric';
+// import fabric from 'fabric';
 import "./WhiteBoard.css";
 
 function Whiteboard() {
@@ -7,9 +10,11 @@ function Whiteboard() {
     const currentTool = useRef("pen");
     const drawing = useRef(false);
     const shapeRef = useRef(null);
-    const start = useRef({ x: 0, y: 0 });
+    const start = useRef({x: 0, y: 0});
     const color = useRef("#000000");
 
+
+    const toolbarRef = useRef(null);
 
     useEffect(() => {
         document.getElementById("colorPicker").oninput = (e) => {
@@ -21,12 +26,13 @@ function Whiteboard() {
             }
         };
 
-
         const canvasEl = document.getElementById("canvas");
 
         // 캔버스 크기 동기화
         canvasEl.width = canvasEl.clientWidth;
         canvasEl.height = canvasEl.clientHeight;
+
+        canvasRef.current = canvas;
 
         const canvas = new fabric.Canvas("canvas", {
             isDrawingMode: true,
@@ -37,6 +43,13 @@ function Whiteboard() {
         canvas.setHeight(canvasEl.clientHeight);
         canvasRef.current = canvas;
 
+        document.getElementById("select").onclick = () => {
+            currentTool.current = "select";        // 현재 툴은 선택 모드
+            canvas.isDrawingMode = false;          // 펜/지우개 끄기
+            canvas.selection = true;               // 전체 선택 가능
+            canvas.defaultCursor = 'default';      // 커서 일반 모양
+        };
+
         // 기본 펜 설정
         canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
         canvas.freeDrawingBrush.color = "#000000";
@@ -46,13 +59,18 @@ function Whiteboard() {
         document.getElementById("pen").onclick = () => {
             currentTool.current = "pen";
             canvas.isDrawingMode = true;
-            canvas.freeDrawingBrush.color = "#000000";
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+            canvas.freeDrawingBrush.color = color.current;
+            canvas.freeDrawingBrush.width = parseInt(document.getElementById("brushWidth").value, 10);
         };
 
         document.getElementById("eraser").onclick = () => {
             currentTool.current = "eraser";
             canvas.isDrawingMode = true;
-            canvas.freeDrawingBrush.color = "#f0f0f0";
+
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas); // ← 지우개도 그냥 연필 브러시
+            canvas.freeDrawingBrush.color = "##f0f0f0"; // ← 배경색과 같게 = 흰색
+            canvas.freeDrawingBrush.width = parseInt(document.getElementById("brushWidth").value, 10);
         };
 
         document.getElementById("addRect").onclick = () => {
@@ -65,12 +83,6 @@ function Whiteboard() {
             canvas.isDrawingMode = false;
         };
 
-        document.getElementById("addImage").onclick = () => {
-            fabric.Image.fromURL("/img/sample.jpg", (img) => {
-                img.scale(0.5);
-                canvas.add(img);
-            });
-        };
 
         document.getElementById("brushWidth").oninput = (e) => {
             canvas.freeDrawingBrush.width = parseInt(e.target.value, 10);
@@ -82,8 +94,10 @@ function Whiteboard() {
 
             if (currentTool.current === "rect" || currentTool.current === "circle") {
                 drawing.current = true;
+                canvas.selection = false;
+
                 const pointer = canvas.getPointer(opt.e);
-                start.current = { x: pointer.x, y: pointer.y };
+                start.current = {x: pointer.x, y: pointer.y};
 
                 let shape;
                 if (currentTool.current === "rect") {
@@ -146,6 +160,7 @@ function Whiteboard() {
         canvas.on("mouse:up", () => {
             drawing.current = false;
             shapeRef.current = null;
+            canvas.selection = true;
         });
 
         const handleKeyDown = (e) => {
@@ -163,21 +178,28 @@ function Whiteboard() {
             }
         };
 
+
         window.addEventListener("keydown", handleKeyDown);
 
         return () => {
+
             window.removeEventListener("keydown", handleKeyDown);
         };
+
     }, []);
+
+
 
     return (
         <div className="whiteboard-container">
-            <div className="toolbar">
+            <div className="toolbar" ref={toolbarRef}>
+                <button id="select">선택</button>
                 <button id="pen">펜</button>
                 <button id="eraser">지우개</button>
                 <button id="addRect">사각형</button>
                 <button id="addCircle">원</button>
-                <button id="addImage">이미지 삽입</button>
+
+
                 <label>
                     두께:<br/>
                     <input
@@ -191,7 +213,7 @@ function Whiteboard() {
                 </label>
                 <label>
                     색상:<br/>
-                    <input type="color" id="colorPicker" defaultValue="#000000" />
+                    <input type="color" id="colorPicker" defaultValue="#000000"/>
                 </label>
             </div>
             <canvas id="canvas" className="canvas"></canvas>

@@ -61,7 +61,7 @@ function Meeting() {
 
     useEffect(() => {
         // 1. Socket 서버 연결 (ex: localhost:8080)
-        socketRef.current = io('https://172.30.1.12:8181');  // socket.io-client import 필요
+        socketRef.current = io('http://172.30.1.12:8686');  // socket.io-client import 필요
 
         // 2. RTCPeerConnection 생성 (STUN 서버는 필수)
         pcRef.current = new RTCPeerConnection({
@@ -85,12 +85,14 @@ function Meeting() {
 
         // 4. 상대방 스트림 받기 (remoteVideoRef에 연결)
         pcRef.current.ontrack = (event) => {
+            console.log("상대방스트림받기",event);
             // 여러 트랙이 올 수 있으니 첫번째 스트림 가져오기
             remoteVideoRef.current.srcObject = event.streams[0];
         };
 
         // 5. ICE 후보 처리
         pcRef.current.onicecandidate = (event) => {
+            console.log("ICE후보처리,",event);
             if (event.candidate) {
                 socketRef.current.emit('ice-candidate', event.candidate);
             }
@@ -131,8 +133,8 @@ function Meeting() {
         };
     }, []);
 
-    console.log("showCode 상태:", showCode);
-    console.log("whiteBoard 상태:",activeIndex, showWhiteBoard);
+    // console.log("showCode 상태:", showCode);
+    // console.log("whiteBoard 상태:",activeIndex, showWhiteBoard);
     return (
         <div>
             <div className="container">
@@ -163,7 +165,7 @@ function Meeting() {
 
                     <div className="ai">
                         <div className="tooltip">
-                            <p>링고가 고수의 수업을 정리해드릴게요~~~</p>
+                            <p>링고가 고수의 수업을 정리해드릴게요!</p>
 
                         </div>
                         <figure><img src="/img/ai.png" alt=""/></figure>
@@ -183,7 +185,7 @@ function Meeting() {
                         <li>
                             <figure><img src="/img/me2.jpg" alt=""/></figure>
                             <div>
-                                <p>edfj_567</p>
+                                <p>edfj_5678</p>
                                 <span>제자</span>
                             </div>
 
