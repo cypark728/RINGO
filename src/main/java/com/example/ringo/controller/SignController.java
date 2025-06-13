@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class SignController {
 
-    @GetMapping("/{pageName}") //.do 해주세요
+    @GetMapping("/Sign/{pageName}") //.do 해주세요
     public String page(@PathVariable String pageName, Model model) {
         model.addAttribute("pageName", pageName);
         System.out.println("뷰이름:" + pageName);

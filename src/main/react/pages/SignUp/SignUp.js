@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './SignUp.css';
 import MyHeader from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 const allTopics = ['디자인', 'it·프로그래밍', '영상·사진', '마케팅', '주식·코인', '문서·글쓰기', '세무·법인·노무', '창업·사업', '기타'];
 
@@ -123,11 +124,11 @@ function SignUp() {
                     <div className="form-row">
                         <label className="form-label">생년월일</label>
                         <div className="birth-group">
-                            <input type="text" className="form-input" style={{width: "60px"}} placeholder="YYYY" />
+                            <input type="text" className="form-input" style={{width: "60px"}} placeholder="YYYY" maxLength={4}/>
                             <span>년</span>
-                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="MM" />
+                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="MM" maxLength={2}/>
                             <span>월</span>
-                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="DD" />
+                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="DD" maxLength={2}/>
                             <span>일</span>
                         </div>
                     </div>
@@ -192,5 +193,6 @@ root.render(
     <>
         <MyHeader/>
         <SignUp/>
+        <Footer/>
     </>
 );

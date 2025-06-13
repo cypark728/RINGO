@@ -4,6 +4,8 @@ import './Meeting.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import io from 'socket.io-client';
 import Chat from "./Chat";
+import Code from "./Code";
+import Whiteboard from "./Whiteboard";
 
 function Meeting() {
     const localVideoRef = useRef(null);
@@ -21,6 +23,12 @@ function Meeting() {
 
     // 전체 화면
     const [isFullScreen, setIsFullScreen] = useState(false);
+
+    // 코드
+    const [showCode, setShowCode] = useState(false);
+
+    // 화이트보드
+    const [showWhiteBoard, setShowWhiteBoard] = useState(false);
 
     const toggleFullScreen = () => {
         setIsFullScreen(prev => !prev);
@@ -123,7 +131,8 @@ function Meeting() {
         };
     }, []);
 
-
+    console.log("showCode 상태:", showCode);
+    console.log("whiteBoard 상태:",activeIndex, showWhiteBoard);
     return (
         <div>
             <div className="container">
@@ -134,8 +143,15 @@ function Meeting() {
                             {icons.map((icon, index) => (
                                 <li key={index} className={activeIndex === index ? 'on' : ''}>
                                     <button
-                                        className={activeIndex === index ? 'action' : ''}
-                                        onClick={() => setActiveIndex(index)}
+                                        className={activeIndex === index ? "action" : ""}
+                                        onClick={() => {
+                                            setActiveIndex(index);
+                                            if (icon === "fas fa-code") {
+                                                setShowCode((prev) => !prev);
+                                            } else if (icon === "fas fa-pencil") {
+                                                setShowWhiteBoard((prev) => !prev);
+                                            }
+                                        }}
                                     >
                                         <i className={icon}></i>
                                     </button>
@@ -147,8 +163,8 @@ function Meeting() {
 
                     <div className="ai">
                         <div className="tooltip">
-                            <p>이 이미지는 AI를 상징하는 아이콘입니다.</p>
-                            <button className="close-btn" onClick="this.parentElement.style.display='none'">✕</button>
+                            <p>링고가 고수의 수업을 정리해드릴게요~~~</p>
+
                         </div>
                         <figure><img src="/img/ai.png" alt=""/></figure>
                     </div>
@@ -156,7 +172,7 @@ function Meeting() {
 
                 <div className="wrap">
                     <ul className={`top ${isFullScreen ? 'hidden' : ''}`}>
-                    <li>
+                        <li>
                             <figure><img src="/img/me.jpg" alt=""/></figure>
                             <div>
                                 <p>edfj_56</p>
@@ -167,7 +183,7 @@ function Meeting() {
                         <li>
                             <figure><img src="/img/me2.jpg" alt=""/></figure>
                             <div>
-                                <p>edfj_56</p>
+                                <p>edfj_567</p>
                                 <span>제자</span>
                             </div>
 
@@ -184,14 +200,23 @@ function Meeting() {
                                     alt="clock"
                                 /> {time}</span>
                             </div>
-
                             <div className="video-section">
-                                <video
-                                    ref={remoteVideoRef}
-                                    autoPlay
-                                    playsInline
-                                    style={{width: "100%", objectFit: "cover", borderRadius: "10px"}}
-                                ></video>
+                                {activeIndex === 2 ? (
+                                    <div className="code-container">
+                                        <Code/>
+                                    </div>
+                                ) : activeIndex === 3 && showWhiteBoard ? (
+                                    <div className="white-container">
+                                        <Whiteboard/>
+                                    </div>
+                                ) : (
+                                    <video
+                                        ref={remoteVideoRef}
+                                        autoPlay
+                                        playsInline
+                                        style={{width: "100%", objectFit: "cover", borderRadius: "10px"}}
+                                    />
+                                )}
 
                                 {/*------------------ 🔊 볼륨 조절 UI----------------- */}
                                 <div className="volume-container">
