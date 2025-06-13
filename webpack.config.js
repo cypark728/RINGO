@@ -15,17 +15,13 @@ module.exports = {
         signup: './pages/SignUp/SignUp.js',
         noticelist: './pages/Notice/NoticeList.js',
         qnawrite: './pages/Qna/QnaWrite.js',
+
         qnalist: './pages/Qna/Qnalist.js',
         mypageuser: './pages/MyPage/User/MyPageUser.js',
         mypagegosu: './pages/MyPage/Gosu/MyPageGosu.js',
-        meeting: './pages/webrtc/Meeting.js',
-        chat: './pages/webrtc/Chat.js',
-        idfind: './pages/IdFind/IdFind.js',
-        idfindGood: './pages/IdFind/IdFindGood.js',
-        pwchange: './pages/pwChange/pwChange.js',
-        pwreset: './pages/pwChange/pwReset.js',
-        login: './pages/Login/Login.js'
 
+        meeting: './pages/webrtc/Meeting.js',
+        chat: './pages/webrtc/Chat.js'
     },
     devtool: 'sourcemaps',
     cache: true,
