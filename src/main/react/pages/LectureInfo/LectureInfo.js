@@ -10,6 +10,8 @@ import Lectures from "./Lectures/Lectures";
 
 function LectureInfo() {
 
+
+
     return (
         <div className="LectureInfo-container">
             <SearchBar/>
