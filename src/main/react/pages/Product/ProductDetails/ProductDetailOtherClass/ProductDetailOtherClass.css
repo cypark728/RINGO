@@ -8,11 +8,6 @@
     margin-bottom: 1rem;
 }
 
-.section-total {
-    font-size: 0.875rem;
-    font-weight: normal;
-}
-
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

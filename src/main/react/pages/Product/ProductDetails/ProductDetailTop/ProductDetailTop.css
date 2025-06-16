@@ -4,9 +4,13 @@
     box-sizing: border-box;
 }
 
+.topBox {
+    margin-top: 85px;
+}
+
 .leftTop {
     width: 74%;
-    border: 1px solid #777;
+    /*border: 1px solid #777;*/
     padding: 10px;
     height: 265px;
 }
@@ -77,11 +81,13 @@
 
 .gosuProfile > div:nth-of-type(3) {
     width: 15%;
-    height: 30px;
-    border: 1px solid #777;
+    height: 44px;
+    color: #FF8127;
+    border: 1px solid #FF8127;
     border-radius: 10px;
     padding: 5px;
     text-align: center;
-    margin-top: 15px;
-    line-height: 18px;
+    margin-top: 7px;
+    line-height: 32px;
+    font-size: 20px;
 }

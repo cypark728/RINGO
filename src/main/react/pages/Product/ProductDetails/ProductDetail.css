@@ -110,6 +110,7 @@
 .middleMenu > div {
     display: inline-block;
     margin-left: 20px;
+    cursor: pointer;
 }
 
 .middleMenu > div:nth-of-type(2) {
@@ -203,3 +204,10 @@
 /*    font-size: 18px;*/
 /*    font-weight: 500;*/
 /*}*/
+
+.otherClassBox {
+    width: 60%;
+    padding: 20px;
+    margin: 0 auto;
+    padding-right: 0;
+}

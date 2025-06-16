@@ -7,6 +7,8 @@ import ProductDetailTop from "./ProductDetailTop/ProductDetailTop";
 import ProductDetailBottomSideBar from "./ProductDetailBottomSideBar/ProductDetailBottomSideBar";
 import ProductDetailContent from "./ProductDetailContent/ProductDetailContent";
 import ProductDetailReview from "./ProductDetailReview/ProductDetailReview";
+import MyClass from "../../MyPage/Gosu/MyClass/MyClass";
+import ProductDetailOtherClass from "./ProductDetailOtherClass/ProductDetailOtherClass";
 
 
 
@@ -34,8 +36,8 @@ export default function ProductDetail() {
             {/*</div>*/}
             <div className="sizeCheck">
                 <div className="middleMenu">
-                    <div>서비스 설명</div>
-                    <div>리뷰</div>
+                    <div onClick={() => setActiveTab("content")}>서비스 설명</div>
+                    <div onClick={() => setActiveTab("review") }>리뷰</div>
                 </div>
                 <div className="downContent">
                     <div className="leftBottom">
@@ -91,6 +93,11 @@ export default function ProductDetail() {
                     {/*    <div>상담신청하기</div>*/}
                     {/*</div>*/}
                 </div>
+            </div>
+
+            <div className="otherClassBox">
+                <ProductDetailOtherClass />
+
             </div>
         </>
     );
