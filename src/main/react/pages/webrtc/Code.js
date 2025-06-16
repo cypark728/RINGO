@@ -37,6 +37,8 @@ function Code(){
                 defaultLanguage="java"
                 defaultValue={"// 테스트 코드ㅋ\nconsole.log('Hello world~~');"}
                 theme="vs-dark"
+                value={code}
+                onChange={handleChange}
             />
         </div>
     )

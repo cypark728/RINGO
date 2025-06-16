@@ -11,13 +11,13 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: '*',
-        methods: ['GET', 'POST']
+        // methods: ['GET', 'POST']
     }
 });
 
 // 클라이언트 연결 시
 io.on('connection', (socket) => {
-    console.log('🔌 유저 연결됨:', socket.id);
+    console.log('🔌 누군가 접속했어요!:', socket.id);
 
     // 메시지 받기
     socket.on('chat-message', (message) => {
@@ -29,6 +29,14 @@ io.on('connection', (socket) => {
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         });
     });
+
+    // ✅ 코드 공유 처리
+    socket.on('code-update', (code) => {
+        console.log('🧠 코드 업데이트 수신:', code);
+        socket.broadcast.emit('code-update', code);
+    });
+
+
 
     socket.on('disconnect', () => {
         console.log('❌ 유저 연결 종료:', socket.id);

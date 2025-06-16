@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'; //어느 컴포넌트이든 React임포트가 필요합니다.
+import React, {useEffect, useRef, useState} from 'react'; //어느 컴포넌트이든 React임포트가 필요합니다.
 import ReactDOM from 'react-dom/client'; //root에 리액트 돔방식으로 렌더링시 필요합니다.
 // import SocketJS from "sockjs-client";
 import './Chat.css' //css파일 임포트
-import  io  from 'socket.io-client';
+import { io }  from 'socket.io-client';
 
 
 const socket = io('http://172.30.1.12:8687');
@@ -10,6 +10,8 @@ const socket = io('http://172.30.1.12:8687');
 function Chat({room}) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const chatEndRef = useRef(null);
+
 
     useEffect(() => {
         // 메시지 수신
@@ -38,6 +40,11 @@ function Chat({room}) {
         if (e.key === 'Enter') sendMessage();
     };
 
+    useEffect(() => {
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     return (
         <div className="chat">
@@ -55,6 +62,7 @@ function Chat({room}) {
                     </div>
 
                 ))}
+                <div ref={chatEndRef} />
             </div>
 
             <div className="chat-input">
@@ -69,6 +77,7 @@ function Chat({room}) {
                     <img src="/img/send.png" alt="보내기" />
                 </button>
             </div>
+
         </div>
 
     )
