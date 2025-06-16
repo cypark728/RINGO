@@ -275,7 +275,7 @@ function CommunityDetail() {
                 {/* 댓글/답글 영역 */}
                 <CommentSection />
                 <div className={"Community-list-box"}>
-                    <button type={"button"} className={"Community-list"}>목록으로</button>
+                    <button type={"button"} className={"Community-list"}  onClick={() => window.location.href = "/Community/community"} >목록으로</button>
                 </div>
 
             </div>

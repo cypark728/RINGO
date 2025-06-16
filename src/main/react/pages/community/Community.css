@@ -121,6 +121,7 @@
     border-bottom: 1px solid #eee;
     padding: 22px 0;
     gap: 18px;
+    cursor: pointer;
 }
 .board-meta {
     width: 50px;
