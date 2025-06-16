@@ -1,39 +1,50 @@
-import React, {useEffect, useState} from 'react'; //어느 컴포넌트이든 React임포트가 필요합니다.
+import React, {useEffect, useRef, useState} from 'react'; //어느 컴포넌트이든 React임포트가 필요합니다.
 import ReactDOM from 'react-dom/client'; //root에 리액트 돔방식으로 렌더링시 필요합니다.
 // import SocketJS from "sockjs-client";
 import './Chat.css' //css파일 임포트
+import { io }  from 'socket.io-client';
+
+
+const socket = io('http://172.30.1.12:8687');
 
 function Chat({room}) {
-    // const socketRef = useRef(null);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const chatEndRef = useRef(null);
+
+
+    useEffect(() => {
+        // 메시지 수신
+        socket.on('chat-message', (msg) => {
+            setMessages(prev => [...prev, { from: 'other', ...msg }]);
+        });
+
+        return () => socket.off('chat-message');
+    }, []);
 
     const sendMessage = () => {
         if (!message.trim()) return;
 
-        // 내 메시지 추가
-        const myMessage = { from: 'me', text: message };
-        setMessages(prev => [...prev, myMessage]);
+        const myMsg = {
+            from: 'me',
+            text: message,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
 
-        // 가짜 상대 메시지 1초 후 추가
-        setTimeout(() => {
-            const replyTime = new Date();
-            const fakeReply = {
-                from: 'other',
-                text: `${message}`,
-                time: replyTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
-            };
-            setMessages(prev => [...prev, fakeReply]);
-        }, 1000);
-
+        setMessages(prev => [...prev, myMsg]);
+        socket.emit('chat-message', message);
         setMessage('');
     };
 
     const handleEnter = (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
+        if (e.key === 'Enter') sendMessage();
     };
+
+    useEffect(() => {
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     return (
         <div className="chat">
@@ -49,7 +60,9 @@ function Chat({room}) {
                         {msg.text}
                         <div className="chat-time">{msg.time}</div>
                     </div>
+
                 ))}
+                <div ref={chatEndRef} />
             </div>
 
             <div className="chat-input">
@@ -64,6 +77,7 @@ function Chat({room}) {
                     <img src="/img/send.png" alt="보내기" />
                 </button>
             </div>
+
         </div>
 
     )
