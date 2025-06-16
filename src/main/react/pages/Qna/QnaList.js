@@ -38,7 +38,7 @@ export default function QnaList() {
 
     return (
 
-        <div>
+        <div className="QnaAllBox">
             {/*제목/검색/아이콘*/}
             <div className="contentTopBox">
                 <div className="textContentArea">
@@ -47,7 +47,7 @@ export default function QnaList() {
                     </div>
                     <div className="qwer">
                         <input type="text" className="qnaSearch" id="qnaSearchKeyword" placeholder="키워드를 검색하세요"/>
-                        <img src="/img/Search_1.png" alt="검색" className="search-icon"/>
+                        <img src="/img/Search_1.png" alt="검색" className="search-iconTwo"/>
                     </div>
                 </div>
                 <div className="imgContentArea">

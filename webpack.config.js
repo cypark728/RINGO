@@ -16,8 +16,6 @@ module.exports = {
         noticelist: './pages/Notice/NoticeList.js',
         qnawrite: './pages/Qna/QnaWrite.js',
         qnalist: './pages/Qna/Qnalist.js',
-        meeting: './pages/webrtc/Meeting.js',
-        chat: './pages/webrtc/Chat.js',
         idfind: './pages/IdFind/IdFind.js',
         idfindGood: './pages/IdFind/IdFindGood.js',
         pwchange: './pages/pwChange/pwChange.js',
@@ -28,12 +26,12 @@ module.exports = {
         community: './pages/Community/Community.js',
         communitywrite: './pages/Community/CommunityWrite.js',
         communitydetail: './pages/Community/CommunityDetail.js',
-        mypageuser: './pages/MyPage/User/MyPageUser.js',
-        mypagegosu: './pages/MyPage/Gosu/MyPageGosu.js',
         meeting: './pages/webrtc/Meeting.js',
         chat: './pages/webrtc/Chat.js',
         mypage: './pages/MyPage/MyPageApp.js',
+        productdetail: './pages/Product/ProductDetails/ProductDetail.js',
         ProductRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
+
     },
     devtool: 'sourcemaps',
     cache: true,

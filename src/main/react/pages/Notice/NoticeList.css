@@ -114,36 +114,6 @@ img {
     /*    display: none;*/
     /*}*/
 
-    header h1 {
-        width: 170px;
-    }
-
-    header .hamburger {
-        display: none;
-    }
-
-    header h1 a {
-        display: flex;
-        height: 100%;
-        align-items: center;
-    }
-
-    header h1 a img {
-        width: 100%;
-    }
-
-    header .menu {
-        background-color: #fff;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        justify-content: space-between;
-        height: 50px;
-        align-items: center;
-        border-radius: 50px;
-        gap: 50px;
-        padding: 20px 40px;
-        min-width: 548px;
-    }
-
 
     header .login,
     header .logout {
@@ -413,35 +383,6 @@ img {
     .pg {
         display: inline-block; width: 20px; height: 20px;
     }
-
-
-
-
-
-
-    /* --------footer----------- */
-    footer {
-        width: 100%;
-        height: 250px;
-        background-color: #D9D9D9;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 100px;
-    }
-
-    footer p {
-        margin: 20px 0;
-        font-size: 15px;
-    }
-
-    footer .footer-logo {
-        width: 300px;
-    }
-
-    footer .footer-logo img {
-        width: 100%;
-    }
-
 
 }
 
