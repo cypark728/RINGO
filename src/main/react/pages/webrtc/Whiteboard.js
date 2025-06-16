@@ -4,6 +4,10 @@ import * as fabric from "fabric";
 // import { fabric } from 'fabric';
 // import fabric from 'fabric';
 import "./WhiteBoard.css";
+import io from "socket.io-client";
+
+
+const socket = io('http://172.30.1.12:8687');
 
 function Whiteboard() {
     const canvasRef = useRef(null);
@@ -32,7 +36,7 @@ function Whiteboard() {
         canvasEl.width = canvasEl.clientWidth;
         canvasEl.height = canvasEl.clientHeight;
 
-        canvasRef.current = canvas;
+
 
         const canvas = new fabric.Canvas("canvas", {
             isDrawingMode: true,
@@ -55,6 +59,80 @@ function Whiteboard() {
         canvas.freeDrawingBrush.color = "#000000";
         canvas.freeDrawingBrush.width = 5;
 
+        // ---------------------------소켓 설정----------------------------
+        // 소켓 이벤트 수신 (서버에서 받은 그리기 정보 반영)
+        const generateId = () => '_' + Math.random().toString(36).substr(2, 9);
+
+        // 🎨 펜 드로잉
+        canvas.on("path:created", (e) => {
+            const pathData = e.path.toObject(['path','left','top','stroke','strokeWidth','fill','id']);
+            socket.emit("draw-path", pathData);
+        });
+
+        socket.on("draw-path", (pathObj) => {
+            const path = new fabric.Path(pathObj.path, pathObj);
+            canvas.add(path);
+            canvas.renderAll();
+        });
+
+        // 🧱 도형 추가
+        canvas.on("object:added", (e) => {
+            const obj = e.target;
+            if (!obj || obj._isRemote || obj.type === 'path') return;
+
+            obj.id = obj.id || generateId();
+            const json = obj.toObject(['id','left','top','width','height','fill','stroke','strokeWidth','radius']);
+            socket.emit("add-object", json);
+        });
+
+        socket.on("add-object", (objData) => {
+            fabric.util.enlivenObjects([objData], (objs) => {
+                objs.forEach(o => {
+                    o._isRemote = true;
+                    canvas.add(o);
+                });
+                canvas.renderAll();
+            });
+        });
+
+        // ✏️ 수정 (이동/크기/회전)
+        canvas.on("object:modified", (e) => {
+            const obj = e.target;
+            if (!obj.id) return;
+            const data = obj.toObject(['id','left','top','scaleX','scaleY','angle','width','height','radius']);
+            socket.emit("modify-object", data);
+        });
+
+        socket.on("modify-object", (data) => {
+            const obj = canvas.getObjects().find(o => o.id === data.id);
+            if (obj) {
+                obj.set(data);
+                canvas.renderAll();
+            }
+        });
+
+        // ❌ 삭제
+        canvas.on("object:removed", (e) => {
+            const obj = e.target;
+            if (obj && obj.id) {
+                socket.emit("remove-object", obj.id);
+            }
+        });
+
+        socket.on("remove-object", (id) => {
+            const obj = canvas.getObjects().find(o => o.id === id);
+            if (obj) {
+                canvas.remove(obj);
+                canvas.renderAll();
+            }
+        });
+
+        // 🌀 초기 동기화
+        socket.emit("request-canvas-init");
+        socket.on("canvas-init", (json) => {
+            canvas.loadFromJSON(json, () => canvas.renderAll());
+        });
+
         // 툴 이벤트
         document.getElementById("pen").onclick = () => {
             currentTool.current = "pen";
@@ -69,7 +147,7 @@ function Whiteboard() {
             canvas.isDrawingMode = true;
 
             canvas.freeDrawingBrush = new fabric.PencilBrush(canvas); // ← 지우개도 그냥 연필 브러시
-            canvas.freeDrawingBrush.color = "##f0f0f0"; // ← 배경색과 같게 = 흰색
+            canvas.freeDrawingBrush.color = "#f0f0f0"; // ← 배경색과 같게 = 흰색
             canvas.freeDrawingBrush.width = parseInt(document.getElementById("brushWidth").value, 10);
         };
 
@@ -91,37 +169,15 @@ function Whiteboard() {
         // 드래그로 도형 생성
         canvas.on("mouse:down", (opt) => {
             if (canvas.getActiveObject()) return;
-
             if (currentTool.current === "rect" || currentTool.current === "circle") {
                 drawing.current = true;
                 canvas.selection = false;
+                const p = canvas.getPointer(opt.e);
+                start.current = {x:p.x, y:p.y};
 
-                const pointer = canvas.getPointer(opt.e);
-                start.current = {x: pointer.x, y: pointer.y};
-
-                let shape;
-                if (currentTool.current === "rect") {
-                    shape = new fabric.Rect({
-                        left: pointer.x,
-                        top: pointer.y,
-                        width: 0,
-                        height: 0,
-                        fill: "",
-                        stroke: color.current,
-                        strokeWidth: 2,
-                        selectable: true,
-                    });
-                } else {
-                    shape = new fabric.Circle({
-                        left: pointer.x,
-                        top: pointer.y,
-                        radius: 1,
-                        fill: "",
-                        stroke: color.current,
-                        strokeWidth: 2,
-                        selectable: true,
-                    });
-                }
+                const shape = currentTool.current === "rect"
+                    ? new fabric.Rect({ left: p.x, top: p.y, width: 0, height: 0, stroke: color.current, fill: '', strokeWidth:2 })
+                    : new fabric.Circle({ left: p.x, top: p.y, radius:1, stroke: color.current, fill: '', strokeWidth:2 });
 
                 shapeRef.current = shape;
                 canvas.add(shape);
@@ -130,30 +186,19 @@ function Whiteboard() {
 
         canvas.on("mouse:move", (opt) => {
             if (!drawing.current || !shapeRef.current) return;
-
-            const pointer = canvas.getPointer(opt.e);
-            const shape = shapeRef.current;
-
+            const p = canvas.getPointer(opt.e);
+            const s = shapeRef.current;
             if (currentTool.current === "rect") {
-                shape.set({
-                    width: Math.abs(pointer.x - start.current.x),
-                    height: Math.abs(pointer.y - start.current.y),
-                    left: Math.min(pointer.x, start.current.x),
-                    top: Math.min(pointer.y, start.current.y),
-                });
+                s.set({ width: Math.abs(p.x - start.current.x), height: Math.abs(p.y - start.current.y),
+                    left: Math.min(p.x, start.current.x), top: Math.min(p.y, start.current.y) });
             } else {
-                const radius = Math.sqrt(
-                    Math.pow(pointer.x - start.current.x, 2) +
-                    Math.pow(pointer.y - start.current.y, 2)
-                ) / 2;
-
-                shape.set({
-                    radius: radius,
-                    left: (pointer.x + start.current.x) / 2 - radius,
-                    top: (pointer.y + start.current.y) / 2 - radius,
+                const r = Math.hypot(p.x - start.current.x, p.y - start.current.y)/2;
+                s.set({
+                    radius: r,
+                    left: (p.x + start.current.x)/2 - r,
+                    top: (p.y + start.current.y)/2 - r
                 });
             }
-
             canvas.renderAll();
         });
 
@@ -178,12 +223,24 @@ function Whiteboard() {
             }
         };
 
-
-        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keydown", (e) => {
+            if (!canvasRef.current) return;
+            const a = canvas.getActiveObject();
+            if (a && (e.key === "Delete" || e.key === "Backspace")) {
+                canvas.remove(a);
+                canvas.renderAll();
+            }
+        });
 
         return () => {
 
             window.removeEventListener("keydown", handleKeyDown);
+            socket.off("draw-path");
+            socket.off("add-object");
+            socket.off("modify-object");
+            socket.off("remove-object");
+            socket.off("canvas-init");
+            canvas.dispose();
         };
 
     }, []);
