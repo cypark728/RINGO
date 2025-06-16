@@ -15,6 +15,10 @@ const io = new Server(server, {
     }
 });
 
+
+let lastCanvasData = null;
+let savedCanvasJSON = null;
+
 // 클라이언트 연결 시
 io.on('connection', (socket) => {
     console.log('🔌 누군가 접속했어요!:', socket.id);
@@ -36,6 +40,28 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('code-update', code);
     });
 
+
+    // 새 사용자에겐 마지막 캔버스 상태 전송
+    if (lastCanvasData) {
+        socket.emit("canvas-update", lastCanvasData);
+    }
+
+    socket.join(socket.handshake.query.roomId);
+
+    socket.on("request-canvas-init", () => {
+        if (savedCanvasJSON) {
+            socket.emit("canvas-init", savedCanvasJSON);
+        }
+    });
+
+    socket.on("draw-path", (p) => socket.broadcast.emit("draw-path", p));
+    socket.on("add-object", (o) => socket.broadcast.emit("add-object", o));
+    socket.on("modify-object", (d) => socket.broadcast.emit("modify-object", d));
+    socket.on("remove-object", (id) => socket.broadcast.emit("remove-object", id));
+
+    socket.on("save-canvas", (json) => {
+        savedCanvasJSON = json;
+    });
 
 
     socket.on('disconnect', () => {

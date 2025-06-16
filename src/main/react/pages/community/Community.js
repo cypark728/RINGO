@@ -415,7 +415,9 @@ function Community() {
                         ))}
                     </ul>
                     <div className="btn-box">
-                        <button className="board-write-btn">글쓰기</button>
+                        <button className="board-write-btn"
+                                onClick={() => window.location.href = "/Community/communitywrite"}
+                        >글쓰기</button>
                     </div>
                 </div>
 
@@ -434,7 +436,9 @@ function Community() {
                 </div>
                 <ul className="board-list">
                     {currentPosts.map((post) => (
-                        <li key={post.id} className="board-list-item">
+                        <li  key={post.id}
+                             onClick={() => window.location.href = `/Community/communitydetail/${post.id}`}
+                             className="board-list-item">
                             <div className="board-meta">
                                 <span className="board-category">{post.category}</span>
                             </div>

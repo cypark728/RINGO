@@ -41,3 +41,6 @@ out/
 
 ### bundle ###
 /src/main/resources/static/bundle/
+
+### 민감정보 ###
+/src/main/resources/application-db.properties
