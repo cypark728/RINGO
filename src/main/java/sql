@@ -1,0 +1,17 @@
+--user 테이블 만들기
+CREATE TABLE user (
+    user_primary_id   SERIAL PRIMARY KEY,       -- 유저아이디 (PK, 자동 증가)
+    user_id           VARCHAR(50) NOT NULL,     -- 아이디
+    user_pw           VARCHAR(100) NOT NULL,    -- 비밀번호 (암호화 저장 권장)
+    user_name         VARCHAR(50) NOT NULL,     -- 이름
+    user_nick_name    VARCHAR(50),              -- 닉네임
+    user_age          INTEGER,                  -- 나이
+    user_gender       VARCHAR(10),              -- 성별
+    user_phone        VARCHAR(20),              -- 연락처
+    user_role         VARCHAR(20),              -- 역할
+    user_profile      VARCHAR(255),             -- 프로필이미지 (이미지 URL 등)
+    user_birth        DATE,                     -- 생년월일
+    user_email        VARCHAR(100),             -- 이메일
+    user_interest     VARCHAR(100),             -- 관심분야
+    user_create_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 생성일
+);
