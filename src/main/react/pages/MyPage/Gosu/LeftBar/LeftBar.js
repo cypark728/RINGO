@@ -2,7 +2,7 @@ import React from "react";
 import './LeftBar.css';
 import ReactDOM from "react-dom/client";
 
-export default function LeftBar({activeTab, setActiveTab }) {
+export default function LeftBar({activeTab, setActiveTab, onBack }) {
 
     return (
         <aside className="sidebar">
@@ -30,14 +30,14 @@ export default function LeftBar({activeTab, setActiveTab }) {
                         className={`menu-item ${activeTab === "review" ? "selected" : ""}`}>
                         내 강의 리뷰
                     </li>
-                    {/*<li onClick={() => setActiveTab("timetable")}*/}
-                    {/*    className={`menu-item ${activeTab === "timetable" ? "selected" : ""}`}>*/}
-                    {/*    시간표*/}
-                    {/*</li>*/}
+                    <li onClick={() => setActiveTab("timetable")}
+                        className={`menu-item ${activeTab === "timetable" ? "selected" : ""}`}>
+                        시간표
+                    </li>
 
 
                 </ul>
-                <button className="convert-button">제자 전환</button>
+                <button className="convert-button" onClick={onBack}>제자 전환</button>
             </div>
         </aside>
     )

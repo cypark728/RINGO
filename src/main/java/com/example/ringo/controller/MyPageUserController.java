@@ -10,7 +10,7 @@ public class MyPageUserController {
 
     @GetMapping("/MyPage/mypageuser") //.do 해주세요
     public String myPageUser(Model model) {
-        model.addAttribute("pageName", "mypageuser");
+        model.addAttribute("pageName", "mypage");
         System.out.println("뷰이름:" + "mypageuser");
 
         return "mypage"; //언제나 view화면으로 이동합니다.
