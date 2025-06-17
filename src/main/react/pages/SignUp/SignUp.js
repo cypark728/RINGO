@@ -8,17 +8,24 @@ import Footer from "../../components/footer/Footer";
 const allTopics = ['디자인', 'it·프로그래밍', '영상·사진', '마케팅', '주식·코인', '문서·글쓰기', '세무·법인·노무', '창업·사업', '기타'];
 
 function SignUp() {
+
+
+
+    // 각 input의 상태 관리
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [name, setName] = useState('');
+    const [gender, setGender] = useState('');
+    const [birthYear, setBirthYear] = useState('');
+    const [birthMonth, setBirthMonth] = useState('');
+    const [birthDay, setBirthDay] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [agreements, setAgreements] = useState([false, false, false, false]);
     const [allAgree, setAllAgree] = useState(false);
-
-    // 비밀번호 입력값 상태
-    const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
     const [pwTouched, setPwTouched] = useState(false);
-
-    // 연락처 입력값 상태 (자동 하이픈)
-    const [phone, setPhone] = useState('');
 
     // 관심분야
     const handleSelect = (topic) => {
@@ -70,6 +77,65 @@ function SignUp() {
         }
     };
 
+    // 성별 라디오
+    const handleGenderChange = (e) => {
+        setGender(e.target.value);
+    };
+
+    // 생년월일
+    const handleBirthYearChange = (e) => setBirthYear(e.target.value.replace(/[^0-9]/g, '').slice(0, 4));
+    const handleBirthMonthChange = (e) => setBirthMonth(e.target.value.replace(/[^0-9]/g, '').slice(0, 2));
+    const handleBirthDayChange = (e) => setBirthDay(e.target.value.replace(/[^0-9]/g, '').slice(0, 2));
+
+    // 회원가입 처리
+    const handleSignUp = async () => {
+        if (!userId || !password || !passwordConfirm || !name || !gender || !birthYear || !birthMonth || !birthDay || !phone || !email) {
+            alert("모든 필수 정보를 입력하세요.");
+            return;
+        }
+        if (password !== passwordConfirm) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+        if (selectedTopics.length === 0) {
+            alert("관심분야를 1개 이상 선택하세요.");
+            return;
+        }
+        if (!agreements[0] || !agreements[1]) {
+            alert("필수 약관에 동의해야 합니다.");
+            return;
+        }
+        const birth = `${birthYear}-${birthMonth.padStart(2, '0')}-${birthDay.padStart(2, '0')}`;
+        const userData = {
+            userId,
+            userPw: password,
+            userName: name,
+            userGender: gender,
+            userBirth: birth,
+            userPhone: phone,
+            userEmail: email,
+            userInterest: selectedTopics.join(','),
+        };
+        try {
+            const response = await fetch("/users/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+
+            if (response.ok) {
+                const result = await response.text(); // "success" 받기
+                alert("회원가입이 완료되었습니다!");
+
+            } else {
+                const errorMsg = await response.text();
+                alert(errorMsg || "회원가입 실패");
+            }
+        } catch (err) {
+            alert("서버 연결 실패");
+        }
+    };
+
     return (
         <div className="background">
             <div className="box">
@@ -79,7 +145,14 @@ function SignUp() {
                 <div className="detailBox">
                     <div className="form-row">
                         <label className="form-label" htmlFor="userid">아이디</label>
-                        <input type="text" id="userid" className="form-input" placeholder="8~20글자로 입력해주세요" />
+                        <input
+                            type="text"
+                            id="userid"
+                            className="form-input"
+                            placeholder="8~20글자로 입력해주세요"
+                            value={userId}
+                            onChange={e => setUserId(e.target.value)}
+                        />
                     </div>
                     <div className="form-row">
                         <label className="form-label" htmlFor="pw">비밀번호</label>
@@ -112,23 +185,70 @@ function SignUp() {
                     )}
                     <div className="form-row">
                         <label className="form-label" htmlFor="name">이름</label>
-                        <input type="text" id="name" className="form-input" placeholder="이름 입력" />
+                        <input
+                            type="text"
+                            id="name"
+                            className="form-input"
+                            placeholder="이름 입력"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                        />
                     </div>
                     <div className="form-row">
                         <label className="form-label">성별</label>
                         <div className="radio-group">
-                            <label><input type="radio" name="gender" value="남성" /> 남성</label>
-                            <label><input type="radio" name="gender" value="여성" /> 여성</label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="남성"
+                                    checked={gender === "남성"}
+                                    onChange={handleGenderChange}
+                                /> 남성
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="여성"
+                                    checked={gender === "여성"}
+                                    onChange={handleGenderChange}
+                                /> 여성
+                            </label>
                         </div>
                     </div>
                     <div className="form-row">
                         <label className="form-label">생년월일</label>
                         <div className="birth-group">
-                            <input type="text" className="form-input" style={{width: "60px"}} placeholder="YYYY" maxLength={4}/>
+                            <input
+                                type="text"
+                                className="form-input"
+                                style={{width: "60px"}}
+                                placeholder="YYYY"
+                                maxLength={4}
+                                value={birthYear}
+                                onChange={handleBirthYearChange}
+                            />
                             <span>년</span>
-                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="MM" maxLength={2}/>
+                            <input
+                                type="text"
+                                className="form-input"
+                                style={{width: "40px"}}
+                                placeholder="MM"
+                                maxLength={2}
+                                value={birthMonth}
+                                onChange={handleBirthMonthChange}
+                            />
                             <span>월</span>
-                            <input type="text" className="form-input" style={{width: "40px"}} placeholder="DD" maxLength={2}/>
+                            <input
+                                type="text"
+                                className="form-input"
+                                style={{width: "40px"}}
+                                placeholder="DD"
+                                maxLength={2}
+                                value={birthDay}
+                                onChange={handleBirthDayChange}
+                            />
                             <span>일</span>
                         </div>
                     </div>
@@ -146,7 +266,14 @@ function SignUp() {
                     </div>
                     <div className="form-row">
                         <label className="form-label" htmlFor="email">이메일</label>
-                        <input type="text" id="email" className="form-input" placeholder="ringo@gmail.com" />
+                        <input
+                            type="text"
+                            id="email"
+                            className="form-input"
+                            placeholder="ringo@gmail.com"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
                     </div>
                     <div className="interest-row">
                         <span className="interest-label">관심분야</span>
@@ -180,7 +307,7 @@ function SignUp() {
                         </div>
                     </div>
                     <div className="signup">
-                        <button type="button" className="signup_button">회원 가입하기</button>
+                        <button type="button" className="signup_button" onClick={handleSignUp}>회원 가입하기</button>
                     </div>
                 </div>
             </div>
