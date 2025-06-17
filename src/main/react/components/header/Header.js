@@ -14,10 +14,17 @@ function Header() {
                 </a>
 
                 <nav className="nav navCenter">
+<<<<<<< HEAD
                     <a href="/Lecture/LectureInfo">강의정보</a>
                     <a href="/Community/CommunityList">커뮤니티</a>
                     <a href="#">문의사항</a>
                     <a href="/Notice/NoticeList">공지사항</a>
+=======
+                    <a href="#">강의정보</a>
+                    <a href="#">커뮤니티</a>
+                    <a href="/Qna/Qnalist">문의사항</a>
+                    <a href="/Notice/noticelist">공지사항</a>
+>>>>>>> 7e60832c6c96940b67749163d36171602847109e
                 </nav>
 
                 <nav className="nav">

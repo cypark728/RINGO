@@ -86,8 +86,8 @@ export default function QnaList() {
                         {/*// <!-- 제자자 -->*/}
                         <div className={active ? "FAQContentBoxStudentActive" : "FAQContentBoxStudent"}>
                             {[
-                            { question: "RINGO는 어떤 서비스 인가요?",
-                                answer: `RINGO는 나라,지역,거리 에 상관없이 모두가 수업을 받을 수 있는 1대1 비대면 매칭 멘토링 플랫폼 입니다!
+                                { question: "RINGO는 어떤 서비스 인가요?",
+                                    answer: `RINGO는 나라,지역,거리 에 상관없이 모두가 수업을 받을 수 있는 1대1 비대면 매칭 멘토링 플랫폼 입니다!
 
 
 
@@ -102,14 +102,14 @@ export default function QnaList() {
 
 
                                 크기 체크용
-                                test`}, 
-                            { question: "수업은 어떻게 진행하나요?",
-                                answer: "사이트 내부 영상통화 시스템으로 수업을 진행합니다"},
-                            {question: "아이디와 비밀번호는 어떻게 찾나요?",
-                                answer: "아이디 찾기 버튼을 누르세요"},
-                            {question: "수업 리뷰는 어떻게 남기나요?",
-                                answer: "리뷰 쓰기 창으로 가세요"}
-                            
+                                test`},
+                                { question: "수업은 어떻게 진행하나요?",
+                                    answer: "사이트 내부 영상통화 시스템으로 수업을 진행합니다"},
+                                {question: "아이디와 비밀번호는 어떻게 찾나요?",
+                                    answer: "아이디 찾기 버튼을 누르세요"},
+                                {question: "수업 리뷰는 어떻게 남기나요?",
+                                    answer: "리뷰 쓰기 창으로 가세요"}
+
                             ].map((item, index) => (
                                 <div key={index}>
                                     <div>
@@ -121,15 +121,15 @@ export default function QnaList() {
                                              alt="표시화살표"
                                              className="bottomArrow"
                                              onClick={ () => downPost(index) } />
-                                        </div>
-
-                                        <div className={`FAQContentPost ${postActive === index ? "on" : "off"}`}>
-                                            {item.answer}
-                                        </div>
                                     </div>
+
+                                    <div className={`FAQContentPost ${postActive === index ? "on" : "off"}`}>
+                                        {item.answer}
+                                    </div>
+                                </div>
                             ))}
 
-                            
+
                             {/*<div>*/}
                             {/*    <div className="questionQMark">Q</div>*/}
                             {/*    <span*/}
@@ -181,13 +181,13 @@ export default function QnaList() {
                                 <div key={index}>
                                     <div>
                                         <div className="questionQMark">Q</div>
-                                        <span onClick={() => downQna(index)}>
+                                        <span onClick={() => downPost(index)}>
                                             {item.question}
                                         </span>
                                         <img src="/img/buttom_arrow.png"
                                              alt="표시화살표"
                                              className="bottomArrow"
-                                             onClick={ () => downQna(index) } />
+                                             onClick={ () => downPost(index) } />
                                     </div>
 
                                     <div className={`FAQContentPost ${postActive === index ? "on" : "off"}`}>
@@ -274,16 +274,16 @@ export default function QnaList() {
                                     <div
                                         className={"QnaAnswerTitle"}
                                         onClick={() => downQna(index)}>
-                                            {item.question}
+                                        {item.question}
                                     </div>
                                     <div className="QnaAnswerOther">
                                         <div onClick={ () => downQna(index)}>운영자</div>
                                         <div onClick={ () => downQna(index)}>시간간</div>
                                         <div>
                                             <img src="/img/buttom_arrow.png"
-                                                  alt="표시화살표"
-                                                  className="bottomArrow"
-                                                  onClick={ () => downQna(index)}/>
+                                                 alt="표시화살표"
+                                                 className="bottomArrow"
+                                                 onClick={ () => downQna(index)}/>
                                         </div>
                                     </div>
                                 </div>
@@ -294,69 +294,76 @@ export default function QnaList() {
                             </div>
                         ))}
                     </div>
+                    
 
-            {/*        디비에서 정보 가져와서 반복 돌리기*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">1</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        디비에서 정보 가져와서 반복 돌리기*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">2</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">1</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">3</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">2</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">4</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">3</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">5</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">4</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
 
-            {/*        <div className="QnaOneLine">*/}
-            {/*            <div className="QnaAnswerNumber">6</div>*/}
-            {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
-            {/*            <div className="QnaAnswerOther">*/}
-            {/*                <div>운영자</div>*/}
-            {/*                <div>시간간</div>*/}
-            {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">5</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+
+                    {/*        <div className="QnaOneLine">*/}
+                    {/*            <div className="QnaAnswerNumber">6</div>*/}
+                    {/*            <div className="QnaAnswerTitle">문의 제목</div>*/}
+                    {/*            <div className="QnaAnswerOther">*/}
+                    {/*                <div>운영자</div>*/}
+                    {/*                <div>시간간</div>*/}
+                    {/*                <div><img src="/img/buttom_arrow.png" alt="표시화살표" className="bottomArrow"/></div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
                 </div>
+
+                <a href="qnawrite" className="qnaWriteButton" >
+                    문의하기
+                </a>
+
             </div>
 
 
@@ -366,11 +373,11 @@ export default function QnaList() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <Header />
-        <QnaList/>
-        <Footer />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <Header />
+//         <QnaList/>
+//         <Footer />
+//     </>
+// );

@@ -3,6 +3,8 @@ import "./QnaWrite.css";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactDOM from "react-dom/client";
 import NoticeList from "../Notice/NoticeList";
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 
 export default function QnaWrite() {
@@ -39,7 +41,7 @@ export default function QnaWrite() {
                                     <textarea className="qnaContent" name="inquiryContent"
                                               placeholder="내용을 입력해주세요"></textarea><br/>
                                 </div>
-                                <input type="submit" value="등록" className="qna_submit_btn"/>
+                                <input type="submit" value="등록" className="qnaSubmitBtn"/>
                             </form>
 
                         </div>
@@ -54,5 +56,9 @@ export default function QnaWrite() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <QnaWrite />
+    <>
+        <Header />
+        <QnaWrite />
+        <Footer />
+    </>
 );

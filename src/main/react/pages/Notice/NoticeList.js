@@ -95,12 +95,13 @@ export default function NoticeList() {
         </div>
     );
 }
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <Header />
-        <NoticeList />
-        <Footer />
-    </>
 
-);
+
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <Header />
+//         <NoticeList />
+//         <Footer />
+//     </>
+// );

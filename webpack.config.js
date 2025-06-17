@@ -13,9 +13,9 @@ module.exports = {
         main: './pages/main/Main.js', //여러페이지 설정이 가능함
         user: './User.js',
         signup: './pages/SignUp/SignUp.js',
-        noticelist: './pages/Notice/NoticeList.js',
+        noticelist: './pages/Notice/NoticeApp.js',
         qnawrite: './pages/Qna/QnaWrite.js',
-        qnalist: './pages/Qna/QnaList.js',
+        qnalist: './pages/Qna/QnaApp.js',
         idfind: './pages/IdFind/IdFind.js',
         idfindGood: './pages/IdFind/IdFindGood.js',
         pwchange: './pages/pwChange/pwChange.js',
@@ -33,7 +33,7 @@ module.exports = {
         LectureRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
 
     },
-    devtool: 'sourcemaps',
+    devtool: 'source-map',
     cache: true,
     output: { //파일이 생성되는 경로
         path: __dirname,
