@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class ProductController {
+public class ViewController {
 
-    @GetMapping("/Product/{pageName}") //.do 해주세요
+    @GetMapping("/{pageName}.do") //.do 해주세요
     public String page(@PathVariable String pageName, Model model) {
         model.addAttribute("pageName", pageName);
         System.out.println("뷰이름:" + pageName);
 
-        return pageName; //언제나 view화면으로 이동합니다.
+        return "view"; //언제나 view화면으로 이동합니다.
     }
 }

@@ -29,8 +29,8 @@ module.exports = {
         meeting: './pages/webrtc/Meeting.js',
         chat: './pages/webrtc/Chat.js',
         mypage: './pages/MyPage/MyPageApp.js',
-        productdetail: './pages/Product/ProductDetails/ProductDetail.js',
-        ProductRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
+        lecturedetail: './pages/Product/ProductDetails/ProductDetail.js',
+        LectureRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
 
     },
     devtool: 'source-map',
