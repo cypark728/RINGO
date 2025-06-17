@@ -10,4 +10,19 @@
                user_name
         FROM users
     </select>
+
+    <insert id="signup" parameterType="com.example.ringo.command.UsersVO">
+        INSERT INTO users (
+            user_id, user_pw, user_name, user_nick_name, user_birth, user_profile, user_phone, user_email, user_gender, user_age, user_interest
+        ) VALUES (
+                     #{userId}, #{userPw}, #{userName}, #{userId}, #{userBirth}, #{userProfile}, #{userPhone}, #{userEmail}, #{userGender}, #{userAge}, #{userInterest}
+                 )
+    </insert>
+
+
+    <select id="countByUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM users WHERE user_id = #{userId}
+    </select>
+
+
 </mapper>
