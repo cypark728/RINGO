@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./QnaList.css";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactDOM from "react-dom/client";
@@ -12,6 +12,7 @@ export default function QnaList() {
     const [active, setActive] = useState(true);
     const [postActive, setPostActive] = useState(null); //사용자가 몇 번째 질문을 열었는지 기억하는 state / 초기값은 null
     const [qnaActive, setQnaActive] = useState(null);
+    const [qnaList, setQnaList] = useState([]);
 
     // function changeTab() {
     //     setActive(!active);
@@ -34,6 +35,23 @@ export default function QnaList() {
     const downQna = (index) => {
         setQnaActive((prev) => (prev === index ? null : index));
     }
+
+    useEffect(()=> {
+        fetch("/api/qna/list")
+            .then(res => res.json())
+            .then(data => setQnaList(data))
+            // .catch(err => console.error(err)) // 오류가 생기면 콘솔에 출력
+    }, []);
+
+    // React (qnaList 상태)
+    //     ⬇ fetch
+    // Spring @RestController
+    //     ⬇
+    // QnaService
+    //     ⬇
+    // QnaMapper
+    //     ⬇
+    // MyBatis - DB(qna_post 테이블)
 
 
     return (
@@ -228,11 +246,6 @@ export default function QnaList() {
             </div>
 
             {/*// <!-- 문의사항 -->*/}
-
-
-
-
-
             <div className="contentBottomBox">
                 <div className="contentBottomHeader">
                     <div className="contentMiddleTitle">문의사항</div>
@@ -244,41 +257,18 @@ export default function QnaList() {
                 <div className="contentBottomBody">
 
                     <div>
-                        {[
-                            { question: "문의제목1",
-                                answer: "답변1"},
-                            { question: "문의제목2",
-                                answer: "답변2"},
-                            {question: "문의제목3",
-                                answer: "답변3"},
-                            {question: "문의제목4",
-                                answer: `답
-                                 변
-                                 4
-                                 테스트`},
-                            {question: "문의제목5",
-                                answer: `답
-                                 변
-                                 5
-                                 테스트`},
-                            {question: "문의제목6",
-                                answer: `답
-                                 변
-                                 6
-                                 테스트`}
-
-                        ].map((item, index) => (
-                            <div key={index}>
+                        {qnaList.map((item, index) => (
+                            <div key={item.qnaPostId}>
                                 <div className="QnaOneLine">
-                                    <div className="QnaAnswerNumber">{index}</div>
+                                    <div className="QnaAnswerNumber">{index + 1}</div>
                                     <div
                                         className={"QnaAnswerTitle"}
                                         onClick={() => downQna(index)}>
-                                        {item.question}
+                                        {item.qnaPostTitle}
                                     </div>
                                     <div className="QnaAnswerOther">
-                                        <div onClick={ () => downQna(index)}>운영자</div>
-                                        <div onClick={ () => downQna(index)}>시간간</div>
+                                        <div onClick={ () => downQna(index)}>{item.userPrimaryId}</div>
+                                        <div onClick={ () => downQna(index)}>{item.qnaPostDate?.slice(0,10)}</div>
                                         <div>
                                             <img src="/img/buttom_arrow.png"
                                                  alt="표시화살표"
@@ -289,8 +279,13 @@ export default function QnaList() {
                                 </div>
 
                                 <div className={`qnaContentPost ${qnaActive === index ? "on" : "off"}`}>
-                                    {item.answer}
+                                    {item.qnaPostContent}
                                 </div>
+
+                                <div className={`qnaContentPostTwo ${qnaActive === index ? "on" : "off"}`}>
+                                    {item.qnaPostAnswerContent || "현재 답변 준비중입니다."}
+                                </div>
+
                             </div>
                         ))}
                     </div>

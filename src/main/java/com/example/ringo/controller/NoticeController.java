@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/Notice")
+@RequestMapping("/notice")
 public class NoticeController {
 
-    @GetMapping("/NoticeList")
+    @GetMapping("/noticelist")
     public String NoticeList(Model model) {
         model.addAttribute("pageName", "noticelist");
         return "notice";
