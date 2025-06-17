@@ -24,8 +24,6 @@
     left: 0;
     z-index: 999;
     /*max-width: 1200px;*/
-    margin: 0 auto;
-    margin-bottom: 85px;
 }
 
 .nav a {
@@ -46,4 +44,8 @@
 
 .nav a img {
     height: 20px;
+}
+
+.header-container .header-letterbox {
+    padding-top: 40px;
 }

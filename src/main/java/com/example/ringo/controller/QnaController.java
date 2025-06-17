@@ -8,11 +8,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class QnaController {
 
-    @GetMapping("/Qna/{pageName}") //.do 해주세요
-    public String page(@PathVariable String pageName, Model model) {
-        model.addAttribute("pageName", pageName);
-        System.out.println("뷰이름:" + pageName);
+    @GetMapping("/Qna/Qnalist") //.do 해주세요
+    public String qnaList(Model model) {
+        model.addAttribute("pageName", "qnalist");
+        System.out.println("뷰이름:" + "qnalist");
 
-        return pageName; //언제나 view화면으로 이동합니다.
+        return "Qnalist"; //언제나 view화면으로 이동합니다.
+    }
+
+    @GetMapping("/Qna/qnawrite") //.do 해주세요
+    public String qnaWrite(Model model) {
+        model.addAttribute("pageName", "qnawrite");
+        System.out.println("뷰이름:" + "qnawrite");
+
+        return "qnawrite"; //언제나 view화면으로 이동합니다.
     }
 }

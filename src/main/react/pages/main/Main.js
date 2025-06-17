@@ -21,19 +21,23 @@ function Main() {
 
             {/* Categories */}
             <Category />
+
             {/* Interests Section */}
             <Interest />
+
             {/* HighScoreService Section */}
             <HighScoreService />
+
             {/* 지금 인기 있는 서비스 섹션 */}
             <PopularService />
+
             {/* 지금 인기 있는 고수 섹션 */}
             <PopularGosu/>
 
             {/* 링고에게 물어보세요 섹션 */}
             <AskRingo/>
-            {/* 전문가 활동 유도 섹션 */}
 
+            {/* 전문가 활동 유도 섹션 */}
             <Gosu/>
 
         </div>

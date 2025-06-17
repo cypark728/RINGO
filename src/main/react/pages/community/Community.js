@@ -416,7 +416,7 @@ function Community() {
                     </ul>
                     <div className="btn-box">
                         <button className="board-write-btn"
-                                onClick={() => window.location.href = "/Community/communitywrite"}
+                                onClick={() => window.location.href = "/community/communitywrite"}
                         >글쓰기</button>
                     </div>
                 </div>

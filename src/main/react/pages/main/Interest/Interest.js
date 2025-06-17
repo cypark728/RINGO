@@ -74,7 +74,10 @@ function InterestsSection() {
                 {/* 오른쪽: 서비스 카드 2x2 */}
                 <div className="interests-cards">
                     {services.map((service, idx) => (
-                        <div className="service-card" key={idx}>
+                        <div className="service-card"
+                             key={idx}
+                             onClick={() => window.location.href = "/lecture/lecturedetail"}
+                        >
                             <img src={service.img} alt={service.title} />
                             <div className="service-title">{service.title}</div>
                             <div className="service-info">
