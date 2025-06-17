@@ -51,7 +51,7 @@ function Lectures() {
             {services.map((service, idx) => (
                 <div className="service-card"
                      key={idx}
-                     onClick={() => window.location.href = "/Lecture/LectureDetail"}
+                     onClick={() => window.location.href = "/lecture/lecturedetail"}
                 >
                     <img src={service.img} alt={service.title} />
                     <div className="service-title">{service.title}</div>

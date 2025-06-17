@@ -96,3 +96,13 @@ CREATE TABLE class_manage (
 	recruitment_post_id			INTEGER,				--수업 모집글 아이디 (수업 상세정보 페이지 확인용)
 	user_primary_id				INTEGER					--수업 등록 유저 아이디
 );
+
+--문의 게시판 테이블 만들기
+CREATE TABLE qna_post (
+    qna_post_id             SERIAL PRIMARY KEY,      --문의게시판 아이디
+    qna_post_title          varchar(1000),           --문의 제목
+    qna_post_content        varchar(5000),           --문의 내용
+    qna_post_date           TIMESTAMP,               --문의 날짜
+    qna_post_answer_date    TIMESTAMP,               --문의 답변 날짜
+    user_primary_id         INTEGER                  --문의 등록 유저 아이디
+);
