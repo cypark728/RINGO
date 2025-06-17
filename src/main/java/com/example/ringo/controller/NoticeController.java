@@ -4,15 +4,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/Notice")
 public class NoticeController {
 
-    @GetMapping("/Notice/{pageName}") //.do 해주세요
-    public String page(@PathVariable String pageName, Model model) {
-        model.addAttribute("pageName", pageName);
-        System.out.println("뷰이름:" + pageName);
-
-        return pageName; //언제나 view화면으로 이동합니다.
+    @GetMapping("/NoticeList")
+    public String NoticeList(Model model) {
+        model.addAttribute("pageName", "noticelist");
+        return "notice";
     }
+
 }

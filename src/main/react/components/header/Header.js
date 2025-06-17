@@ -7,15 +7,17 @@ function Header() {
     return (
         <div className="header-container">
             <header className="header">
-                <div className="logo">
-                    <img src="/img/logo.png" alt="로고"/>
-                </div>
+                <a href="/main">
+                    <div className="logo">
+                        <img src="/img/logo.png" alt="로고"/>
+                    </div>
+                </a>
 
                 <nav className="nav navCenter">
-                    <a href="#">강의정보</a>
-                    <a href="#">커뮤니티</a>
+                    <a href="/Lecture/LectureInfo">강의정보</a>
+                    <a href="/Community/CommunityList">커뮤니티</a>
                     <a href="#">문의사항</a>
-                    <a href="#">공지사항</a>
+                    <a href="/Notice/NoticeList">공지사항</a>
                 </nav>
 
                 <nav className="nav">

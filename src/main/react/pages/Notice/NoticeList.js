@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./NoticeList.css";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactDOM from "react-dom/client";
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 const dummyData = { //공지 내용물 변경필요
     total: 5,
@@ -95,5 +97,10 @@ export default function NoticeList() {
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <NoticeList />
+    <>
+        <Header />
+        <NoticeList />
+        <Footer />
+    </>
+
 );

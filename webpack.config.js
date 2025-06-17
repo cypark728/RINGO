@@ -15,7 +15,7 @@ module.exports = {
         signup: './pages/SignUp/SignUp.js',
         noticelist: './pages/Notice/NoticeList.js',
         qnawrite: './pages/Qna/QnaWrite.js',
-        qnalist: './pages/Qna/Qnalist.js',
+        qnalist: './pages/Qna/QnaList.js',
         idfind: './pages/IdFind/IdFind.js',
         idfindGood: './pages/IdFind/IdFindGood.js',
         pwchange: './pages/pwChange/pwChange.js',
@@ -29,8 +29,8 @@ module.exports = {
         meeting: './pages/webrtc/Meeting.js',
         chat: './pages/webrtc/Chat.js',
         mypage: './pages/MyPage/MyPageApp.js',
-        productdetail: './pages/Product/ProductDetails/ProductDetail.js',
-        ProductRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
+        lecturedetail: './pages/Product/ProductDetails/ProductDetail.js',
+        LectureRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
 
     },
     devtool: 'sourcemaps',

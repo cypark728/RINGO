@@ -4,16 +4,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/Community")
 public class CommunityController {
 
-    @GetMapping("/Community/{pageName}") //.do 해주세요
-    public String page(@PathVariable String pageName, Model model) {
-        model.addAttribute("pageName", pageName);
-        System.out.println("뷰이름:" + pageName);
+    @GetMapping("/CommunityList")
+    public String communityList(Model model) {
+        model.addAttribute("pageName", "community");
+        return "community";
+    }
 
-        return "community"; //언제나 view화면으로 이동합니다.
+    @GetMapping("/CommunityDetail")
+    public String communityDetail(Model model) {
+        model.addAttribute("pageName", "communitydetail");
+        return "community";
+    }
+
+    @GetMapping("/CommunityWrite")
+    public String communityWrite(Model model) {
+        model.addAttribute("pageName", "communitywrite");
+        return "community";
     }
 
 }
