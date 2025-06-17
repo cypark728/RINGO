@@ -29,6 +29,7 @@ function Header() {
                     <button className="signup-button">회원가입</button>
                 </nav>
             </header>
+            <div className="header-letterbox"/>
         </div>
 
     );
