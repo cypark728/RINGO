@@ -55,7 +55,10 @@ const HighScoreService = () => {
                 >
                     {images.map((src, idx) => (
                         <div className="keen-slider__slide slide" key={idx}>
-                            <img src={src} alt={`Slide ${idx}`} />
+                            <img src={src}
+                                 alt={`Slide ${idx}`}
+                                 onClick={() => window.location.href = "/lecture/lecturedetail"}
+                            />
                         </div>
                     ))}
                 </div>

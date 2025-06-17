@@ -30,7 +30,7 @@ module.exports = {
         chat: './pages/webrtc/Chat.js',
         mypage: './pages/MyPage/MyPageApp.js',
         lecturedetail: './pages/Product/ProductDetails/ProductDetail.js',
-        LectureRegistration: './pages/Product/ProductRegistration/ProductRegistration.js'
+        lectureregistration: './pages/Product/ProductRegistration/ProductRegistration.js'
 
     },
     devtool: 'source-map',

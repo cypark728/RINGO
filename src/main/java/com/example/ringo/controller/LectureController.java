@@ -6,24 +6,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/Lecture")
+@RequestMapping("/lecture")
 public class LectureController {
 
-    @GetMapping("/LectureInfo")
+    @GetMapping("/lectureinfo")
     public String lectures(Model model) {
         model.addAttribute("pageName", "lectureinfo");
         return "lecture";
     }
 
-    @GetMapping("/LectureDetail")
+    @GetMapping("/lecturedetail")
     public String lectureDetail(Model model) {
         model.addAttribute("pageName", "lecturedetail");
         return "lecture";
     }
 
-    @GetMapping("/LectureRegistration")
+    @GetMapping("/lectureregistration")
     public String lectureRegistration(Model model) {
-        model.addAttribute("pageName", "LectureRegistration");
+        model.addAttribute("pageName", "lectureregistration");
         return "lecture";
     }
 
