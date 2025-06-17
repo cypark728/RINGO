@@ -47,7 +47,10 @@ const PopularService = () => (
         <div className="popular-services-right">
             <div className="popular-services-grid">
                 {services.map((svc) => (
-                    <div className="popular-service-card" key={svc.id}>
+                    <div className="popular-service-card"
+                         key={svc.id}
+                         onClick={() => window.location.href = "/lecture/lecturedetail"}
+                    >
                         <img src={svc.img} alt={svc.title} className="popular-service-img" />
                         <div className="popular-service-title">{svc.title}</div>
                         <div className="popular-service-rating">
