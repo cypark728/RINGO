@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class NoticeController {
 
-    @GetMapping("/Notice/{pageName}") //.do 해주세요
-    public String page(@PathVariable String pageName, Model model) {
-        model.addAttribute("pageName", pageName);
-        System.out.println("뷰이름:" + pageName);
+    @GetMapping("/Notice/noticelist") //.do 해주세요
+    public String noticeList(Model model) {
+        model.addAttribute("pageName", "noticelist");
+        System.out.println("뷰이름:" + "noticelist");
 
-        return pageName; //언제나 view화면으로 이동합니다.
+        return "noticelist";
     }
 }
