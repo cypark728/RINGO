@@ -19,9 +19,19 @@ public class QnaServiceImpl implements QnaService {
     }
 
     @Override
-    public List<QnaVo> getQnaList() {
-        return qnaMapper.getQnaList();
+    public List<QnaVo> getQnaListPaging(int start, int amount, String keyword) {
+        return qnaMapper.getQnaListPaging(start, amount, keyword);
     }
+
+    @Override
+    public int getTotalQnaCount(String keyword) {
+        return qnaMapper.getTotalQnaCount(keyword);
+    }
+
+//    @Override
+//    public List<QnaVo> getQnaList() {
+//        return qnaMapper.getQnaList();
+//    }
 
 
 }

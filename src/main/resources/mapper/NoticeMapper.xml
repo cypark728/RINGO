@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ringo.notice.mapperJava.NoticeMapper">
+
+    <resultMap id="noticeMap" type="com.example.ringo.command.NoticeVO">
+        <id property="noticePostId" column="notice_post_id"/>
+        <result property="noticePostTitle" column="notice_post_title"/>
+        <result property="noticePostContent" column="notice_post_content"/>
+        <result property="noticePostDate" column="notice_post_date"/>
+    </resultMap>
+
+    <select id="getNoticeList" resultMap="noticeMap">
+        SELECT * FROM notice ORDER BY notice_post_id DESC
+    </select>
+
+    <select id="getNoticeListPaging" resultMap="noticeMap">
+        SELECT * FROM notice
+        WHERE notice_post_title ILIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY notice_post_id DESC
+            LIMIT #{amount} OFFSET #{start}
+    </select>
+
+    <select id="getTotalNoticeCount" resultType="int">
+        SELECT COUNT(*) FROM notice
+        WHERE notice_post_title ILIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+
+</mapper>

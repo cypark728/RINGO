@@ -5,6 +5,15 @@
 
 <mapper namespace="com.example.ringo.qna.mapperJava.QnaMapper">
 
+    <resultMap id="qnaMap" type="com.example.ringo.command.QnaVo">
+        <id property="qnaPostId" column="qna_post_id"/>
+        <result property="qnaPostTitle" column="qna_post_title"/>
+        <result property="qnaPostContent" column="qna_post_content"/>
+        <result property="qnaPostDate" column="qna_post_date"/>
+        <result property="userPrimaryId" column="user_primary_id"/>
+        <result property="qnaPostAnswerContent" column="qna_post_answer_content"/>
+    </resultMap>
+
     <insert id="insertQna" parameterType="com.example.ringo.command.QnaVo">
         INSERT INTO qna_post (
             qna_post_title,
@@ -24,6 +33,17 @@
         SELECT * FROM qna_post ORDER BY qna_post_id DESC
     </select>
 
+    <select id="getQnaListPaging" resultMap="qnaMap">
+        SELECT * FROM qna_post
+        WHERE qna_post_title ILIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY qna_post_id DESC
+            LIMIT #{amount} OFFSET #{start}
+    </select>
+
+    <select id="getTotalQnaCount" resultType="int">
+        SELECT COUNT(*) FROM qna_post
+        WHERE qna_post_title ILIKE CONCAT('%', #{keyword}, '%')
+    </select>
 
 
 

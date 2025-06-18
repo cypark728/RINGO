@@ -13,6 +13,9 @@ export default function QnaList() {
     const [postActive, setPostActive] = useState(null); //사용자가 몇 번째 질문을 열었는지 기억하는 state / 초기값은 null
     const [qnaActive, setQnaActive] = useState(null);
     const [qnaList, setQnaList] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [total, setTotal] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
 
     // function changeTab() {
     //     setActive(!active);
@@ -36,12 +39,19 @@ export default function QnaList() {
         setQnaActive((prev) => (prev === index ? null : index));
     }
 
+    const handleSearch = (e) => {
+        setCurrentPage(1);
+    };
+
     useEffect(()=> {
-        fetch("/api/qna/list")
+        fetch(`/api/qna/list?page=${currentPage}&keyword=${keyword}`)
             .then(res => res.json())
-            .then(data => setQnaList(data))
+            .then(data => {
+                setQnaList(data.qnaList);
+                setTotal(data.total);
+            });
             // .catch(err => console.error(err)) // 오류가 생기면 콘솔에 출력
-    }, []);
+    }, [currentPage, keyword]);
 
     // React (qnaList 상태)
     //     ⬇ fetch
@@ -53,6 +63,11 @@ export default function QnaList() {
     //     ⬇
     // MyBatis - DB(qna_post 테이블)
 
+    const handlePageChange = (page) => {
+        if(page > 0 && page <= Math.ceil(total / 10)) {
+            setCurrentPage(page);
+        }
+    }
 
     return (
 
@@ -64,8 +79,15 @@ export default function QnaList() {
                         <p>RINGO에 물어보세요</p>
                     </div>
                     <div className="qwer">
-                        <input type="text" className="qnaSearch" id="qnaSearchKeyword" placeholder="키워드를 검색하세요"/>
-                        <img src="/img/Search_1.png" alt="검색" className="search-iconTwo"/>
+                        <input type="text"
+                               className="qnaSearch"
+                               id="qnaSearchKeyword"
+                               placeholder="키워드를 검색하세요"
+                               value={keyword}
+                               onChange={(e) => setKeyword(e.target.value)}/>
+                        <img src="/img/Search_1.png" alt="검색"
+                             className="search-iconTwo"
+                             onClick={handleSearch} />
                     </div>
                 </div>
                 <div className="imgContentArea">
@@ -82,8 +104,8 @@ export default function QnaList() {
                     <div className="contentMiddleTitle">자주 묻는 질문
                         <div className="contentMiddleSubtitle">FAQ</div>
                     </div>
-
-                    <div className="contentMiddleMore">더보기></div>
+                    {/*더보기> 자리*/}
+                    <div className="contentMiddleMore"></div>
 
                 </div>
                 <div>
@@ -249,9 +271,9 @@ export default function QnaList() {
             <div className="contentBottomBox">
                 <div className="contentBottomHeader">
                     <div className="contentMiddleTitle">문의사항</div>
-
-                    <div className="contentMiddleMore">더보기></div>
-
+                    {/*더보기 자리*/}
+                    <div className="contentMiddleMore"></div>
+                
                 </div>
 
                 <div className="contentBottomBody">
@@ -260,7 +282,7 @@ export default function QnaList() {
                         {qnaList.map((item, index) => (
                             <div key={item.qnaPostId}>
                                 <div className="QnaOneLine">
-                                    <div className="QnaAnswerNumber">{index + 1}</div>
+                                    <div className="QnaAnswerNumber">{item.qnaPostId}</div>
                                     <div
                                         className={"QnaAnswerTitle"}
                                         onClick={() => downQna(index)}>
@@ -354,6 +376,25 @@ export default function QnaList() {
                     {/*            </div>*/}
                     {/*        </div>*/}
                 </div>
+
+                <div className="pagenation">
+                    <p><BiChevronsLeft className="pg" onClick={() => handlePageChange(1)} /></p>
+                    <p><BiChevronLeft className="pg" onClick={() => handlePageChange(currentPage - 1)} /></p>
+
+                    {Array.from({ length: Math.ceil(total / 10) }, (_, i) => (
+                        <p key={i} onClick={() => handlePageChange(i + 1)}>
+                            <span className={`pageNumber ${currentPage === i + 1 ? "active" : ""}`}>{i + 1}</span>
+                        </p>
+                    ))}
+
+                    <p><BiChevronRight className="pg" onClick={() => handlePageChange(currentPage + 1)} /></p>
+                    <p><BiChevronsRight className="pg" onClick={() => handlePageChange(Math.ceil(total / 10))} /></p>
+                </div>
+
+
+
+
+
 
                 <a href="qnawrite" className="qnaWriteButton" >
                     문의하기

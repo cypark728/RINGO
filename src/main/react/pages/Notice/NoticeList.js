@@ -1,35 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./NoticeList.css";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from "react-icons/bi";
 import ReactDOM from "react-dom/client";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 
-const dummyData = { //공지 내용물 변경필요
-    total: 5,
-    currentPage: 1,
-    amount: 10,
-    keyword: "",
-    noticeList: [
-        {
-            noticeId: 1,
-            noticeTitle: "첫 번째 공지사항",
-            noticeCreatedAt: "2024-06-01",
-            noticeContent: "이것은 첫 번째 공지사항의 내용입니다.",
-        },
-        // 추가 항목...
-    ],
-};
+// const dummyData = { //공지 내용물 변경필요
+//     total: 5,
+//     currentPage: 1,
+//     amount: 10,
+//     keyword: "",
+//     noticeList: [
+//         {
+//             noticeId: 1,
+//             noticeTitle: "첫 번째 공지사항",
+//             noticeCreatedAt: "2024-06-01",
+//             noticeContent: "이것은 첫 번째 공지사항의 내용입니다.",
+//         },
+//         // 추가 항목...
+//     ],
+// };
 
 export default function NoticeList() {
     const [activeIndex, setActiveIndex] = useState(null);
-    const [keyword, setKeyword] = useState(dummyData.keyword);
+    const [keyword, setKeyword] = useState("");
+    const [noticeList, setNoticeList] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const handleToggle = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
-    const handleSearchChange = (e) => setKeyword(e.target.value);
+    const handleSearchChange = (e) => {
+        setKeyword(e.target.value);
+        setCurrentPage(1);
+    };
+
+    useEffect(()=> {
+        fetch(`/api/notice/list?page=${currentPage}&keyword=${keyword}`)
+        // fetch("/api/notice/list")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("서버 응답:", data);
+                if(data && data.noticeList) {
+                    setNoticeList(data.noticeList);
+                    setTotal(data.total);
+                } else {
+                    setNoticeList([]);
+                    setTotal(0);
+                }
+            })
+    },[currentPage, keyword]);
+
+    const handlePageChange = (page) => {
+        if(page > 0 && page <= Math.ceil(total / 10)) { //페이지 범위 확인
+            setCurrentPage(page);
+        }
+    }
+
+    // React (qnaList 상태)
+    //     ⬇ fetch
+    // Spring @RestController
+    //     ⬇
+    // QnaService
+    //     ⬇
+    // QnaMapper
+    //     ⬇
+    // MyBatis - DB(qna_post 테이블)
 
     return (
         <div className="wrap">
@@ -64,19 +102,19 @@ export default function NoticeList() {
 
                 <section>
                     <div className="notice_card">
-                        <div className="notice_card_upper">총 <span>{dummyData.total}</span>개</div>
+                        <div className="notice_card_upper">총 <span>{total}</span>개</div>
 
-                        {dummyData.noticeList.map((notice, index) => (
-                            <div key={notice.noticeId} className="notice_card_row" onClick={() => handleToggle(index)}>
+                        {noticeList.map((notice, index) => (
+                            <div key={notice.noticePostId} className="notice_card_row" onClick={() => handleToggle(index)}>
                                 <div className={`notice_card_title ${activeIndex === index ? "open" : ""}`}>
-                                    <span className="title_cont num">{notice.noticeId}</span>
-                                    <span className="title_cont title">{notice.noticeTitle}</span>
+                                    <span className="title_cont num">{notice.noticePostId}</span>
+                                    <span className="title_cont title">{notice.noticePostTitle}</span>
                                     <span className="title_cont writer">운영자</span>
-                                    <span className="title_cont regdate">{notice.noticeCreatedAt}</span>
+                                    <span className="title_cont regdate">{notice.noticePostDate?.slice(0,10)}</span>
                                     <span className="title_cont down"><BiChevronDown className="arrow-icon" /></span>
                                 </div>
                                 <div className={`notice_card_content ${activeIndex === index ? "active" : ""}`}>
-                                    {notice.noticeContent}
+                                    {notice.noticePostContent}
                                 </div>
                             </div>
                         ))}
@@ -84,11 +122,19 @@ export default function NoticeList() {
 
                     {/* 페이징 */}
                     <div className="pagenation">
-                        <p><BiChevronsLeft className="pg" /></p>
-                        <p><BiChevronLeft className="pg" /></p>
-                        <p><a href="#1" className="active">1</a></p>
-                        <p><BiChevronRight className="pg" /></p>
-                        <p><BiChevronsRight className="pg" /></p>
+                        <p><BiChevronsLeft className="pg" onClick={() => handlePageChange(1)}/></p>
+                        <p><BiChevronLeft className="pg" onClick={() => handlePageChange(currentPage - 1)}/></p>
+
+
+                        {/* 페이징 번호 */}
+                        {Array.from({ length: Math.ceil(total / 10) }, (_, i) => (
+                            <p key={i} onClick={() => handlePageChange(i + 1)}>
+                                <span className={`pageNumber ${currentPage === i + 1 ? "active" : ""}`}>{i + 1}</span>
+                            </p>
+                        ))}
+
+                        <p><BiChevronRight className="pg" onClick={() => handlePageChange(currentPage + 1)} /></p>
+                        <p><BiChevronsRight className="pg" onClick={() => handlePageChange(Math.ceil(total / 10))}/></p>
                     </div>
                 </section>
             </main>
