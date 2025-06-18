@@ -7,13 +7,43 @@ function Login() {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!userId || !password) {
+            alert('아이디와 비밀번호를 모두 입력하세요.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    userPw: password,
+                }),
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = '/main';
+            } else {
+                alert(data.message || '아이디 또는 비밀번호가 올바르지 않습니다.');
+            }
+
+        } catch (error) {
+            alert('로그인 요청 중 오류가 발생했습니다.');
+        }
+    };
+
     return (
         <div className="login-background">
             <div className="login-box">
-                <div className="login-logo">
-                    <img src="/img/logo.png" alt="ringo" className="login-logo-img" />
-                </div>
-                <form className="login-form">
+                {/* ...생략... */}
+                <form className="login-form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         className="login-input"
@@ -27,6 +57,7 @@ function Login() {
                         placeholder="비밀번호"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
+                        autoComplete="off"
                     />
                     <button type="submit" className="login-btn">로그인</button>
                 </form>

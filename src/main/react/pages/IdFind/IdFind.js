@@ -44,10 +44,6 @@ function IdFind() {
                             maxLength={13}
                         />
                     </div>
-                    <div className="form-row">
-                        <label className="form-label" htmlFor="email">이메일</label>
-                        <input type="text" id="email" className="form-input" placeholder="ringo@gmail.com"/>
-                    </div>
                     <div className="form-actions">
                         <button type="button" className="findid-button">아이디 찾기</button>
                     </div>
