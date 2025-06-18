@@ -1,15 +1,20 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.PostVO;
+import com.example.ringo.command.UsersVO;
+import com.example.ringo.community.service.CommunityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/community")
 public class CommunityController {
+
+    @Autowired
+    private CommunityService communityService;
 
     @GetMapping("/communitylist")
     public String communityList(Model model) {
@@ -29,12 +34,12 @@ public class CommunityController {
         return "community";
     }
 
-    @GetMapping("/writepost")
-    public String communityWritePost(@RequestParam("postTitle") String postTitle,
-                                     @RequestParam("postContent") String postContent,
-                                     @RequestParam("postType") String postType) {
-
-        return "/community/communitylist";
+    @PostMapping("/writepost")
+    @ResponseBody
+    public ResponseEntity<String> communityWrite(@RequestBody PostVO postVO) {
+        communityService.writePost(postVO);
+        return ResponseEntity.ok("success");
     }
+
 
 }
