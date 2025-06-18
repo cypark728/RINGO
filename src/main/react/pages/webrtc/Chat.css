@@ -17,7 +17,7 @@
 
 .chat-box {
     overflow-y: auto;
-    max-height: 400px;
+    max-height: 90%;
     padding-right: 8px;
     display: flex;
     flex-direction: column;    /* 세로로 쌓기 */
