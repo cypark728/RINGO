@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -37,10 +38,11 @@ public class UsersServiceImpl implements UsersService {
         // 닉네임 = 아이디
         usersVO.setUserNickName(usersVO.getUserId());
 
+
         // 나이 계산
         LocalDate birthDate = usersVO.getUserBirth();
-        int age = Period.between(birthDate, LocalDate.now()).getYears();
-        usersVO.setUserAge(age + 1);
+        int age = Period.between(birthDate, LocalDate.now()).getYears() + 1; // 한국식 나이
+        usersVO.setUserAge(age);
 
         usersMapper.signup(usersVO);
     }

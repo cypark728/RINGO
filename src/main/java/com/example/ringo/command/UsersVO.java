@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,13 +19,14 @@ public class UsersVO {
     private String userPw;
     private String userName;
     private String userNickName;
-    private LocalDate userBirth; // 생년월일 (java.time.LocalDate 사용)
+    private LocalDate userBirth;
     private String userProfile; // 프로필 이미지 URL
-    private LocalDateTime createdAt; // 가입일시 (java.time.LocalDateTime 사용)
+    private Timestamp createdAt;
     private String userPhone; // 전화번호
     private String userRole; // 사용자 역할 (예: "USER", "ADMIN")
     private String userEmail;
     private String userGender;
     private int userAge;
     private String userInterest;
+
 }

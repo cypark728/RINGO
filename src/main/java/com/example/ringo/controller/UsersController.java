@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/Users")
+@RequestMapping("/users")
 public class UsersController {
 
     @Autowired
@@ -48,9 +48,10 @@ public class UsersController {
         return ResponseEntity.ok("success");
     }
 
-    @GetMapping("/check-id") ///users/check-id?userId=xxx로 GET 요청 시 중복 여부를 반환.
+    @GetMapping("/check-id")
+    @ResponseBody
     public boolean checkUserId(@RequestParam String userId) {
-        return usersService.isUserIdDuplicate(userId);
+        return usersService.isUserIdDuplicate(userId); // true: 중복, false: 사용 가능
     }
 
 }

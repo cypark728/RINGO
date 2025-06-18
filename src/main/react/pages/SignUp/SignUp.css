@@ -194,3 +194,113 @@
     font-size: 13px;
     margin: -12px 0 16px 120px; /* label width + margin-left에 맞게 조정 */
 }
+
+/* react-datepicker 기본 스타일 오버라이드 */
+.react-datepicker {
+    font-family: 'Noto Sans KR', sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.react-datepicker__header {
+    color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 8px 0;
+    font-weight: 700;
+}
+
+.react-datepicker__current-month {
+    font-size: 16px;
+}
+
+.react-datepicker__day-name {
+    color: #FF8127;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.react-datepicker__day {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    margin: 0 2px;
+    border-radius: 6px;
+    color: #222;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.react-datepicker__day:hover {
+    background-color: #FFEFE3;
+    color: #FF8127;
+}
+
+.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+    background-color: #FF8127;
+    color: white;
+    font-weight: 700;
+}
+
+.react-datepicker__day--outside-month {
+    color: #ccc;
+}
+
+.react-datepicker__triangle {
+    display: none;
+}
+
+.react-datepicker__navigation {
+    top: 10px;
+    line-height: 1.7rem;
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.react-datepicker__navigation--previous {
+    left: 10px;
+}
+
+.react-datepicker__navigation--next {
+    right: 10px;
+}
+
+.react-datepicker__year-dropdown, .react-datepicker__month-dropdown {
+    font-size: 14px;
+    color: #222;
+}
+
+.react-datepicker__input-container input {
+    width: 350px;
+    height: 40px;
+    padding-left: 14px;
+    font-size: 14px;
+    border: 1px solid #bababa;
+    border-width: 0 0 2px 0;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.3s;
+    border-radius: 0;
+}
+
+.react-datepicker__input-container input:focus {
+    border-bottom: 2px solid #ff8127;
+}
+
+.input-msg {
+    color: #ff3b3b;
+    font-size: 13px;
+    margin: -21px 0 0 120px; /* label width(100px) + margin-left(18px) + 여유 */
+    line-height: 1.4;
+}
+
+.input-msg.success {
+    color: #1ebd5a;
+}
