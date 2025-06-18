@@ -12,6 +12,26 @@
         )
     </insert>
 
+    <select id="getPost" resultType="PostVO">
+        SELECT *
+        FROM post
+        <where>
+            <if test="category != null and category != '' and category != '전체'">
+                post_type = #{category}
+            </if>
+        </where>
+        ORDER BY post_id DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
 
+    <select id="getPostCount" resultType="Integer">
+        SELECT count(*)
+        FROM post
+        <where>
+            <if test="category != null and category != '' and category != '전체'">
+                post_type = #{category}
+            </if>
+        </where>
+    </select>
 
 </mapper>
