@@ -1,20 +1,43 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.PostVO;
+import com.example.ringo.command.UsersVO;
+import com.example.ringo.community.service.CommunityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/community")
 public class CommunityController {
 
+    @Autowired
+    private CommunityService communityService;
+
     @GetMapping("/communitylist")
     public String communityList(Model model) {
         model.addAttribute("pageName", "community");
         return "community";
+    }
+
+    @GetMapping("/getPost")
+    @ResponseBody
+    public List<PostVO> getPost(@RequestParam(required = false) String category,
+                                @RequestParam int size,
+                                @RequestParam int offset) {
+        System.out.println(communityService.getPost(category, size, offset).toString());
+        return communityService.getPost(category, size, offset);
+    }
+
+    @GetMapping("/getPostCount")
+    @ResponseBody
+    public Integer getPostCount(@RequestParam(required = false) String category) {
+        System.out.println(communityService.getPostCount(category));
+        return communityService.getPostCount(category);
     }
 
     @GetMapping("/communitydetail")
@@ -29,12 +52,12 @@ public class CommunityController {
         return "community";
     }
 
-    @GetMapping("/writepost")
-    public String communityWritePost(@RequestParam("postTitle") String postTitle,
-                                     @RequestParam("postContent") String postContent,
-                                     @RequestParam("postType") String postType) {
-
-        return "/community/communitylist";
+    @PostMapping("/writepost")
+    @ResponseBody
+    public ResponseEntity<String> communityWrite(@RequestBody PostVO postVO) {
+        communityService.writePost(postVO);
+        return ResponseEntity.ok("success");
     }
+
 
 }

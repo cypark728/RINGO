@@ -6,12 +6,32 @@
 
     <insert id="writePost" parameterType="PostVO">
         INSERT INTO post (
-            post_title, post_content, post_type
+            post_title, post_content, post_type, user_primary_id
         ) VALUES (
-            #{postTitle}, #{postContent}, #{postType}
+            #{postTitle}, #{postContent}, #{postType}, #{userPrimaryId}
         )
     </insert>
 
+    <select id="getPost" resultType="PostVO">
+        SELECT *
+        FROM post
+        <where>
+            <if test="category != null and category != '' and category != '전체'">
+                post_type = #{category}
+            </if>
+        </where>
+        ORDER BY post_id DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
 
+    <select id="getPostCount" resultType="Integer">
+        SELECT count(*)
+        FROM post
+        <where>
+            <if test="category != null and category != '' and category != '전체'">
+                post_type = #{category}
+            </if>
+        </where>
+    </select>
 
 </mapper>

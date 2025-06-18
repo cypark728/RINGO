@@ -99,10 +99,34 @@ function CommunityWrite() {
     };
 
     // 등록 버튼 클릭
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 실제 업로드 로직은 별도로 구현
-        alert("글이 등록되었습니다!");
+
+        const postData = {
+            postTitle: title,
+            postContent: content,
+            postType: category,
+            userPrimaryId: 0 //이거 나중에 세션에서 받아오는 userId로 교체해야 함.
+        };
+
+        try {
+            const response = await fetch('/community/writepost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            });
+
+            if (response.ok) {
+                alert("글이 등록되었습니다.");
+                window.location.href="/community/communitylist";
+            } else {
+                alert("글 등록에 실패했습니다.");
+            }
+        }catch (e) {
+            alert("에러발생" + e);
+        }
     };
 
     return (
