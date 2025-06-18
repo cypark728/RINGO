@@ -14,10 +14,11 @@ function Header() {
                 </a>
 
                 <nav className="nav navCenter">
-                    <a href="/Lecture/LectureInfo">강의정보</a>
-                    <a href="/Community/CommunityList">커뮤니티</a>
-                    <a href="/Qna/Qnalist">문의사항</a>
-                    <a href="/Notice/noticelist">공지사항</a>
+
+                    <a href="/lecture/lectureinfo">강의정보</a>
+                    <a href="/community/communitylist">커뮤니티</a>
+                    <a href="/qna/qnalist">문의사항</a>
+                    <a href="/notice/noticelist">공지사항</a>
                 </nav>
 
                 <nav className="nav">
