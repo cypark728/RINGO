@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.ringo.users.mapperJava.UsersMapper">
 
-    <select id="usersVOList" resultType="com.example.ringo.command.UsersVO">
+    <select id="usersVOList" resultType="UsersVO">
         SELECT user_primary_id,
                user_id,
                user_pw,
@@ -11,7 +11,7 @@
         FROM users
     </select>
 
-    <insert id="signup" parameterType="com.example.ringo.command.UsersVO">
+    <insert id="signup" parameterType="UsersVO">
         INSERT INTO users (
             user_id, user_pw, user_name, user_nick_name, user_birth, user_profile, user_phone, user_email, user_gender, user_age, user_interest
         ) VALUES (
@@ -23,6 +23,26 @@
     <select id="countByUserId" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM users WHERE user_id = #{userId}
     </select>
+
+
+    <select id="findByUserId"
+            parameterType="String"
+            resultType="UsersVO">
+        SELECT user_primary_id, user_id, user_pw
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+
+<!--    <select id="login"-->
+<!--            parameterType="com.example.ringo.command.UsersVO"-->
+<!--            resultType="com.example.ringo.command.UsersVO">-->
+<!--        SELECT user_primary_id, user_id, user_pw-->
+<!--        FROM users-->
+<!--        WHERE user_id = #{userId}-->
+<!--          AND user_pw = #{userPw}-->
+<!--    </select>-->
+
 
 
 </mapper>

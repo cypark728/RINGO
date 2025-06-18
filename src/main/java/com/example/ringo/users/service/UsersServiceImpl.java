@@ -3,6 +3,7 @@ package com.example.ringo.users.service;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.users.mapperJava.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     private UsersMapper usersMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 //    @Autowired
 //    private PasswordEncoder passwordEncoder; // PasswordEncoder 주입
@@ -39,9 +42,12 @@ public class UsersServiceImpl implements UsersService {
         usersVO.setUserNickName(usersVO.getUserId());
 
 
+        String encodedPw = passwordEncoder.encode(usersVO.getUserPw());
+        usersVO.setUserPw(encodedPw);
+
         // 나이 계산
         LocalDate birthDate = usersVO.getUserBirth();
-        int age = Period.between(birthDate, LocalDate.now()).getYears() + 1; // 한국식 나이
+        int age = Period.between(birthDate, LocalDate.now()).getYears();
         usersVO.setUserAge(age);
 
         usersMapper.signup(usersVO);
@@ -50,6 +56,17 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public boolean isUserIdDuplicate(String userId) {
         return usersMapper.countByUserId(userId) > 0;
+    }
+
+    @Override
+    public UsersVO login(UsersVO usersVO) {
+
+
+        UsersVO dbUser = usersMapper.findByUserId(usersVO.getUserId());
+        if (dbUser != null && passwordEncoder.matches(usersVO.getUserPw(), dbUser.getUserPw())) {
+            return dbUser; // 로그인 성공 시 유저 정보 반환
+        }
+        return null; // 로그인 실패 시 null 반환
     }
 
 }
