@@ -30,6 +30,15 @@ function Meeting() {
     // 화이트보드
     const [showWhiteBoard, setShowWhiteBoard] = useState(false);
 
+
+    // ai 녹음
+    const [recording, setRecording] = useState(false);
+    const [seconds, setSeconds] = useState(0);
+    const [mediaRecorder, setMediaRecorder] = useState(null);
+    const [showTooltip, setShowTooltip] = useState(true);
+    const timerRef = useRef(null);
+    const chunksRef = useRef([]);
+
     const toggleFullScreen = () => {
         setIsFullScreen(prev => !prev);
     };
@@ -135,6 +144,56 @@ function Meeting() {
 
     // console.log("showCode 상태:", showCode);
     // console.log("whiteBoard 상태:",activeIndex, showWhiteBoard);
+
+    // 초를 mm:ss 형식으로 포맷팅
+    const formatTime = (sec) => {
+        const minutes = String(Math.floor(sec / 60)).padStart(2, "0");
+        const seconds = String(sec % 60).padStart(2, "0");
+        return `${minutes}:${seconds}`;
+    };
+
+    const handleStartRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const recorder = new MediaRecorder(stream);
+            setMediaRecorder(recorder);
+            chunksRef.current = [];
+
+            recorder.ondataavailable = (e) => {
+                chunksRef.current.push(e.data);
+            };
+
+            recorder.onstop = () => {
+                const blob = new Blob(chunksRef.current, {type: "audio/webm"});
+                const url = URL.createObjectURL(blob);
+                setAudioUrl(url);
+                setSeconds(0); // 타이머 리셋
+                clearInterval(timerRef.current);
+            };
+
+            recorder.start();
+            setRecording(true);
+
+            // 타이머 시작
+            timerRef.current = setInterval(() => {
+                setSeconds((prev) => prev + 1);
+            }, 1000);
+        } catch (err) {
+            console.error("마이크 권한 오류", err);
+        }
+    };
+
+    const handleStopRecording = () => {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+        }
+        setRecording(false);
+    };
+
+    useEffect(() => {
+        return () => clearInterval(timerRef.current); // 컴포넌트 언마운트 시 타이머 정리
+    }, []);
+
     return (
         <div>
             <div className="container">
@@ -164,11 +223,33 @@ function Meeting() {
 
 
                     <div className="ai">
-                        <div className="tooltip">
-                            <p>링고가 고수의 수업을 정리해드릴게요!</p>
+                        {recording && (
+                            <div style={{
+                                padding: "5px 10px",
+                                borderRadius: "8px",
+                                fontSize: "14px" ,
+                                display: "inline-block"
+                            }}>
+                                ⏺️ {formatTime(seconds)}
+                            </div>
+                        )}
 
-                        </div>
-                        <figure><img src="/img/ai.png" alt=""/></figure>
+                        {recording && (
+                            <button onClick={handleStopRecording} style={{marginTop: "10px", display: "inline-block"}}>
+                                <i className="fas fa-stop"></i>
+                            </button>
+                        )}
+
+                        {showTooltip && (
+                            <div className="tooltip">
+                                <p>링고가 고수의 수업을 정리해드릴게요!</p>
+                            </div>
+                        )}
+                        <figure onClick={handleStartRecording}><img src="/img/ai.png" alt=""/></figure>
+
+
+
+
                     </div>
                 </div>
 
