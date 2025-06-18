@@ -23,6 +23,7 @@ let savedCanvasJSON = null;
 io.on('connection', (socket) => {
     console.log('🔌 누군가 접속했어요!:', socket.id);
 
+    // =============✅ 채팅 공유 처리===================
     // 메시지 받기
     socket.on('chat-message', (message) => {
         console.log('📨 받은 메시지:', message);
@@ -34,13 +35,14 @@ io.on('connection', (socket) => {
         });
     });
 
-    // ✅ 코드 공유 처리
+    // =============✅ 코드 공유 처리===================
     socket.on('code-update', (code) => {
         console.log('🧠 코드 업데이트 수신:', code);
         socket.broadcast.emit('code-update', code);
     });
 
 
+    // =============✅ 화이트보드 공유 처리===================
     // 새 사용자에겐 마지막 캔버스 상태 전송
     if (lastCanvasData) {
         socket.emit("canvas-update", lastCanvasData);
@@ -57,13 +59,14 @@ io.on('connection', (socket) => {
     socket.on("draw-path", (p) => socket.broadcast.emit("draw-path", p));
     socket.on("add-object", (o) => socket.broadcast.emit("add-object", o));
     socket.on("modify-object", (d) => socket.broadcast.emit("modify-object", d));
-    socket.on("remove-object", (id) => socket.broadcast.emit("remove-object", id));
+    socket.on("remove-object", (id) => socket.broadcast.emit("remove-obj ect", id));
 
     socket.on("save-canvas", (json) => {
         savedCanvasJSON = json;
     });
 
 
+    // =================== 연결 종료===========================
     socket.on('disconnect', () => {
         console.log('❌ 유저 연결 종료:', socket.id);
     });

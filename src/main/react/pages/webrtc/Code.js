@@ -5,7 +5,7 @@ import './Code.css';
 import  io  from 'socket.io-client';
 
 
-const socket = io('http://172.30.1.12:8687');
+const socket = io('http://192.168.9.163:8687');
 
 function Code(){
 
