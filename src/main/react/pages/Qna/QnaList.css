@@ -354,3 +354,40 @@ img {
     cursor: pointer;
 
 }
+
+.pagenation {
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
+    text-decoration: none;
+}
+
+.pagenation > p {
+    display: inline-block;
+    margin: 8px;
+    font-size: 23px;
+    cursor: pointer;
+    text-decoration: none;
+    width: 20px;
+    height: 23px;
+}
+
+.pagenation > p > a {
+    text-decoration: none;
+
+}
+
+.pg {
+    display: inline-block; width: 20px; height: 20px;
+
+}
+
+.pageNumber.active {
+    font-weight: 600;
+    color: #FF8127;
+    font-size: 24px;
+}
+
+.pageNumber {
+    font-size: 22px;
+}
