@@ -1,5 +1,6 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.CommentVO;
 import com.example.ringo.command.PostVO;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.community.service.CommunityService;
@@ -29,21 +30,25 @@ public class CommunityController {
     public List<PostVO> getPost(@RequestParam(required = false) String category,
                                 @RequestParam int size,
                                 @RequestParam int offset) {
-        System.out.println(communityService.getPost(category, size, offset).toString());
         return communityService.getPost(category, size, offset);
     }
 
     @GetMapping("/getPostCount")
     @ResponseBody
     public Integer getPostCount(@RequestParam(required = false) String category) {
-        System.out.println(communityService.getPostCount(category));
         return communityService.getPostCount(category);
     }
 
     @GetMapping("/communitydetail")
-    public String communityDetail(Model model) {
+    public String communityDetail(@RequestParam("postId") String postId,Model model) {
         model.addAttribute("pageName", "communitydetail");
         return "community";
+    }
+
+    @GetMapping("/getOnePost")
+    @ResponseBody
+    public PostVO getOnePost(@RequestParam("postId") int postId) {
+        return communityService.getOnePost(postId);
     }
 
     @GetMapping("/communitywrite")
@@ -59,5 +64,16 @@ public class CommunityController {
         return ResponseEntity.ok("success");
     }
 
+    @PostMapping("/writeComment")
+    @ResponseBody
+    public void writeComment(@RequestBody CommentVO commentVO) {
+        communityService.writeComment(commentVO);
+    }
+
+    @GetMapping("/getAllComments")
+    @ResponseBody
+    public List<CommentVO> getAllComment(@RequestParam int postId) {
+        return communityService.getAllComments(postId);
+    }
 
 }

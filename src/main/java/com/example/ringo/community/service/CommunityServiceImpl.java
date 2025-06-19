@@ -1,5 +1,6 @@
 package com.example.ringo.community.service;
 
+import com.example.ringo.command.CommentVO;
 import com.example.ringo.command.PostVO;
 import com.example.ringo.community.mapperJava.CommunityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,20 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Integer getPostCount(String category) {
         return communityMapper.getPostCount(category);
+    }
+
+    @Override
+    public PostVO getOnePost(int postId) {
+        return communityMapper.getOnePost(postId);
+    }
+
+    @Override
+    public void writeComment(CommentVO commentVO) {
+        communityMapper.writeComment(commentVO);
+    }
+
+    @Override
+    public List<CommentVO> getAllComments(int postId) {
+        return communityMapper.getAllComments(postId);
     }
 }

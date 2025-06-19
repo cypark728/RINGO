@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import '../first.css';
+import '../../first.css';
 import './Community.css';
-import MyHeader from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
+import MyHeader from "../../../components/header/Header";
+import Footer from "../../../components/footer/Footer";
+import dayjs from 'dayjs';
 
 const categories = ["전체", "자유", "질문", "홍보"];
 
@@ -43,7 +44,7 @@ function Community() {
 
     const fetchPostsCount = async (category) => {
         const response = await fetch(`/community/getPostCount?category=${category}`);
-        setTotalPages(await response.json() / postsPerPage + 1);
+        setTotalPages((await response.json() + postsPerPage - 1) / postsPerPage);
     }
 
     // 카테고리/검색 변경 시 1페이지로 이동
@@ -94,8 +95,8 @@ function Community() {
                 </div>
                 <ul className="board-list">
                     {posts.map((post) => (
-                        <li  key={post.postID}
-                             onClick={() => window.location.href = `/community/communitydetail`}
+                        <li  key={post.postId}
+                             onClick={() => window.location.href = `/community/communitydetail?postId=${post.postId}`}
                              className="board-list-item">
                             <div className="board-meta">
                                 <span className="board-category">{post.postType}</span>
@@ -105,7 +106,9 @@ function Community() {
                                 <div className="board-desc">{post.postContent}</div>
                                 <div className="board-info">
                                     <span className="board-comments">💬 0</span>
-                                    <span className="board-date">{post.postCreateDate}</span>
+                                    <span className="board-date">
+                                        {dayjs(post.postCreateDate).format('YYYY-MM-DD')}
+                                    </span>
                                 </div>
                             </div>
                             <div className="board-thumb">

@@ -16,9 +16,14 @@
         SELECT *
         FROM post
         <where>
-            <if test="category != null and category != '' and category != '전체'">
-                post_type = #{category}
-            </if>
+            <choose>
+                <when test="category != null and category != '' and category != '전체'">
+                    post_type = #{category}
+                </when>
+                <otherwise>
+                    post_type in ('자유', '홍보', '질문')
+                </otherwise>
+            </choose>
         </where>
         ORDER BY post_id DESC
         LIMIT #{size} OFFSET #{offset}
@@ -28,10 +33,50 @@
         SELECT count(*)
         FROM post
         <where>
-            <if test="category != null and category != '' and category != '전체'">
-                post_type = #{category}
-            </if>
+            <choose>
+                <when test="category != null and category != '' and category != '전체'">
+                    post_type = #{category}
+                </when>
+                <otherwise>
+                    post_type in ('자유', '홍보', '질문')
+                </otherwise>
+            </choose>
         </where>
+    </select>
+
+    <select id="getOnePost" resultType="PostVO">
+        select
+            p.*,
+            u.user_nick_name
+        from
+            post as p
+                JOIN
+            users as u
+            ON p.user_primary_id = u.user_primary_id
+        where p.post_id = #{post_id};
+    </select>
+
+    <select id="writeComment" parameterType="CommentVO">
+        INSERT INTO comment(
+            comment_content, comment_depth, comment_parent_id, post_id, user_primary_id
+        )
+        VALUES (
+            #{commentContent}, #{commentDepth}, #{commentParentId}, #{postId}, #{userPrimaryId}
+        )
+    </select>
+
+    <select id="getAllComments" resultType="PostVO">
+        SELECT
+            c.*,
+            u.user_nick_name
+        FROM
+            COMMENT as c
+        JOIN
+            users as u
+        ON
+            c.user_primary_id = u.user_primary_id
+        WHERE
+            post_id = #{postId}
     </select>
 
 </mapper>
