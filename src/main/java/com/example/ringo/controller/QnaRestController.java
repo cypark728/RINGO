@@ -1,6 +1,6 @@
 package com.example.ringo.controller;
 
-import com.example.ringo.command.QnaVo;
+import com.example.ringo.command.QnaVO;
 import com.example.ringo.qna.service.QnaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public class QnaRestController {
         int amount = 10;
         int start = (page - 1) * amount;
 
-        List<QnaVo> qnaList = qnaService.getQnaListPaging(start, amount, keyword);
+        List<QnaVO> qnaList = qnaService.getQnaListPaging(start, amount, keyword);
         int total = qnaService.getTotalQnaCount(keyword);
 
         Map<String, Object> response = new HashMap<>();

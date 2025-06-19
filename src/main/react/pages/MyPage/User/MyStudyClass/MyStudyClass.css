@@ -56,8 +56,18 @@
 }
 
 .card-desc {
+    width: 100%;                    /* 부모 card 너비에 맞춤 */
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;      /* 최대 줄 수 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: calc(1.2em * 2);  /* 줄 간격을 고려한 최소 높이 */
+    line-height: 1.2em;
     font-size: 0.75rem;
     color: #555;
+    white-space: pre-wrap;
 }
 
 .card-price {

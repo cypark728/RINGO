@@ -11,7 +11,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QnaPostVO {
+public class QnaVO {
+
     private int postId;
     private String postTitle;
     private String postContent;
@@ -22,5 +23,8 @@ public class QnaPostVO {
 
     private String commentContent;
 
+
 }
+
+
 

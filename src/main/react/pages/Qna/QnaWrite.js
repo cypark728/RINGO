@@ -33,12 +33,12 @@ export default function QnaWrite() {
                             <form action="/qna/qnaForm" method="post">
                                 <div className="formUpper">
                                     <p className="qnaTitleWrap"><span className="pilsoo">*</span>제목</p>
-                                    <input type="text" className="qnaTitle" name="qnaPostTitle"
+                                    <input type="text" className="qnaTitle" name="postTitle"
                                            placeholder="제목을 입력해 주세요" required/><br/>
                                 </div>
                                 <div className="formMid">
                                     <p className="qnaContentWrap"><span className="pilsoo">*</span>내용</p>
-                                    <textarea className="qnaContent" name="qnaPostContent"
+                                    <textarea className="qnaContent" name="postContent"
                                               placeholder="내용을 입력해주세요"></textarea><br/>
                                 </div>
                                 <input type="submit" value="등록" className="qnaSubmitBtn"/>

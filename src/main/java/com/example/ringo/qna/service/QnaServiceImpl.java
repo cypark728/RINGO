@@ -1,6 +1,6 @@
 package com.example.ringo.qna.service;
 
-import com.example.ringo.command.QnaVo;
+import com.example.ringo.command.QnaVO;
 import com.example.ringo.qna.mapperJava.QnaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,12 @@ public class QnaServiceImpl implements QnaService {
     private QnaMapper qnaMapper;
 
     @Override
-    public void insertQna(QnaVo vo) {
+    public void insertQna(QnaVO vo) {
         qnaMapper.insertQna(vo);
     }
 
     @Override
-    public List<QnaVo> getQnaListPaging(int start, int amount, String keyword) {
+    public List<QnaVO> getQnaListPaging(int start, int amount, String keyword) {
         return qnaMapper.getQnaListPaging(start, amount, keyword);
     }
 

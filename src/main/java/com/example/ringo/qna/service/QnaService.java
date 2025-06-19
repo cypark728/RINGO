@@ -1,14 +1,14 @@
 package com.example.ringo.qna.service;
 
-import com.example.ringo.command.QnaVo;
+import com.example.ringo.command.QnaVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface QnaService {
-    void insertQna(QnaVo vo);
+    void insertQna(QnaVO vo);
 
-    List<QnaVo> getQnaListPaging(@Param("start") int start,
+    List<QnaVO> getQnaListPaging(@Param("start") int start,
                                  @Param("amount") int amount,
                                  @Param("keyword") String keyword);
 
