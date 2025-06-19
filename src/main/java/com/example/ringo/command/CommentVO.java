@@ -19,4 +19,6 @@ public class CommentVO {
     private Timestamp commentCreateTime;
     private Integer postId;
     private Integer userPrimaryId;
+
+    private String userNickName;
 }

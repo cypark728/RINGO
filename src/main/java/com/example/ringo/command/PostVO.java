@@ -19,5 +19,7 @@ public class PostVO {
     private String postType;
     private Integer postViewCount;
     private Integer userPrimaryId;
+
+    private String userNickName;
 }
 

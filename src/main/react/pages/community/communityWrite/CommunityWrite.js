@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import '../first.css';
+import '../../first.css';
 import "./CommunityWrite.css";
 import ReactDOM from "react-dom/client";
-import MyHeader from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
+import MyHeader from "../../../components/header/Header";
+import Footer from "../../../components/footer/Footer";
 
 const categories = ["자유", "질문", "홍보"];
 
