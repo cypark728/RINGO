@@ -47,6 +47,7 @@ export default function QnaList() {
         fetch(`/api/qna/list?page=${currentPage}&keyword=${keyword}`)
             .then(res => res.json())
             .then(data => {
+                console.log("qnaList data:", data.qnaList);
                 setQnaList(data.qnaList);
                 setTotal(data.total);
             });
@@ -280,17 +281,17 @@ export default function QnaList() {
 
                     <div>
                         {qnaList.map((item, index) => (
-                            <div key={item.qnaPostId}>
+                            <div key={item.postId}>
                                 <div className="QnaOneLine">
-                                    <div className="QnaAnswerNumber">{item.qnaPostId}</div>
+                                    <div className="QnaAnswerNumber">{index + 1}</div>
                                     <div
                                         className={"QnaAnswerTitle"}
                                         onClick={() => downQna(index)}>
-                                        {item.qnaPostTitle}
+                                        {item.postTitle}
                                     </div>
                                     <div className="QnaAnswerOther">
                                         <div onClick={ () => downQna(index)}>{item.userPrimaryId}</div>
-                                        <div onClick={ () => downQna(index)}>{item.qnaPostDate?.slice(0,10)}</div>
+                                        <div onClick={ () => downQna(index)}>{item.postDate?.slice(0,10)}</div>
                                         <div>
                                             <img src="/img/buttom_arrow.png"
                                                  alt="표시화살표"
@@ -301,11 +302,11 @@ export default function QnaList() {
                                 </div>
 
                                 <div className={`qnaContentPost ${qnaActive === index ? "on" : "off"}`}>
-                                    {item.qnaPostContent}
+                                    {item.postContent}
                                 </div>
 
                                 <div className={`qnaContentPostTwo ${qnaActive === index ? "on" : "off"}`}>
-                                    {item.qnaPostAnswerContent || "현재 답변 준비중입니다."}
+                                    {item.commentContent || "현재 답변 준비중입니다."}
                                 </div>
 
                             </div>

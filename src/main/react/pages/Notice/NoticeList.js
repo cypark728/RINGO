@@ -105,16 +105,16 @@ export default function NoticeList() {
                         <div className="notice_card_upper">총 <span>{total}</span>개</div>
 
                         {noticeList.map((notice, index) => (
-                            <div key={notice.noticePostId} className="notice_card_row" onClick={() => handleToggle(index)}>
+                            <div key={notice.postId} className="notice_card_row" onClick={() => handleToggle(index)}>
                                 <div className={`notice_card_title ${activeIndex === index ? "open" : ""}`}>
-                                    <span className="title_cont num">{notice.noticePostId}</span>
-                                    <span className="title_cont title">{notice.noticePostTitle}</span>
+                                    <span className="title_cont num">{index + 1}</span>
+                                    <span className="title_cont title">{notice.postTitle}</span>
                                     <span className="title_cont writer">운영자</span>
-                                    <span className="title_cont regdate">{notice.noticePostDate?.slice(0,10)}</span>
+                                    <span className="title_cont regdate">{notice.postCreateDate?.slice(0,10)}</span>
                                     <span className="title_cont down"><BiChevronDown className="arrow-icon" /></span>
                                 </div>
                                 <div className={`notice_card_content ${activeIndex === index ? "active" : ""}`}>
-                                    {notice.noticePostContent}
+                                    {notice.postContent}
                                 </div>
                             </div>
                         ))}

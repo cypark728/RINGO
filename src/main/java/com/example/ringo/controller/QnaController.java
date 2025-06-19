@@ -1,6 +1,6 @@
 package com.example.ringo.controller;
 
-import com.example.ringo.command.QnaVo;
+import com.example.ringo.command.QnaVO;
 import com.example.ringo.qna.service.QnaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,10 +37,10 @@ public class QnaController {
     }
 
     @PostMapping("/qnaForm")
-    public String insertQna(QnaVo vo) {
+    public String insertQna(QnaVO vo) {
 
 //        vo.setUserPrimaryId; (로그인유저ID)
-
+        System.out.println("전달된 QnaVO: " + vo);
         qnaService.insertQna(vo);
         return "redirect:/qna/qnalist";
 
