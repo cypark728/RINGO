@@ -20,7 +20,7 @@ public class UsersVO {
     private String userName;
     private String userNickName;
     private LocalDate userBirth;
-    private String userProfile; // 프로필 이미지 URL
+    private byte[] userProfile;  // 프로필 이미지 URL
     private Timestamp createdAt;
     private String userPhone; // 전화번호
     private String userRole; // 사용자 역할 (예: "USER", "ADMIN")
