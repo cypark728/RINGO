@@ -288,6 +288,7 @@ function SignUp() {
                             placeholder="이름 입력"
                             value={name}
                             onChange={e => setName(e.target.value)}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="form-row">
@@ -338,6 +339,7 @@ function SignUp() {
                             value={phone}
                             onChange={handlePhoneChange}
                             maxLength={13}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="form-row">
@@ -349,6 +351,7 @@ function SignUp() {
                             placeholder="ringo@gmail.com"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="interest-row">

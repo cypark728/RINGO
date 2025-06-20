@@ -62,9 +62,9 @@ function Login() {
                     <button type="submit" className="login-btn">로그인</button>
                 </form>
                 <div className="login-links">
-                    <a href="/idfind" className="login-link">아이디 찾기</a>
+                    <a href="/users/idfind" className="login-link">아이디 찾기</a>
                     <span className="login-divider">|</span>
-                    <a href="pwchange" className="login-link">비밀번호 찾기</a>
+                    <a href="/users/pwchange" className="login-link">비밀번호 찾기</a>
                 </div>
                 <div className="login-social-title">소셜 계정으로 간편 로그인</div>
                 <div className="login-social-icons">

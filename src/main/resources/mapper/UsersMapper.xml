@@ -11,7 +11,7 @@
         FROM users
     </select>
 
-    <insert id="signup" parameterType="UsersVO">
+    <insert id="signup" parameterType="UsersVO"> /* 회원가입 */
         INSERT INTO users (
             user_id, user_pw, user_name, user_nick_name, user_birth, user_profile, user_phone, user_email, user_gender, user_age, user_interest
         ) VALUES (
@@ -20,28 +20,74 @@
     </insert>
 
 
-    <select id="countByUserId" parameterType="String" resultType="int">
+    <select id="countByUserId" parameterType="String" resultType="int"> /* 아이디 중복 체크 */
         SELECT COUNT(*) FROM users WHERE user_id = #{userId}
     </select>
 
 
     <select id="findByUserId"
             parameterType="String"
-            resultType="UsersVO">
-        SELECT user_primary_id, user_id, user_pw
-        FROM users
-        WHERE user_id = #{userId}
+            resultType="UsersVO"> /* 로그인 시 아이디 존재 여부 확인 */
+        SELECT
+            user_primary_id AS userPrimaryId,
+            user_id         AS userId,
+            user_pw         AS userPw,
+            user_name       AS userName,
+            user_nick_name  AS userNickName,
+            user_gender     AS userGender,
+            user_birth      AS userBirth,
+            user_phone      AS userPhone,
+            user_email      AS userEmail,
+            user_interest   AS userInterest,
+            user_profile    AS userProfile,
+            user_create_date      AS createdAt,
+            user_age        AS userAge,
+            user_role       AS userRole
+        FROM
+            users
+        WHERE
+            user_id = #{userId}
     </select>
 
+    <select id="findId" resultType="UsersVO">
+        SELECT
+        user_id AS userId,
+        user_name AS userName,
+        user_create_date AS createdAt
+        FROM users
+        WHERE user_name = #{userName}
+        AND user_phone = #{userPhone}
+    </select>
 
-<!--    <select id="login"-->
-<!--            parameterType="com.example.ringo.command.UsersVO"-->
-<!--            resultType="com.example.ringo.command.UsersVO">-->
-<!--        SELECT user_primary_id, user_id, user_pw-->
-<!--        FROM users-->
-<!--        WHERE user_id = #{userId}-->
-<!--          AND user_pw = #{userPw}-->
-<!--    </select>-->
+    <select id="findUserForReset" parameterType="UsersVO" resultType="UsersVO">
+        SELECT
+            user_id as userId,
+            user_name as userName,
+            user_phone as userPhone
+        FROM users
+        WHERE user_name = #{userName}
+          AND user_id = #{userId}
+          AND user_phone = #{userPhone}
+    </select>
+
+    <update id="updatePassword" parameterType="UsersVO">
+        UPDATE users
+        SET user_pw = #{userPw}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUserInfo" parameterType="UsersVO">
+        UPDATE users
+        SET
+            user_name = #{userName},
+            user_nick_name = #{userNickName},
+            user_phone = #{userPhone},
+            user_email = #{userEmail},
+            user_interest = #{userInterest},
+            user_profile = #{userProfile, jdbcType=BINARY}
+        WHERE
+            user_id = #{userId}
+    </update>
 
 
 
