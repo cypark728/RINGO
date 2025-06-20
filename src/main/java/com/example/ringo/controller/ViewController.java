@@ -15,4 +15,15 @@ public class ViewController {
 
         return "view"; //언제나 view화면으로 이동합니다.
     }
+
+    @GetMapping("/{pageName}.do/{roomId}")
+    public String pageWithRoom(@PathVariable String pageName,
+                               @PathVariable String roomId,
+                               Model model) {
+        model.addAttribute("pageName", pageName);
+        model.addAttribute("roomId", roomId);
+        System.out.println("뷰이름:" + pageName + ", roomId:" + roomId);
+        return "view";
+    }
+
 }
