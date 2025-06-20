@@ -21,5 +21,6 @@ public class PostVO {
     private Integer userPrimaryId;
 
     private String userNickName;
+    private Integer postCommentCount;
 }
 

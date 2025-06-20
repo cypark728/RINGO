@@ -28,15 +28,17 @@ public class CommunityController {
     @GetMapping("/getPost")
     @ResponseBody
     public List<PostVO> getPost(@RequestParam(required = false) String category,
+                                @RequestParam(required = false) String search,
                                 @RequestParam int size,
                                 @RequestParam int offset) {
-        return communityService.getPost(category, size, offset);
+        return communityService.getPost(category, search, size, offset);
     }
 
     @GetMapping("/getPostCount")
     @ResponseBody
-    public Integer getPostCount(@RequestParam(required = false) String category) {
-        return communityService.getPostCount(category);
+    public Integer getPostCount(@RequestParam(required = false) String category,
+                                @RequestParam(required = false) String search) {
+        return communityService.getPostCount(category, search);
     }
 
     @GetMapping("/communitydetail")
@@ -70,10 +72,17 @@ public class CommunityController {
         communityService.writeComment(commentVO);
     }
 
-    @GetMapping("/getAllComments")
+    @GetMapping("/getAllParentComments")
     @ResponseBody
-    public List<CommentVO> getAllComment(@RequestParam int postId) {
-        return communityService.getAllComments(postId);
+    public List<CommentVO> getAllParentComment(@RequestParam int postId) {
+        return communityService.getAllParentComments(postId);
+    }
+
+    @GetMapping("/getChildComments")
+    @ResponseBody
+    public List<CommentVO> getChildComments(@RequestParam int postId,
+                                            @RequestParam int commentParentId) {
+        return communityService.getChildComments(postId, commentParentId);
     }
 
 }

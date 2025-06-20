@@ -23,13 +23,13 @@ public class CommunityServiceImpl implements CommunityService {
     public List<PostVO> getAllPost() { return communityMapper.getAllPost(); }
 
     @Override
-    public List<PostVO> getPost(String category, int size, int offset) {
-        return communityMapper.getPost(category, size, offset);
+    public List<PostVO> getPost(String category, String search, int size, int offset) {
+        return communityMapper.getPost(category, search, size, offset);
     }
 
     @Override
-    public Integer getPostCount(String category) {
-        return communityMapper.getPostCount(category);
+    public Integer getPostCount(String category, String search) {
+        return communityMapper.getPostCount(category, search);
     }
 
     @Override
@@ -43,7 +43,12 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public List<CommentVO> getAllComments(int postId) {
-        return communityMapper.getAllComments(postId);
+    public List<CommentVO> getAllParentComments(int postId) {
+        return communityMapper.getAllParentComments(postId);
+    }
+
+    @Override
+    public List<CommentVO> getChildComments(int postId, int commentParentId) {
+        return communityMapper.getChildComments(postId, commentParentId);
     }
 }

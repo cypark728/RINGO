@@ -21,4 +21,5 @@ public class CommentVO {
     private Integer userPrimaryId;
 
     private String userNickName;
+    private Integer childCommentCount;
 }
