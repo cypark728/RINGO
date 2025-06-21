@@ -90,7 +90,7 @@
     font-size: 16px;
     color: #444;
     font-weight: 400;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .userinfo-input {
@@ -178,8 +178,7 @@
 }
 
 .userinfo-submit-btn {
-    width: 100%;
-    max-width: 320px;
+    width: 400px;
     height: 48px;
     background-color: #FF8127;
     color: white;

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -30,26 +29,15 @@ public class UsersServiceImpl implements UsersService {
     @Transactional
     @Override
     public void signup(UsersVO usersVO) {
-
         if (isUserIdDuplicate(usersVO.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
-
-//        String encodedPw = passwordEncoder.encode(usersVO.getUserPw());
-//        usersVO.setUserPw(encodedPw);
-
-        // 닉네임 = 아이디
         usersVO.setUserNickName(usersVO.getUserId());
-
-
         String encodedPw = passwordEncoder.encode(usersVO.getUserPw());
         usersVO.setUserPw(encodedPw);
-
-        // 나이 계산
         LocalDate birthDate = usersVO.getUserBirth();
         int age = Period.between(birthDate, LocalDate.now()).getYears();
         usersVO.setUserAge(age);
-
         usersMapper.signup(usersVO);
     }
 
@@ -60,13 +48,34 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UsersVO login(UsersVO usersVO) {
-
-
         UsersVO dbUser = usersMapper.findByUserId(usersVO.getUserId());
         if (dbUser != null && passwordEncoder.matches(usersVO.getUserPw(), dbUser.getUserPw())) {
-            return dbUser; // 로그인 성공 시 유저 정보 반환
+            return dbUser;
         }
-        return null; // 로그인 실패 시 null 반환
+        return null;
     }
 
+    @Override
+    public List<UsersVO> findId(String userName, String userPhone) {
+        UsersVO vo = UsersVO.builder().userName(userName).userPhone(userPhone).build();
+        return usersMapper.findId(vo);
+    }
+
+    @Override
+    public UsersVO findUserForReset(String userName, String userId, String userPhone) {
+        UsersVO vo = UsersVO.builder().userName(userName).userId(userId).userPhone(userPhone).build();
+        return usersMapper.findUserForReset(vo);
+    }
+
+    @Override
+    public void updatePassword(String userId, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        UsersVO vo = UsersVO.builder().userId(userId).userPw(encodedPassword).build();
+        usersMapper.updatePassword(vo);
+    }
+
+    @Override
+    public void updateUserInfo(UsersVO vo) {
+        usersMapper.updateUserInfo(vo);
+    }
 }

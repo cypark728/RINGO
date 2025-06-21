@@ -1,48 +1,21 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Comment from "../comment/Comment"
 import './CommentSection.css';
 
-const initialComments = [
-    {
-        id: 1,
-        content: "첫 번째 댓글입니다.",
-        author: "사용자1",
-        date: "2025-06-13",
-        depth: 0,
-        children: [
-            {
-                id: 2,
-                content: "첫 번째 답글입니다.",
-                author: "사용자2",
-                date: "2025-06-13",
-                depth: 1,
-                children: [
-                    {
-                        id: 3,
-                        content: "답글의 답글(2단계 이상)은 같은 위치에 표시됩니다.",
-                        author: "사용자3",
-                        date: "2025-06-13",
-                        depth: 2,
-                        children: []
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: 4,
-        content: "작성자가 직접 쓴 댓글입니다.",
-        author: "닉네임", // 게시글 작성자와 동일
-        date: "2025-06-13",
-        depth: 0,
-        children: []
-    }
-];
-
 // 댓글 전체 관리 컴포넌트
-function CommentSection({postId, post}) {
+function CommentSection({postId, postAuthor}) {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+
+    //해당 post의 모든 댓글을 가져오기
+    const fetchGetAllComments = async (postId) => {
+        const response = await fetch(`/community/getAllParentComments?postId=${postId}`);
+        setComments(await response.json());
+    }
+
+    useEffect(() => {
+        fetchGetAllComments(postId);
+    }, []);
 
     // 최상위 댓글 등록
     const handleAddComment = async() => {
@@ -70,38 +43,33 @@ function CommentSection({postId, post}) {
         }
 
         setNewComment("");
+        await fetchGetAllComments(postId);
     };
 
     // 답글 등록 (트리 구조 갱신)
-    const handleReply = (parentId, text, depth) => {
+    const handleReply = async (parentId, text) => {
+
         const newReply = {
-            id: Date.now(),
-            content: text,
-            author: "나",
-            date: new Date().toISOString().slice(0, 10),
-            depth: depth,
-            children: []
+            commentContent: text,
+            commentDepth: 1,
+            postId: postId,
+            commentParentId: parentId,
+            userPrimaryId: 0 //나중에 현재 세션 userId로 바꿔줘야 함
         };
 
-        // 트리에서 parentId를 찾아 children에 추가 (재귀)
-        function addReply(comments) {
-            return comments.map((comment) => {
-                if (comment.id === parentId) {
-                    return {
-                        ...comment,
-                        children: [...comment.children, newReply]
-                    };
-                } else if (comment.children.length > 0) {
-                    return {
-                        ...comment,
-                        children: addReply(comment.children)
-                    };
-                }
-                return comment;
+        // db에서 입력받은 parentId, postId를 이용해서 저장
+        try {
+            await fetch('/community/writeComment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newReply)
             });
+        }catch (e) {
+            alert("에러발생" + e);
         }
 
-        setComments(addReply(comments));
     };
 
     return (
@@ -128,10 +96,12 @@ function CommentSection({postId, post}) {
             )}
             {comments.map((comment) => (
                 <Comment
-                    key={comment.id}
+                    key={comment.commentId}
                     comment={comment}
                     onReply={handleReply}
-                    postAuthor={post.userNickName}
+                    postAuthor={postAuthor}
+                    postId={postId}
+                    replyCount={comment.childCommentCount}
                 />
             ))}
         </div>

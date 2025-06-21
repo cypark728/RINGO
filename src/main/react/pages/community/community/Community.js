@@ -18,44 +18,52 @@ function Community() {
 
     const postsPerPage = 5;
 
-    //카테고리, 검색 필터링
-    // const filteredPosts = posts.filter(
-    //     (post) =>
-    //         (selectedCategory === "전체" || post.category === selectedCategory)
-    //         // &&
-    //         // (post.title.includes(search) || post.content.includes(search))
-    // );
-
-
     // 페이지 번호 클릭
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    const fetchPosts = async (category, size, offset) => {
+    const fetchPosts = async (category, size, offset, keyword) => {
         const params = new URLSearchParams();
         params.append("category", category);
         params.append("size", size);
         params.append("offset", offset);
+        if (keyword && keyword.trim() !== "") {
+            params.append("search", keyword.trim());
+        }
 
         const response = await fetch(`/community/getPost?${params.toString()}`);
         setPosts(await response.json());
     };
 
-    const fetchPostsCount = async (category) => {
-        const response = await fetch(`/community/getPostCount?category=${category}`);
+    const fetchPostsCount = async (category, keyword) => {
+        const params = new URLSearchParams();
+        params.append("category", category);
+        if (keyword && keyword.trim() !== "") {
+            params.append("search", keyword.trim());
+        }
+
+        const response = await fetch(`/community/getPostCount?${params.toString()}`);
         setTotalPages((await response.json() + postsPerPage - 1) / postsPerPage);
     }
 
+    const handleSearchKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            setCurrentPage(1);
+            fetchPosts(selectedCategory, postsPerPage, 0, search);
+            fetchPostsCount(selectedCategory, search);
+        }
+    };
+
     // 카테고리/검색 변경 시 1페이지로 이동
     useEffect(() => {
-        fetchPosts(selectedCategory, postsPerPage, 0);
+        fetchPosts(selectedCategory, postsPerPage, 0, search);
         setCurrentPage(1);
-        fetchPostsCount(selectedCategory);
-    }, [selectedCategory, search]);
+        fetchPostsCount(selectedCategory, search);
+    }, [selectedCategory]);
 
     useEffect(() => {
-        fetchPosts(selectedCategory, postsPerPage, (currentPage - 1) * postsPerPage);
+        fetchPosts(selectedCategory, postsPerPage, (currentPage - 1) * postsPerPage, search);
     }, [currentPage]);
 
     return (
@@ -90,6 +98,7 @@ function Community() {
                             placeholder="키워드로 검색하세요."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={handleSearchKeyDown}
                         />
                     </div>
                 </div>
@@ -105,7 +114,7 @@ function Community() {
                                 <div className="board-title">{post.postTitle}</div>
                                 <div className="board-desc">{post.postContent}</div>
                                 <div className="board-info">
-                                    <span className="board-comments">💬 0</span>
+                                    <span className="board-comments">💬 {post.postCommentCount}</span>
                                     <span className="board-date">
                                         {dayjs(post.postCreateDate).format('YYYY-MM-DD')}
                                     </span>

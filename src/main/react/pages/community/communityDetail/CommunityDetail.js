@@ -24,15 +24,8 @@ function CommunityDetail() {
         setPost(await response.json());
     }
 
-    const fetchGetAllComment = async (postId) => {
-        const response = await fetch(`/community/getAllComments?postId=${postId}`);
-        setComments(await response.json());
-
-    }
-
     useEffect(() => {
         fetchGetOnePost(postId);
-        fetchGetAllComment(postId);
     }, []);
 
     return (
@@ -64,11 +57,13 @@ function CommunityDetail() {
                     {/*)}*/}
                 </div>
                 {/* 댓글/답글 영역 */}
-                <CommentSection
-                    postId={postId}
-                    post={post}
-                    comments={comments}
-                />
+                {post.userNickName && (
+                    <CommentSection
+                        postId={postId}
+                        postAuthor={post.userNickName}
+                    />
+                )}
+
                 <div className={"Community-list-box"}>
                     <button type={"button"} className={"Community-list"}  onClick={() => window.location.href = "/Community/community"} >목록으로</button>
                 </div>
