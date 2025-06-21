@@ -45,4 +45,4 @@ out/
 ### 민감정보 ###
 /src/main/resources/application-db.properties
 
-application.properties
+

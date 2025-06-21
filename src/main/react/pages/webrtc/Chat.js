@@ -5,7 +5,7 @@ import './Chat.css' //css파일 임포트
 import { io }  from 'socket.io-client';
 
 
-const socket = io('http://172.30.1.12:8687');
+const socket = io('https://0d19-218-153-162-9.ngrok-free.app');
 
 function Chat({room}) {
     const [message, setMessage] = useState('');
@@ -18,6 +18,8 @@ function Chat({room}) {
         socket.on('chat-message', (msg) => {
             setMessages(prev => [...prev, { from: 'other', ...msg }]);
         });
+
+        socket.emit('join room', { room, username: '고수' });
 
         return () => socket.off('chat-message');
     }, []);
