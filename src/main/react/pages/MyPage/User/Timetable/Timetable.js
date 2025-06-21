@@ -64,9 +64,39 @@ export default function Timetable() {
     };
 
     const handleSave = () => {
+
         setEditMode(false);
         setSavedBlocks([...blocks]);
         setEditingId(null);
+
+        const userPrimaryId = 789; //userPrimaryId로 수정필요
+
+
+        fetch('/api/mypage/timetablesave', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userPrimaryId,
+                schedules: blocks.map(b => ({
+                    timetableScheduleContent: b.title,
+                    timetableScheduleX: b.x,
+                    timetableScheduleY: b.y,
+                    timetableScheduleWidth: b.width,
+                    timetableScheduleHeight: b.height,
+                    timetableScheduleColor: b.color,
+                    timetableScheduleTextColor: b.textColor
+                })),
+            }),
+        })
+            .then(response => {
+                console.log('저장 성공')
+            })
+            .catch(error => {
+                console.error('실패', error);
+            });
+
     };
 
     const handleTitleChange = (id, value) => {
@@ -94,6 +124,37 @@ export default function Timetable() {
             block.id === id ? { ...block, textColor } : block
         ));
     };
+
+    //시간표 불러오기
+    useEffect(() => {
+        const userPrimaryId = 789; // 실제 로그인된 사용자 id로 교체 필요
+
+        fetch(`/api/mypage/timetable?userPrimaryId=${userPrimaryId}`)
+            .then((res) => {
+                if(!res.ok) throw new Error('서버오류');
+                return res.json();
+            })
+            .then((data) => {
+                const loadedBlocks = data.map((item, index) => ({
+                    id: index + 1, // 고유 ID 생성
+                    x: item.timetableScheduleX,
+                    y: item.timetableScheduleY,
+                    width: item.timetableScheduleWidth,
+                    height: item.timetableScheduleHeight,
+                    title: item.timetableScheduleContent,
+                    color: item.timetableScheduleColor,
+                    textColor: item.timetableScheduleTextColor
+                }));
+
+                setBlocks(loadedBlocks);
+                setSavedBlocks(loadedBlocks);
+            })
+            .catch(err => {
+                console.error('시간표 로딩 실패', err);
+            })
+
+    }, []);
+
 
     // ✅ 외부 클릭 시 편집 종료
     useEffect(() => {

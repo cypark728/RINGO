@@ -6,8 +6,8 @@ function MyBookmark() {
     const [myBookmarks, setMyBookmarks] = useState([]);
 
     useEffect(() => {
-        fetch("/api/mypage/mywish?userId=789")
-        // fetch(`/api/mypage/mywish?userId=${userId}`) //user id 로 할때
+        fetch("/api/mypage/mywish?userPrimaryId=789")
+        // fetch(`/api/mypage/mywish?userPrimaryId=${userPrimaryId}`) //user id 로 할때
             .then(res => res.json())
             .then(data => {
                 console.log("API 응답 결과:", data);
