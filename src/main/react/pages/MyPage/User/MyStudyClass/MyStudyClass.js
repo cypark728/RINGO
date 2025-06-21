@@ -6,8 +6,8 @@ function MyStudyClass() {
     const [myStudyClass, setMyStudyClass] = useState([]);
 
     useEffect(() => {
-        fetch("/api/mypage/mystudyclass?userId=789") //789 아니고 userid로 할땐 밑에거
-        // fetch(`/api/mypage/mystudyclass?userId=${userId}`) //user id 로 할때
+        fetch("/api/mypage/mystudyclass?userPrimaryId=789") //789 아니고 userPrimaryId로 할땐 밑에거
+        // fetch(`/api/mypage/mystudyclass?userPrimaryId=${userPrimaryId}`) //user id 로 할때
             .then(res => res.json())
             .then(data => {
                 setMyStudyClass(data);

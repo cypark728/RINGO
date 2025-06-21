@@ -29,7 +29,6 @@
     width: 100%;
     height: 140px;
     background-color: #000;
-    margin-bottom: 0.75rem;
 }
 
 .card-title {
@@ -74,11 +73,12 @@
 
 .review-author {
     font-size: 0.875rem;
-    font-weight: 600;
+
 }
 
 .review-text {
     font-size: 0.875rem;
     color: #333;
+    font-weight: 800;
 }
 

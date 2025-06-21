@@ -34,11 +34,36 @@
         <result property="isWish" column="is_wish"/>
         <result property="isApply" column="is_apply"/>
 
+    </resultMap>
+
+    <resultMap id="reviewMap" type="com.example.ringo.command.MyPageVO">
+        <id property="recruitmentReviewId" column="recruitment_review_id"/>
+        <result property="recruitmentReviewTitle" column="recruitment_review_title"/>
+        <result property="recruitmentReviewContent" column="recruitment_review_content"/>
+        <result property="recruitmentReviewScore" column="recruitment_review_score"/>
+        <result property="recruitmentPostId" column="recruitment_post_id"/>
+        <result property="userPrimaryId" column="user_primary_id"/>
+        <result property="recruitmentReviewTime" column="recruitment_review_time"/>
+        <result property="userNickName" column="user_nick_name"/>
+
+    </resultMap>
+
+    <resultMap id="timetableMap" type="com.example.ringo.command.ScheduleVO">
+        <id property="timetableScheduleId" column="timetable_schedule_id"/>
+        <result property="timetableScheduleContent" column="timetable_schedule_content"/>
+        <result property="timetableScheduleX" column="timetable_schedule_x"/>
+        <result property="timetableScheduleY" column="timetable_schedule_y"/>
+        <result property="timetableScheduleWidth" column="timetable_schedule_width"/>
+        <result property="timetableScheduleHeight" column="timetable_schedule_height"/>
+        <result property="timetableScheduleColor" column="timetable_schedule_color"/>
+        <result property="timetableScheduleTextColor" column="timetable_schedule_text_color"/>
+        <result property="userPrimaryId" column="user_primary_id"/>
 
     </resultMap>
 
 
 
+<!--  내가 듣는 수업 불러오기  -->
     <select id="getMyApplyClass" resultMap="userClassMap">
         SELECT
             c.class_manage_id,
@@ -54,10 +79,11 @@
             r.recruitment_post_viewcount
         FROM class_manage c
                  JOIN recruitment_post r ON c.recruitment_post_id = r.recruitment_post_id
-        WHERE c.user_primary_id = #{userId}
+        WHERE c.user_primary_id = #{userPrimaryId}
           AND c.class_manage_status = '신청중'
     </select>
 
+<!--  내가 찜한 수업 불러오기  -->
     <select id="getMyWish" resultMap="wishMap" parameterType="int">
         SELECT
             a.apply_wish_id,
@@ -72,15 +98,69 @@
             r.recruitment_post_viewcount
         FROM apply_wish a
                  JOIN recruitment_post r ON a.recruitment_post_id = r.recruitment_post_id
-        WHERE a.user_primary_id = #{userId}
+        WHERE a.user_primary_id = #{userPrimaryId}
           AND a.is_wish = true
     </select>
 
+<!--  찜 하트 버튼 누르면 db 업뎃하기  -->
     <update id="updateWish" parameterType="com.example.ringo.command.MyPageVO">
         UPDATE apply_wish
         SET is_wish = #{isWish}
         WHERE apply_wish_id = #{applyWishId}
     </update>
+
+<!--  내 리뷰 가져오기  -->
+    <select id="getMyReview" resultMap="reviewMap" parameterType="int">
+        SELECT
+            r.recruitment_review_id,
+            r.recruitment_review_title,
+            r.recruitment_review_content,
+            r.recruitment_review_score,
+            r.recruitment_post_id,
+            r.user_primary_id,
+            r.recruitment_review_time,
+            u.user_nick_name
+        FROM recruitment_review r
+                 LEFT JOIN users u ON r.user_primary_id = u.user_primary_id
+        WHERE r.user_primary_id = #{userPrimaryId}
+    </select>
+
+<!-- 시간표 띄우기 -->
+    <select id="getTimetable" resultMap="timetableMap">
+        SELECT *
+        FROM timetable_schedule
+        WHERE user_primary_id = #{userPrimaryId}
+    </select>
+
+
+<!--  기존 시간표 지우기  -->
+    <delete id="deleteTimetablePast" parameterType="int">
+        DELETE FROM timetable_schedule
+        WHERE user_primary_id = #{userPrimaryId}
+    </delete>
+
+    <!-- 시간표 삽입 -->
+    <insert id="insertSchedule" parameterType="map">
+        INSERT INTO timetable_schedule (
+            user_primary_id,
+            timetable_schedule_content,
+            timetable_schedule_x,
+            timetable_schedule_y,
+            timetable_schedule_width,
+            timetable_schedule_height,
+            timetable_schedule_color,
+            timetable_schedule_text_color
+        ) VALUES (
+                     #{userPrimaryId},
+                     #{schedule.timetableScheduleContent},
+                     #{schedule.timetableScheduleX},
+                     #{schedule.timetableScheduleY},
+                     #{schedule.timetableScheduleWidth},
+                     #{schedule.timetableScheduleHeight},
+                     #{schedule.timetableScheduleColor},
+                     #{schedule.timetableScheduleTextColor}
+                 )
+    </insert>
 
 
 </mapper>

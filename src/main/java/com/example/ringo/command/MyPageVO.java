@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +30,16 @@ public class MyPageVO {
     private Integer applyWishId;
     private Boolean isWish;
     private Boolean isApply;
+
+    private Integer recruitmentReviewId;
+    private String recruitmentReviewTitle;
+    private String recruitmentReviewContent;
+    private String recruitmentReviewScore;
+    private Timestamp recruitmentReviewTime;
+
+    private String userNickName;
+
+    private List<ScheduleVO> schedules;
 
 
 }
