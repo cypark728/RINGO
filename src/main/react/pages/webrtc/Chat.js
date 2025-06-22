@@ -5,7 +5,7 @@ import './Chat.css' //css파일 임포트
 import { io }  from 'socket.io-client';
 
 
-const socket = io('https://0d19-218-153-162-9.ngrok-free.app');
+const socket = io('localhost:8687');
 
 function Chat({room}) {
     const [message, setMessage] = useState('');

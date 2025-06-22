@@ -49,6 +49,9 @@ function Meeting() {
     const [exitTarget, setExitTarget] = useState(null);
 
 
+    const [roomId, setRoomId] = useState(null);
+
+
     const toggleFullScreen = () => {
         setIsFullScreen(prev => !prev);
     };
@@ -78,85 +81,127 @@ function Meeting() {
     const date = currentTime.toISOString().slice(0, 10);
     const time = currentTime.toLocaleTimeString('en-GB')
 
-
+    useEffect(() => {
+        const id = prompt("Room ID를 입력하세요");
+        if (id && id.trim() !== "") {
+            setRoomId(id);
+        } else {
+            alert("방 ID를 입력해야 합니다.");
+            window.location.reload();
+        }
+    }, []);
 
     useEffect(() => {
-        // 1. Socket 서버 연결 (ex: localhost:8080)
-        socketRef.current = io('https://0d19-218-153-162-9.ngrok-free.app');  // socket.io-client import 필요
+        if (!roomId) return;
 
-        // 2. RTCPeerConnection 생성 (STUN 서버는 필수)
-        pcRef.current = new RTCPeerConnection({
-            iceServers: [
-                {urls: 'stun:stun.l.google.com:19302'}
-            ]
+        const socket = io("http://localhost:8687"); // ✅ 시그널링 서버 주소로 수정
+        socketRef.current = socket;
+
+        const pc = new RTCPeerConnection({
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
         });
+        pcRef.current = pc;
 
-        // 3. 내 카메라/마이크 스트림 가져오기
-        navigator.mediaDevices.getUserMedia({video: true, audio: true})
-            .then(stream => {
-                // 내 비디오 화면에 스트림 세팅
-                localVideoRef.current.srcObject = stream;
-                // RTCPeerConnection에 내 스트림 트랙 추가
-                stream.getTracks().forEach(track => pcRef.current.addTrack(track, stream));
+        let myStream;
 
-                socketRef.current.emit('join-room', 'roomId');
-            })
-            .catch(err => {
-                console.error('Error accessing media devices.', err);
-            });
+        // ✅ 컴포넌트 로드시 항상 내 미디어 먼저 가져오기 (내 화면 표시용)
+        (async function initMyMedia() {
+            try {
+                myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideoRef.current.srcObject = myStream;
+            } catch (err) {
+                console.error("🎥 내 미디어 가져오기 실패", err);
+            }
+        })();
 
-        // 4. 상대방 스트림 받기 (remoteVideoRef에 연결)
-        pcRef.current.ontrack = (event) => {
-            console.log("상대방스트림받기",event);
-            // 여러 트랙이 올 수 있으니 첫번째 스트림 가져오기
+        // 상대방과 연결할 때 다시 트랙을 붙이기 위해 별도 함수로 보관
+        async function getMediaAndAttachTracks() {
+            try {
+                if (!myStream) {
+                    myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    localVideoRef.current.srcObject = myStream;
+                }
+                myStream.getTracks().forEach(track => pc.addTrack(track, myStream));
+            } catch (e) {
+                console.error("🎥 미디어 가져오기 실패", e);
+            }
+        }
+
+
+        // 2. 메시지 전송 함수
+        const sendMessage = (message) => {
+            socket.emit("rtc-message", JSON.stringify({
+                roomId,
+                ...message,
+            }));
+        };
+
+        // 3. ICE 후보 전송
+        pc.onicecandidate = (event) => {
+            if (event.candidate) {
+                sendMessage({
+                    event: "candidate",
+                    data: event.candidate,
+                });
+            }
+        };
+
+        // 4. 상대방 스트림 수신
+        pc.ontrack = (event) => {
             remoteVideoRef.current.srcObject = event.streams[0];
         };
 
-        // 5. ICE 후보 처리
-        pcRef.current.onicecandidate = (event) => {
-            console.log("❄️ ICE candidate 생성됨:", event.candidate);
-            if (event.candidate) {
-                socketRef.current.emit('ice-candidate', event.candidate);
-            }
-        };
 
-        // 6. Socket 이벤트 수신 (signaling)
-        socketRef.current.on('offer', async (offer) => {
-            console.log("📨 offer 수신:", offer);
-            await pcRef.current.setRemoteDescription(new RTCSessionDescription(offer));
-            const answer = await pcRef.current.createAnswer();
-            await pcRef.current.setLocalDescription(answer);
-            socketRef.current.emit('answer', answer);
-        });
-
-        socketRef.current.on('answer', async (answer) => {
-            console.log("📩 answer 수신:", answer);
-            await pcRef.current.setRemoteDescription(new RTCSessionDescription(answer));
-        });
-
-        socketRef.current.on('ice-candidate', async (candidate) => {
-            try {
-                await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
-            } catch (e) {
-                console.error('Error adding received ice candidate', e);
+        // 5. socket 메시지 처리
+        socket.on("rtc-message", async (raw) => {
+            const msg = JSON.parse(raw);
+            if (msg.event === "offer") {
+                console.log("📨 offer 수신");
+                await getMedia();
+                await pc.setRemoteDescription(new RTCSessionDescription(msg.data));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                sendMessage({
+                    event: "answer",
+                    data: answer,
+                });
+            } else if (msg.event === "answer") {
+                console.log("📩 answer 수신");
+                await pc.setRemoteDescription(new RTCSessionDescription(msg.data));
+            } else if (msg.event === "candidate") {
+                try {
+                    await pc.addIceCandidate(new RTCIceCandidate(msg.data));
+                } catch (err) {
+                    console.error("ICE 추가 실패", err);
+                }
             }
         });
 
-        // 7. 방 입장 시 offer 생성 및 전송 (초기 연결 시)
-        // socketRef.current.emit('join-room', 'roomId'); // roomId는 실제 룸 이름이나 id로 바꾸세요
+        // 6. 방 입장
+        socket.emit("join", roomId);
 
-        socketRef.current.on('ready', async () => {
-            console.log("🟢 상대방이 연결되어 ready 상태!");
-            const offer = await pcRef.current.createOffer();
-            await pcRef.current.setLocalDescription(offer);
-            socketRef.current.emit('offer', offer);
+        // 7. 방 입장 후 offer 보내기
+        socket.on("room-joined", async () => {
+            console.log("🟢 방에 누군가 입장함, offer 생성");
+            await getMedia();
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            sendMessage({
+                event: "offer",
+                data: offer,
+            });
+        });
+
+        socket.on("room-full", () => {
+            alert("이 방은 이미 두 명이 참가했습니다.");
         });
 
         return () => {
             // 컴포넌트 언마운트 시 소켓 연결 해제
-            socketRef.current.disconnect();
+            socket.disconnect();
+            pc.close();
         };
-    }, []);
+    }, [roomId]);
 
 
     // 초를 mm:ss 형식으로 포맷팅
@@ -392,10 +437,10 @@ function Meeting() {
                                 </div>
 
                                 <div className="video-controls">
-                                    <button className="side"><img src="/img/voice.png" alt=""/></button>
+
                                     <button className="center" style={{backgroundColor: "#f33e3b"}}><img
                                         src="/img/phone.png" alt="" onClick={handleCenterClick}/></button>
-                                    <button className="side"><img src="/img/camera.png" alt=""/></button>
+
                                 </div>
                                 <div className="seeAll" onClick={toggleFullScreen}>
                                     <img src={isFullScreen ? "/img/seeSmall.png" : "/img/seeAll.png"} alt=""/>
@@ -412,7 +457,10 @@ function Meeting() {
                                     playsInline
                                     style={{width: "100%", borderRadius: "20px"}}
                                 ></video>
-
+                                <div className="my-screen-box">
+                                    <button className="side"><img src="/img/voice.png" alt=""/></button>
+                                    <button className="side"><img src="/img/camera.png" alt=""/></button>
+                                </div>
                             </div>
 
                             <Chat/>

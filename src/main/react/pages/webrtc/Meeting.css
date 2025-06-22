@@ -325,7 +325,7 @@ img {
     cursor: pointer;
 }
 
-.video-controls button.side {
+button.side {
     border-radius: 50%;
     border: none;
     background-color: #dddddd67;
