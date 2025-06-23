@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 
 
 
-export default function ProductDetailBottomSideBar() {
+function ProductDetailBottomSideBar() {
 
 
     return (
@@ -41,9 +41,11 @@ export default function ProductDetailBottomSideBar() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <ProductDetailBottomSideBar />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <ProductDetailBottomSideBar />
+//     </>
+// );
+
+export default ProductDetailBottomSideBar;

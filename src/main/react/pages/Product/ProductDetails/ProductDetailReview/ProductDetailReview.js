@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import ProductDetail from "../ProductDetail";
 
 
-export default function ProductDetailReview() {
+function ProductDetailReview() {
 
 
     return (
@@ -31,9 +31,11 @@ export default function ProductDetailReview() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <ProductDetailReview />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <ProductDetailReview />
+//     </>
+// );
+
+export default ProductDetailReview;
