@@ -1,13 +1,21 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.RecruitmentPostVO;
+import com.example.ringo.lecture.service.LectureService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/lecture")
 public class LectureController {
+
+    @Autowired
+    private LectureService lectureService;
 
     @GetMapping("/lectureinfo")
     public String lectures(Model model) {
@@ -16,7 +24,8 @@ public class LectureController {
     }
 
     @GetMapping("/lecturedetail")
-    public String lectureDetail(Model model) {
+    public String lectureDetail(@RequestParam String lectureId,
+                                Model model) {
         model.addAttribute("pageName", "lecturedetail");
         return "lecture";
     }
@@ -27,5 +36,26 @@ public class LectureController {
         return "lecture";
     }
 
+    @PostMapping("/writeRecruitmentPost")
+    @ResponseBody
+    public ResponseEntity<String> writeRecruitmentPost(@RequestBody RecruitmentPostVO recruitmentPostVO){
+        lectureService.writeRecruitmentPost(recruitmentPostVO);
+        return ResponseEntity.ok("success");
+    }
+
+    @GetMapping("/getLectures")
+    @ResponseBody
+    public List<RecruitmentPostVO> getLectures(@RequestParam(required = false) String category,
+                                               @RequestParam(required = false) String search) {
+
+        return lectureService.getLectures(category, search);
+    }
+
+    @GetMapping("/getOneLecture")
+    @ResponseBody
+    public RecruitmentPostVO getOneLecture(@RequestParam String lectureId) {
+
+        return null;
+    }
 
 }

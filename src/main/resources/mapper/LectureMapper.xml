@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ringo.lecture.mapperJava.LectureMapper">
+
+    <insert id="writeRecruitmentPost" parameterType="RecruitmentPostVO">
+        INSERT INTO recruitment_post (
+            recruitment_post_title,
+            recruitment_post_content,
+            recruitment_post_category,
+            recruitment_post_weekly_sessions,
+            recruitment_post_session_duration,
+            recruitment_post_price,
+            recruitment_post_price_basis,
+            recruitment_post_contact_start_time,
+            recruitment_post_contact_end_time,
+            recruitment_post_avg_response_time,
+            user_primary_id
+        ) VALUES (
+             #{recruitmentPostTitle},
+             #{recruitmentPostContent},
+             #{recruitmentPostCategory},
+             #{recruitmentPostWeeklySessions},
+             #{recruitmentPostSessionDuration},
+             #{recruitmentPostPrice},
+             #{recruitmentPostPriceBasis},
+             #{recruitmentPostContactStartTime},
+             #{recruitmentPostContactEndTime},
+             #{recruitmentPostAvgResponseTime},
+             #{userPrimaryId}
+         )
+
+    </insert>
+
+    <select id="getLectures" resultType="RecruitmentPostVO">
+        SELECT *
+        FROM recruitment_post
+        <where>
+            <if test="category != null and category != '' and category != '전체보기' and category != 'undefined'">
+                recruitment_post_category = #{category}
+            </if>
+
+            <if test="search != null and search != ''">
+                recruitment_post_title LIKE CONCAT('%', #{search}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getOneLecture" resultType="RecruitmentPostVO">
+        SELECT *
+        FROM recruitment_post
+        WHERE recruitment_post_id = #{recruitmentPostId}
+    </select>
+
+
+</mapper>

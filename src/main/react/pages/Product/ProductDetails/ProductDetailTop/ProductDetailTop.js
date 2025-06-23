@@ -6,8 +6,7 @@ import Footer from "../../../../components/footer/Footer";
 import ProductDetail from "../ProductDetail";
 
 
-export default function ProductDetailTop() {
-
+function ProductDetailTop() {
 
     return (
         <>
@@ -32,9 +31,11 @@ export default function ProductDetailTop() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <ProductDetailTop />
-    </>
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//     <>
+//         <ProductDetailTop />
+//     </>
+// );
+
+export default ProductDetailTop;
