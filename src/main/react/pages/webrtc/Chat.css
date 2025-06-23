@@ -4,8 +4,7 @@
     border-radius: 12px;
     /*height: 100%;*/
     position: relative;
-
-    height: 90vh; /* 전체 화면의 90% 차지 */
+    height: 49vh; /* 전체 화면의 90% 차지 */
     min-height: 40vh;
     display: flex;
     flex-direction: column;
