@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Header.css';
 
 
 function Header() {
+    const [loginUser, setLoginUser] = useState(null);
+
+    useEffect(() => {
+        fetch("/users/api/user/info", { credentials: "include" })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    setLoginUser(data.user);
+                } else {
+                    setLoginUser(null);
+                }
+            })
+            .catch(() => setLoginUser(null));
+    }, []);
+
+    const handleLogout = () => {
+        fetch("/logout", { method: "POST", credentials: "include" })
+            .then(() => {
+                window.location.href = "/main";
+            })
+            .catch(() => {
+                window.location.href = "/main";
+            });
+    };
 
     return (
         <div className="header-container">
@@ -23,18 +47,31 @@ function Header() {
 
                 <nav className="nav">
                     <a href="#">
-                        <img src="/img/message.png" alt="쪽지"/>
+                        <img src="/img/headerChat.png" alt="쪽지"/>
                     </a>
                     <a href="#">
                         <img src="/img/notification.png" alt="알림"/>
                     </a>
-                    <a href="#">로그인</a>
-                    <button className="signup-button">회원가입</button>
+                    {loginUser ? (
+                        <>
+                            <a href="#" onClick={e => { e.preventDefault(); handleLogout(); }}>로그아웃</a>
+                            <a href="/mypage/mypageuser">
+                                <button className="mypage-button">마이페이지</button>
+                            </a>
+                        </>
+                    ) : (
+                        <>
+                            <a href="/users/login">로그인</a>
+                            <a href="/users/signup">
+                                <button className="signup-button">회원가입</button>
+                            </a>
+
+                        </>
+                    )}
                 </nav>
             </header>
             <div className="header-letterbox"/>
         </div>
-
     );
 }
 

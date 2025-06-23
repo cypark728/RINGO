@@ -2,6 +2,7 @@ package com.example.ringo.users.mapperJava;
 
 import com.example.ringo.command.UsersVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface UsersMapper {
 
     //회워정보 수정
     void updateUserInfo(UsersVO vo);
+
 }

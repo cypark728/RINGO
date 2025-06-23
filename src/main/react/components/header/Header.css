@@ -16,7 +16,7 @@
     width: 100%;
     /*min-width: 1905px;*/
     height: 80px;
-    padding: 0 80px;
+    padding: 0 180px 0 120px;
     backdrop-filter: blur(30px);
     background: rgba(255, 255, 255, 0.3);
     position: fixed;
@@ -26,6 +26,10 @@
     /*max-width: 1200px;*/
 }
 
+.navCenter a{
+    padding: 0 20px;
+}
+
 .nav a {
     margin-right: 30px;
     text-decoration: none;
@@ -33,6 +37,16 @@
 }
 
 .nav .signup-button {
+    padding: 10px 20px;
+    background-color: #FF8127;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav .mypage-button {
     padding: 10px 20px;
     background-color: #FF8127;
     color: white;

@@ -28,5 +28,6 @@ public class UsersVO {
     private String userGender;
     private int userAge;
     private String userInterest;
+    private String userProfileMimeType;
 
 }

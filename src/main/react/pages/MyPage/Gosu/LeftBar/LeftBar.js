@@ -12,7 +12,12 @@ export default function LeftBar({activeTab, setActiveTab, onBack }) {
 
                 </div>
                 <p className="profile-name">테스트</p>
-                <button className="edit-button">회원정보 수정</button>
+                <button
+                    className="edit-button"
+                    onClick={() => window.location.href = "/users/userinfo"}
+                >
+                    회원정보 수정
+                </button>
                 <ul className="menu">
                     <li onClick={() => setActiveTab("home")}
                         className={`menu-item ${activeTab === "home" ? "selected" : ""}`}>
