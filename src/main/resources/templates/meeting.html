@@ -11,6 +11,13 @@
 <body>
 <div id="root"></div>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.roomId = [[${roomId}]];
+    /*]]>*/
+</script>
+
+
 <script src="/bundle/meeting.bundle.js"></script>
 
 </body>

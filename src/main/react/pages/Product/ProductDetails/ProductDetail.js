@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './ProductDetail.css';
 import ReactDOM from "react-dom/client";
 import Header from "../../../components/header/Header";
@@ -12,8 +12,28 @@ import ProductDetailOtherClass from "./ProductDetailOtherClass/ProductDetailOthe
 
 
 
-export default function ProductDetail() {
+function ProductDetail() {
     const [activeTab, setActiveTab] = useState("home");
+    const [lecture, setLecture] = useState([]);
+
+    const getQueryParam = (param) => {
+        return new URLSearchParams(window.location.search).get(param);
+    }
+
+    const lectureId = getQueryParam("lectureId");
+
+    // const fetchGetOneLecture = async (lectureId) => {
+    //     const params = new URLSearchParams();
+    //     params.append("recruitmentPostId", lectureId);
+    //
+    //     const response = await fetch(`/lecture/getOneLecture?${params.toString()}`);
+    //     // setLecture(await response.json());
+    //     console.log(await response.json());
+    // }
+    //
+    // useEffect(() => {
+    //     fetchGetOneLecture(lectureId);
+    // }, []);
 
     return (
         <>

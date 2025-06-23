@@ -19,13 +19,20 @@ CREATE TABLE users (
 
 --모집글 테이블 만들기
 CREATE TABLE recruitment_post (
-    recruitment_post_id       SERIAL PRIMARY KEY,            -- 모집글아이디 (자동 증가, PK)
-    recruitment_post_title    VARCHAR(200) NOT NULL,         -- 모집글제목
-    recruitment_post_content  TEXT NOT NULL,                 -- 모집글내용
-    recruitment_post_systime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 작성시간
-    recruitment_post_category VARCHAR(100),                  -- 카테고리
-    recruitment_post_viewcount INTEGER DEFAULT 0,            -- 조회수
-    user_primary_id           INTEGER               		 -- 유저아이디 (작성자, FK로 연결 가능)
+    recruitment_post_id                 SERIAL PRIMARY KEY,
+    recruitment_post_title              VARCHAR(255),
+    recruitment_post_content            TEXT,
+    recruitment_post_systime            TIMESTAMP NOT NULL DEFAULT NOW(),
+    recruitment_post_category           VARCHAR(100),
+    recruitment_post_viewcount          INTEGER DEFAULT 0,
+    recruitment_post_weekly_sessions    VARCHAR(100),
+    recruitment_post_session_duration   VARCHAR(100),     --단위: 시간
+    recruitment_post_price              INTEGER,
+    recruitment_post_price_basis        VARCHAR(20), -- 예: 'per_hour', 'per_session', 'negotiable'
+    recruitment_post_contact_start_time TIME,
+    recruitment_post_contact_end_time   TIME,
+    recruitment_post_avg_response_time  VARCHAR(100),
+    user_primary_id                     INTEGER
 );
 
 --모집글 리뷰 테이블 만들기

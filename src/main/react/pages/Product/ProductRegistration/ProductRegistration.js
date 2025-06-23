@@ -80,6 +80,7 @@ function ProductRegistration() {
     const [priceType, setPriceType] = useState('1시간');
     const [contactTime, setContactTime] = useState('');
     const [responseTime, setResponseTime] = useState('');
+    const [avgResponseTime, setAvgResponseTime] = useState('');
 
 
     useEffect(() => {
@@ -144,8 +145,40 @@ function ProductRegistration() {
     // 등록 버튼 클릭
     const handleSubmit = (e) => {
         e.preventDefault();
-        // 실제 업로드 로직은 별도로 구현
-        alert("글이 등록되었습니다!");
+        const data = {
+            recruitmentPostTitle: title,
+            recruitmentPostContent: content,
+            recruitmentPostCategory: category,
+            recruitmentPostWeeklySessions: weekValue,
+            recruitmentPostSessionDuration: dayValue,
+            recruitmentPostPrice: price.replace(/,/g, ''),
+            recruitmentPostPriceBasis: priceType,
+            recruitmentPostContactStartTime: contactTime,
+            recruitmentPostContactEndTime: responseTime,
+            recruitmentPostAvgResponseTime: avgResponseTime, // 이 부분은 상태값 추가 필요
+            userPrimaryId: 0 //나중에 세션에서 추가해야 함.
+        };
+
+        fetch('/lecture/writeRecruitmentPost', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.text()) // <-- 여기!
+            .then(result => {
+                if (result === "success") {
+                    alert('글이 등록되었습니다!');
+                    window.location.href = '/lecture/lectureinfo';
+                    // 폼 초기화 등 추가
+                } else {
+                    alert('등록 실패: ' + result);
+                }
+            })
+            .catch(err => {
+                alert('등록 실패');
+                console.log(err);
+            });
+
     };
 
     return (
@@ -346,6 +379,8 @@ function ProductRegistration() {
                         <input
                             className="response-time-input"
                             type="text"
+                            value={avgResponseTime}
+                            onChange={e => setAvgResponseTime(e.target.value)}
                             placeholder="예: 1시간 이내"
                             style={{ width: 140, marginLeft: 8 }}
                         />

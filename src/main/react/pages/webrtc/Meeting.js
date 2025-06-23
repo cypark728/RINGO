@@ -49,7 +49,8 @@ function Meeting() {
     const [exitTarget, setExitTarget] = useState(null);
 
 
-    const [roomId, setRoomId] = useState(null);
+    const [roomId, setRoomId] = useState(window.roomId || '');
+
 
 
     const toggleFullScreen = () => {
@@ -70,6 +71,35 @@ function Meeting() {
         setVolume(e.target.value);
     };
 
+    const createOfferAndSend = async () => {
+        const pc = pcRef.current;
+        const socket = socketRef.current;
+        if (!pc || !socket) return;
+
+        // 미디어 트랙 추가
+        let myStream = localVideoRef.current?.srcObject;
+        if (!myStream) {
+            try {
+                myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideoRef.current.srcObject = myStream;
+            } catch (err) {
+                alert("카메라/마이크 권한이 필요합니다.");
+                return;
+            }
+        }
+        myStream.getTracks().forEach(track => pc.addTrack(track, myStream));
+
+        // offer 생성 및 전송
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        socket.emit("rtc-message", JSON.stringify({
+            roomId,
+            event: "offer",
+            data: offer,
+        }));
+    };
+
+
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentTime(new Date());
@@ -82,14 +112,14 @@ function Meeting() {
     const time = currentTime.toLocaleTimeString('en-GB')
 
     useEffect(() => {
-        const id = prompt("Room ID를 입력하세요");
-        if (id && id.trim() !== "") {
-            setRoomId(id);
+        if (window.roomId && window.roomId.trim() !== "") {
+            setRoomId(window.roomId);
         } else {
-            alert("방 ID를 입력해야 합니다.");
-            window.location.reload();
+            alert("방 ID가 없습니다.");
+            window.location.href = "/";  // 방 ID 없으면 홈으로 이동하거나 적절한 처리
         }
     }, []);
+
 
     useEffect(() => {
         if (!roomId) return;
@@ -459,7 +489,7 @@ function Meeting() {
                                 ></video>
                                 <div className="my-screen-box">
                                     <button className="side"><img src="/img/voice.png" alt=""/></button>
-                                    <button className="side"><img src="/img/camera.png" alt=""/></button>
+                                    <button className="side" onClick={createOfferAndSend}><img src="/img/camera.png" alt=""/></button>
                                 </div>
                             </div>
 
