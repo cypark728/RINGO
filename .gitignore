@@ -45,4 +45,5 @@ out/
 ### 민감정보 ###
 /src/main/resources/application-db.properties
 
+RINGO.git/
 
