@@ -20,7 +20,10 @@ const io = new Server(server, {
 
 let lastCanvasData = null;
 let savedCanvasJSON = null;
-const rooms = {};
+
+const maxClientsPerRoom = 2;
+const roomCounts = {};
+
 
 // 클라이언트 연결 시
 io.on('connection', (socket) => {
@@ -83,41 +86,38 @@ io.on('connection', (socket) => {
 
     // =============✅ webRTC 공유 처리===================
     // 추가 (WebRTC signaling용)
-
-    socket.on("join-room", (roomId) => {
-        socket.join(roomId);
-        if (!rooms[roomId]) rooms[roomId] = [];
-        rooms[roomId].push(socket.id);
-
-        if (rooms[roomId].length >= 2) {
-            io.to(roomId).emit("ready");
+    socket.on("join", (roomId) => {
+        // 클라이언트가 Room에 조인하려고 할 때, 클라이언트 수를 확인하고 제한.
+        if (roomCounts[roomId] === undefined) {
+            roomCounts[roomId] = 1;
+        } else if (roomCounts[roomId] < maxClientsPerRoom) {
+            roomCounts[roomId]++;
+        } else {
+            // 클라이언트 수가 제한을 초과하면 클라이언트를 Room에 입장시키지 않음.
+            socket.emit("room-full", roomId);
+            console.log("room full" + roomCounts[roomId]);
+            return;
         }
+        socket.join(roomId);
+        console.log(
+            "User joined in a room : " + roomId + " count:" + roomCounts[roomId]
+        );
+
+        // 클라이언트가 Room을 떠날 때 클라이언트 수를 업데이트
+        socket.on("disconnect", () => {
+            console.log('❌ 유저 연결 종료:', socket.id);
+            roomCounts[roomId]--;
+            console.log("disconnect, count:" + roomCounts[roomId]);
+        });
     });
 
-    // offer 전달
-    socket.on("offer", ({offer,target}) => {
-        io.to(target).emit("offer", {offer});
+    socket.on("rtc-message", (data) => {
+        var room = JSON.parse(data).roomId;
+        socket.broadcast.to(room).emit("rtc-message", data);
     });
-
-    // answer 전달
-    socket.on("answer", ({ answer, target }) => {
-        io.to(target).emit("answer", {answer});
-    });
-
-    // ICE 후보 전달
-    socket.on("ice-candidate", ({ candidate, target }) => {
-        io.to(target).emit("ice-candidate", {candidate});
-    });
-
 
     // =================== 연결 종료===========================
-    socket.on('disconnect', () => {
-        console.log('❌ 유저 연결 종료:', socket.id);
-        for (const roomId in rooms) {
-            rooms[roomId] = rooms[roomId].filter(id => id !== socket.id);
-            if (rooms[roomId].length === 0) delete rooms[roomId];
-        }
-    });
+
 });
 
 // ==========================서버 시작=================================
