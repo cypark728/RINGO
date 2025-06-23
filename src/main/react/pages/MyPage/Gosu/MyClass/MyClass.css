@@ -65,3 +65,17 @@
     font-weight: 600;
     margin-top: 0.5rem;
 }
+
+.makeClassBtn{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.makeClassBtn .roomBtn{
+    border-style: none;
+    background-color: #f97316;
+    padding: 10px 25px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
