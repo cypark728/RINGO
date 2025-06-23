@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import '../first.css';
 import './Login.css';
+import Header from "../../components/header/Header";
+import MyHeader from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 function Login() {
     const [userId, setUserId] = useState('');
@@ -80,6 +83,11 @@ function Login() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <>
+
+        <MyHeader/>
         <Login/>
+        <Footer />
+
+
     </>
 );

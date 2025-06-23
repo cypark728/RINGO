@@ -2,8 +2,11 @@ package com.example.ringo.controller;
 
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.users.service.UsersService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -72,6 +76,19 @@ public class UsersController {
             session.setAttribute("loginUser", loginUser);
             result.put("success", true);
         }
+        return result;
+    }
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public Map<String, Object> logout(HttpServletRequest request) {
+        Map<String, Object> result = new HashMap<>();
+        HttpSession session = request.getSession(false); // 기존 세션만 가져옴 (없으면 null)
+        if (session != null) {
+            session.invalidate(); // 세션 무효화 (로그아웃)
+        }
+        result.put("success", true);
+        result.put("message", "로그아웃 되었습니다.");
         return result;
     }
 
@@ -140,6 +157,8 @@ public class UsersController {
     public ResponseEntity<Map<String, Object>> getUserInfo(HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+
+        System.out.println("세션의 loginUser: " + loginUser);
         if (loginUser == null) {
             response.put("success", false);
             response.put("message", "로그인이 필요합니다.");
@@ -154,24 +173,14 @@ public class UsersController {
     @PutMapping("/api/user/update")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateUserInfo(
-            @RequestPart("userInfoData") UsersVO updatedVO,
+            @RequestPart("userInfoData") String userInfoJson,
             @RequestPart(value = "profileImageFile", required = false) MultipartFile profileImageFile,
-            HttpSession session) throws Exception {
-
-        // --- 디버깅 로그 시작 ---
-        System.out.println("--- 회원정보 수정 요청 수신 ---");
-        System.out.println("수정할 텍스트 정보: " + updatedVO.toString());
-        if (profileImageFile != null && !profileImageFile.isEmpty()) {
-            System.out.println("수정할 이미지 파일명: " + profileImageFile.getOriginalFilename());
-            System.out.println("파일 크기: " + profileImageFile.getSize() + " bytes");
-        } else {
-            System.out.println("프로필 이미지 변경 없음.");
-        }
-        System.out.println("---------------------------");
-        // --- 디버깅 로그 끝 ---
+            HttpSession session) {
 
         Map<String, Object> response = new HashMap<>();
         UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+
+        System.out.println("세션의 loginUser: " + loginUser);
 
         if (loginUser == null) {
             response.put("success", false);
@@ -179,30 +188,68 @@ public class UsersController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
-        if (profileImageFile != null && !profileImageFile.isEmpty()) {
-            byte[] imageBytes = profileImageFile.getBytes();
-            updatedVO.setUserProfile(imageBytes);
-        } else {
-            // 새 이미지를 업로드하지 않으면, 기존 이미지(byte[])를 그대로 사용
-            updatedVO.setUserProfile(loginUser.getUserProfile());
-        }
+        try {
+            // 1. JSON -> VO 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            UsersVO updatedVO = objectMapper.readValue(userInfoJson, UsersVO.class);
 
-        updatedVO.setUserId(loginUser.getUserId());
-        usersService.updateUserInfo(updatedVO);
+            // 2. 이미지 처리
+            if (profileImageFile != null && !profileImageFile.isEmpty()) {
+                byte[] imageBytes = profileImageFile.getBytes();
+                String mimeType = profileImageFile.getContentType();
+                System.out.println("imageBytes length: " + imageBytes.length);
+                System.out.println("imageBytes as String: " + new String(imageBytes));
 
-        // 세션 정보 최신 데이터로 업데이트
-        loginUser.setUserName(updatedVO.getUserName());
-        loginUser.setUserNickName(updatedVO.getUserNickName());
-        loginUser.setUserPhone(updatedVO.getUserPhone());
-        loginUser.setUserEmail(updatedVO.getUserEmail());
-        loginUser.setUserInterest(updatedVO.getUserInterest());
-        if(updatedVO.getUserProfile() != null) {
+                updatedVO.setUserProfile(imageBytes);
+                updatedVO.setUserProfileMimeType(mimeType);
+            } else {
+                // 이미지 미전송 시 기존 이미지 정보 유지
+                updatedVO.setUserProfile(loginUser.getUserProfile());
+                updatedVO.setUserProfileMimeType(loginUser.getUserProfileMimeType());
+            }
+
+            // 3. 사용자 ID 세팅 (보안상 클라이언트에서 넘어온 값 무시)
+            updatedVO.setUserId(loginUser.getUserId());
+
+            // 4. 서비스 호출
+            usersService.updateUserInfo(updatedVO);
+
+            // 5. 세션 정보 갱신
+            loginUser.setUserName(updatedVO.getUserName());
+            loginUser.setUserNickName(updatedVO.getUserNickName());
+            loginUser.setUserPhone(updatedVO.getUserPhone());
+            loginUser.setUserEmail(updatedVO.getUserEmail());
+            loginUser.setUserInterest(updatedVO.getUserInterest());
             loginUser.setUserProfile(updatedVO.getUserProfile());
-        }
-        session.setAttribute("loginUser", loginUser);
+            loginUser.setUserProfileMimeType(updatedVO.getUserProfileMimeType());
+            session.setAttribute("loginUser", loginUser);
 
-        response.put("success", true);
-        response.put("message", "회원정보가 성공적으로 수정되었습니다.");
-        return ResponseEntity.ok(response);
+            response.put("success", true);
+            response.put("message", "회원정보가 성공적으로 수정되었습니다.");
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            // 파일 처리 등에서 예외 발생 시
+            response.put("success", false);
+            response.put("message", "회원정보 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
+    @GetMapping("/api/user/profile-image")
+    public ResponseEntity<byte[]> getProfileImage(HttpSession session) {
+        UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+
+        System.out.println("세션의 loginUser: " + loginUser);
+        if (loginUser != null && loginUser.getUserProfile() != null && loginUser.getUserProfileMimeType() != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(loginUser.getUserProfileMimeType()));
+            return new ResponseEntity<>(loginUser.getUserProfile(), headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 }

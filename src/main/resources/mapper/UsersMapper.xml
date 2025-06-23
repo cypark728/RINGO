@@ -40,6 +40,7 @@
             user_email      AS userEmail,
             user_interest   AS userInterest,
             user_profile    AS userProfile,
+            user_profile_mimetype AS userProfileMimeType,
             user_create_date      AS createdAt,
             user_age        AS userAge,
             user_role       AS userRole
@@ -76,7 +77,7 @@
         WHERE user_id = #{userId}
     </update>
 
-    <update id="updateUserInfo" parameterType="UsersVO">
+    <update id="updateUserInfo" parameterType="com.example.ringo.command.UsersVO">
         UPDATE users
         SET
             user_name = #{userName},
@@ -84,11 +85,11 @@
             user_phone = #{userPhone},
             user_email = #{userEmail},
             user_interest = #{userInterest},
-            user_profile = #{userProfile, jdbcType=BINARY}
+            user_profile = #{userProfile},
+            user_profile_mimetype = #{userProfileMimeType}
         WHERE
             user_id = #{userId}
     </update>
-
 
 
 </mapper>

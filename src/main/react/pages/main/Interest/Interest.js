@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Interest.css";
 
 const categories = [
@@ -15,6 +15,8 @@ const services = [
         reviews: "158",
         price: "1,123,123원~",
         provider: "중앙개발원",
+
+
     },
     {
         img: "/img/animationThumbnail.png",
@@ -44,6 +46,23 @@ const services = [
 
 function InterestsSection() {
     const [activeIdx, setActiveIdx] = useState(0);
+    const [loginUser, setLoginUser] = useState(null);
+
+    useEffect(() => {
+        // 서버에서 유저 정보 받아오기
+        fetch("/users/api/user/info", { credentials: "include" })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    setLoginUser(data.user);
+                } else {
+                    setLoginUser(null);
+                }
+            })
+            .catch(() => setLoginUser(null));
+    }, []);
+
+
 
     return (
         <div className="interests-section">
@@ -51,7 +70,10 @@ function InterestsSection() {
                 {/* 왼쪽: 관심분야 카테고리 */}
                 <div className="interests-categories">
                     <div className="interests-title">
-                        <span className="circle">●●●</span>님의<br />
+                        <span className="circle">
+                            {loginUser && loginUser.userName ? loginUser.userName : '●●●'}
+                        </span>
+                        님의<br />
                         관심분야 입니다.
                     </div>
                     <div className="interests-desc">
