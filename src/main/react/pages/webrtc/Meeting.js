@@ -60,7 +60,6 @@ function Meeting() {
         setIsFullScreen(prev => !prev);
     };
 
-
     const icons = [
         'fas fa-camera',
         'fas fa-calendar',
@@ -125,9 +124,11 @@ function Meeting() {
 
 
     useEffect(() => {
+        console.log('✅ Meeting.js loaded', window.roomId);
+
         if (!roomId) return;
 
-        const socket = io("http://172.30.1.12:8687"); // ✅ 시그널링 서버 주소로 수정
+        const socket = io("http://172.30.1.12:8687");
         socketRef.current = socket;
 
         const pc = new RTCPeerConnection({
