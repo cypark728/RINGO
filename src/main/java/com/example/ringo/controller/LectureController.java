@@ -53,9 +53,9 @@ public class LectureController {
 
     @GetMapping("/getOneLecture")
     @ResponseBody
-    public RecruitmentPostVO getOneLecture(@RequestParam String lectureId) {
+    public RecruitmentPostVO getOneLecture(@RequestParam Integer lectureId) {
 
-        return null;
+        return lectureService.getOneLecture(lectureId);
     }
 
 }

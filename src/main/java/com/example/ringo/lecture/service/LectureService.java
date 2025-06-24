@@ -7,4 +7,5 @@ import java.util.List;
 public interface LectureService {
     void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO);
     List<RecruitmentPostVO> getLectures(String category, String search);
+    RecruitmentPostVO getOneLecture(Integer lectureId);
 }

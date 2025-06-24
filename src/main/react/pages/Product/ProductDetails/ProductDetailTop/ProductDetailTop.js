@@ -6,21 +6,21 @@ import Footer from "../../../../components/footer/Footer";
 import ProductDetail from "../ProductDetail";
 
 
-function ProductDetailTop() {
+function ProductDetailTop({category, title, contactStartTime, contactEndTime}) {
 
     return (
         <>
 
             <div className="topBox">
                 <div className="leftTop">
-                    <div className="categoryName">카테고리</div>
-                    <div className="titleName">제목제목제목제목제목제목제목제목제목제목제목제목</div>
+                    <div className="categoryName">{category}</div>
+                    <div className="titleName">{title}</div>
                     <div className="scoreName">평점</div>
                     <div className="gosuProfile">
                         <div><img src={"/img/screen1.jpg"} alt="프로필이미지"/></div>
                         <div>
                             <div>프로필이름</div>
-                            <div>응답가능시간</div>
+                            <div>응답 가능 시간: {contactStartTime} ~ {contactEndTime}</div>
                         </div>
                         <div>문의하기</div>
                     </div>

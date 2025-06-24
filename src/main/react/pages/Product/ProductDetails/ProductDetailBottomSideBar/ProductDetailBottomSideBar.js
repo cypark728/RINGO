@@ -5,33 +5,33 @@ import ReactDOM from "react-dom/client";
 
 
 
-function ProductDetailBottomSideBar() {
+function ProductDetailBottomSideBar({title, price, priceBasis, weeklySessions, sessionDuration, contactStartTime, contactEndTime, responseTime}) {
 
 
     return (
         <>
 
             <div className="rightBottom">
-                <p>수업 타이틀</p>
+                <p>{title}</p>
                 <div>
-                    <span>8,000원</span>
-                    <span>1시간 당</span>
+                    <span>{price}원</span>
+                    <span>{priceBasis} 당</span>
                 </div>
 
                 <div>
-                    <span>2시간</span>
-                    <span>주 1회</span>
+                    <span>{sessionDuration}시간</span>
+                    <span>주 {weeklySessions}회</span>
                 </div>
 
 
                 <div>
                     <span>상담 가능 시간</span>
-                    <span>9시~18시</span>
+                    <span>{contactStartTime}~{contactEndTime}</span>
                 </div>
 
                 <div>
                     <span>평균 응답 시간</span>
-                    <span>10분 이내</span>
+                    <span>{responseTime}</span>
                 </div>
 
 
