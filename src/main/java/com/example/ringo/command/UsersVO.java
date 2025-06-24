@@ -29,5 +29,7 @@ public class UsersVO {
     private int userAge;
     private String userInterest;
     private String userProfileMimeType;
+    private String introductionTitle;
+    private String introductionContent;
 
 }

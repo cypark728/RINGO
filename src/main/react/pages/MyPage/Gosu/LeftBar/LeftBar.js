@@ -12,6 +12,8 @@ export default function LeftBar({activeTab, setActiveTab, onBack }) {
 
                 </div>
                 <p className="profile-name">테스트</p>
+
+
                 <button
                     className="edit-button"
                     onClick={() => window.location.href = "/users/userinfo"}

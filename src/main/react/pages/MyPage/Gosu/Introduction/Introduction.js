@@ -1,24 +1,96 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Introduction.css';
 import ReactDOM from "react-dom/client";
 
 function Introduction() {
+
+    const [editMode, setEditMode] = useState(false);
+    const [introTitle, setIntroTitle] = useState("");
+    const [introContent, setIntroContent] = useState("");
+    const [tempTitle, setTempTitle] = useState("");
+    const [tempContent, setTempContent] = useState("");
+
+    // 🔹 컴포넌트 마운트 시 서버에서 소개글 정보 fetch
+    useEffect(() => {
+        fetch("/users/api/user/info", { credentials: "include" })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    setIntroTitle(data.user.introductionTitle || "");
+                    setIntroContent(data.user.introductionContent || "");
+                }
+            });
+    }, []);
+
+    const handleEdit = () => {
+        setTempTitle(introTitle);
+        setTempContent(introContent);
+        setEditMode(true);
+    };
+
+    // 🔹 저장 버튼에서 서버로 소개글 저장
+    const handleSave = () => {
+        fetch("/users/api/user/introduction", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+                introductionTitle: tempTitle,
+                introductionContent: tempContent
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setIntroTitle(tempTitle);
+                    setIntroContent(tempContent);
+                    setEditMode(false);
+                    alert("소개글이 저장되었습니다!");
+                } else {
+                    alert(data.message || "저장 실패!");
+                }
+            });
+    };
+
+    const handleCancel = () => {
+        setEditMode(false);
+    };
 
     return (
         <section className="section">
             <h2 className="section-title">소개</h2>
             <div className="introduction">
                 <div className="introductionBox">
-                    <p className="introductionTitle">테스트 소개글 제목</p>
-                    <p className="introductionTitleContent">[Web발신]
-                        너는나를존중해야한다나는발롱도르5개와수많은개인트로피를들어올렸으며2016
-                        유로에서포르투갈을이끌고우승을차지했고동시에A매치역대최다득점자이다또한챔스역대최다득점자이자5번이나우승을차지한레알마드리드의상징이다또한36세의나이
-                        에도프리미어리그에서18골을기록하고챔스에서5경기연속골을기록하며내가세계
-                        최고임을증명해냈다은혜를모르는맨유보드진과팬들은내가맨유의골칫덩이라며
-                        쫓아냈지만내가세계최고이고내가팀보다위대하다는사실은바뀌지않는다내가
-                        사우디에간이유는메시에대한자격지심이아니라유럽에서이룰수있는모든것을이루었
-                        기에아시아를정복하기위해간것이지단지돈을위해서간것이아니다</p>
+                    {editMode ? (
+                        <>
+                            <input
+                                className="introductionTitle"
+                                value={tempTitle}
+                                onChange={e => setTempTitle(e.target.value)}
+                                placeholder={"제목을 작성해주세요"}
+                            />
+                            <textarea
+                                className="introductionTitleContent"
+                                value={tempContent}
+                                onChange={e => setTempContent(e.target.value)}
+                                rows={6}
+                                placeholder={"내용을 작성해주세요"}
+                            />
+                            <div className="button-group">
+                                <button onClick={handleSave} className="modify-button">저장</button>
+                                <button onClick={handleCancel} className="modify-button">취소</button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <p className="introductionTitle">{introTitle}</p>
+                            <p className="introductionTitleContent">{introContent}</p>
+                            <div className="button-group">
+                                <button onClick={handleEdit} className="modify-button">수정</button>
+                            </div>
 
+                        </>
+                    )}
                 </div>
 
             </div>
