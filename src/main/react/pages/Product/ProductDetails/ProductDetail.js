@@ -22,22 +22,23 @@ function ProductDetail() {
 
     const lectureId = getQueryParam("lectureId");
 
-    // const fetchGetOneLecture = async (lectureId) => {
-    //     const params = new URLSearchParams();
-    //     params.append("recruitmentPostId", lectureId);
-    //
-    //     const response = await fetch(`/lecture/getOneLecture?${params.toString()}`);
-    //     // setLecture(await response.json());
-    //     console.log(await response.json());
-    // }
-    //
-    // useEffect(() => {
-    //     fetchGetOneLecture(lectureId);
-    // }, []);
+    const fetchGetOneLecture = async (lectureId) => {
+        const response = await fetch(`/lecture/getOneLecture?lectureId=${lectureId}`);
+        setLecture(await response.json());
+    }
+
+    useEffect(() => {
+        fetchGetOneLecture(lectureId);
+    }, []);
 
     return (
         <>
-            <ProductDetailTop />
+            <ProductDetailTop
+                category={lecture.recruitmentPostCategory}
+                title={lecture.recruitmentPostTitle}
+                contactStartTime={lecture.recruitmentPostContactStartTime}
+                contactEndTime={lecture.recruitmentPostContactEndTime}
+            />
 
             {/*<div className="topBox">*/}
             {/*    <div className="leftTop">*/}
@@ -71,20 +72,33 @@ function ProductDetail() {
 
                         {activeTab === "home" &&
                             <>
-                            <ProductDetailContent />
+                            <ProductDetailContent
+                                content={lecture.recruitmentPostContent}
+                            />
                                 <div className="betweenSpace"></div>
                             <ProductDetailReview />
                             </>
                         }
                         {activeTab === "content" &&
-                            <ProductDetailContent />
+                            <ProductDetailContent
+                                content={lecture.recruitmentPostContent}
+                            />
                         }
                         {activeTab === "review" &&
                             <ProductDetailReview />
                         }
 
                     </div>
-                    <ProductDetailBottomSideBar />
+                    <ProductDetailBottomSideBar
+                        title={lecture.recruitmentPostTitle}
+                        price={lecture.recruitmentPostPrice}
+                        priceBasis={lecture.recruitmentPostPriceBasis}
+                        weeklySessions={lecture.recruitmentPostWeeklySessions}
+                        sessionDuration={lecture.recruitmentPostSessionDuration}
+                        contactStartTime={lecture.recruitmentPostContactStartTime}
+                        contactEndTime={lecture.recruitmentPostContactEndTime}
+                        responseTime={lecture.recruitmentPostAvgResponseTime}
+                    />
 
                     {/*<div className="rightBottom">*/}
                     {/*    <p>수업 타이틀</p>*/}

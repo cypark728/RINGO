@@ -51,7 +51,7 @@
     <select id="getOneLecture" resultType="RecruitmentPostVO">
         SELECT *
         FROM recruitment_post
-        WHERE recruitment_post_id = #{recruitmentPostId}
+        WHERE recruitment_post_id = #{lectureId}
     </select>
 
 

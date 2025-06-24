@@ -22,4 +22,9 @@ public class LectureServiceImpl implements LectureService {
     public List<RecruitmentPostVO> getLectures(String category, String search) {
         return lectureMapper.getLectures(category, search);
     }
+
+    @Override
+    public RecruitmentPostVO getOneLecture(Integer lectureId) {
+        return lectureMapper.getOneLecture(lectureId);
+    }
 }

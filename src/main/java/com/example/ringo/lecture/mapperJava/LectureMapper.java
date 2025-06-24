@@ -9,4 +9,5 @@ import java.util.List;
 public interface LectureMapper {
     void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO);
     List<RecruitmentPostVO> getLectures(String category, String search);
+    RecruitmentPostVO getOneLecture(Integer lectureId);
 }
