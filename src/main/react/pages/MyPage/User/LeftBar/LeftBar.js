@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './LeftBar.css';
 import ReactDOM from "react-dom/client";
 
 export default function LeftBar({activeTab, setActiveTab, onConvert }) {
+    const [userInfo, setUserInfo] = useState(null);
+    const [profileImage, setProfileImage] = useState("/img/screen1.jpg");
+
+    useEffect(() => {
+        fetch('/users/api/user/info', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setUserInfo(data.user);
+                    setProfileImage(data.userProfileImage || "/img/screen1.jpg");
+                }
+            });
+    }, []);
 
     return (
         <aside className="sidebar">
             <div className="profile">
                 <div className="profile-image">
-                    <img src={"/img/screen1.jpg"} alt="프로필사진"/>
-
+                    <img
+                        src={profileImage}
+                        alt="프로필사진"
+                    />
                 </div>
-                <p className="profile-name">테스트</p>
+                <p className="profile-name">
+                    {userInfo?.userNickName ? userInfo.userNickName : "닉네임"}
+                </p>
                 <button
                     className="edit-button"
                     onClick={() => window.location.href = "/users/userinfo"}
@@ -45,6 +62,6 @@ export default function LeftBar({activeTab, setActiveTab, onConvert }) {
                 </button>
             </div>
         </aside>
-    )
+    );
 }
 

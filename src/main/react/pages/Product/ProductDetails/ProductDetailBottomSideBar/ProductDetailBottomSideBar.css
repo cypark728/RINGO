@@ -68,3 +68,11 @@
     font-size: 18px;
     font-weight: 500;
 }
+
+.enroll-btn {
+    background-color: #FF8127;
+    border: none;
+    color: #fff;
+    padding-bottom: 5px;
+    width: 100%;
+}

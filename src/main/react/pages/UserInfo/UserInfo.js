@@ -123,7 +123,7 @@ function UserInfo() {
 
             if (result.success) {
                 alert(result.message);
-                window.location.reload();
+                window.location.href = '/mypage/mypageuser';
             } else {
                 alert(result.message || "수정에 실패했습니다.");
             }

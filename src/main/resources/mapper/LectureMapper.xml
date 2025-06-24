@@ -54,5 +54,11 @@
         WHERE recruitment_post_id = #{lectureId}
     </select>
 
+    <insert id="enrollClass" parameterType="ClassManageVO">
+        INSERT INTO class_manage
+            (class_manage_status, recruitment_post_id, user_primary_id)
+        VALUES
+            (#{classManageStatus}, #{recruitmentPostId}, #{userPrimaryId})
+    </insert>
 
 </mapper>

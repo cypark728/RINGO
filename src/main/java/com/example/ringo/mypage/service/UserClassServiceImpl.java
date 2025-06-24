@@ -1,5 +1,6 @@
 package com.example.ringo.mypage.service;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.MyPageVO;
 import com.example.ringo.command.ScheduleVO;
 import com.example.ringo.mypage.mapperJava.UserClassMapper;
@@ -63,6 +64,11 @@ public class UserClassServiceImpl implements UserClassService {
             }
         }
 
+    }
+
+    @Override
+    public List<ClassManageVO> getMyStudyClass(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClass(userPrimaryId);
     }
 
 

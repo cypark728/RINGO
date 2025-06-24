@@ -83,18 +83,18 @@
 
     <update id="updateUserInfo" parameterType="com.example.ringo.command.UsersVO">
         UPDATE users
-        SET
-            user_name = #{userName},
-            user_nick_name = #{userNickName},
-            user_phone = #{userPhone},
-            user_email = #{userEmail},
-            user_interest = #{userInterest},
-            user_profile = #{userProfile},
-            user_profile_mimetype = #{userProfileMimeType},
-            introduction_title = #{introductionTitle},
-            introduction_content = #{introductionContent}
-        WHERE
-            user_id = #{userId}
+        <set>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userNickName != null">user_nick_name = #{userNickName},</if>
+            <if test="userPhone != null">user_phone = #{userPhone},</if>
+            <if test="userEmail != null">user_email = #{userEmail},</if>
+            <if test="userInterest != null">user_interest = #{userInterest},</if>
+            <if test="userProfile != null">user_profile = #{userProfile},</if>
+            <if test="userProfileMimeType != null">user_profile_mimetype = #{userProfileMimeType},</if>
+            <if test="introductionTitle != null">introduction_title = #{introductionTitle},</if>
+            <if test="introductionContent != null">introduction_content = #{introductionContent},</if>
+        </set>
+        WHERE user_id = #{userId}
     </update>
 
 

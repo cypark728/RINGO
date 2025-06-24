@@ -1,5 +1,6 @@
 package com.example.ringo.mypage.mapperJava;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.MyPageVO;
 import com.example.ringo.command.ScheduleVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,5 +24,7 @@ public interface UserClassMapper {
 
     void insertSchedule(@Param("userPrimaryId") int userPrimaryId,
                         @Param("schedule") ScheduleVO schedule);
+
+    List<ClassManageVO> getMyStudyClass(Integer userPrimaryId);
 
 }
