@@ -11,11 +11,13 @@
         FROM users
     </select>
 
-    <insert id="signup" parameterType="UsersVO"> /* 회원가입 */
+    <insert id="signup" parameterType="UsersVO">
         INSERT INTO users (
-            user_id, user_pw, user_name, user_nick_name, user_birth, user_profile, user_phone, user_email, user_gender, user_age, user_interest
+            user_id, user_pw, user_name, user_nick_name, user_birth, user_profile, user_phone, user_email, user_gender, user_age, user_interest,
+            introduction_title, introduction_content
         ) VALUES (
-                     #{userId}, #{userPw}, #{userName}, #{userId}, #{userBirth}, #{userProfile}, #{userPhone}, #{userEmail}, #{userGender}, #{userAge}, #{userInterest}
+                     #{userId}, #{userPw}, #{userName}, #{userId}, #{userBirth}, #{userProfile}, #{userPhone}, #{userEmail}, #{userGender}, #{userAge}, #{userInterest},
+                     #{introductionTitle}, #{introductionContent}
                  )
     </insert>
 
@@ -41,6 +43,8 @@
             user_interest   AS userInterest,
             user_profile    AS userProfile,
             user_profile_mimetype AS userProfileMimeType,
+            introduction_title AS introductionTitle,
+            introduction_content AS introductionContent,
             user_create_date      AS createdAt,
             user_age        AS userAge,
             user_role       AS userRole
@@ -86,7 +90,9 @@
             user_email = #{userEmail},
             user_interest = #{userInterest},
             user_profile = #{userProfile},
-            user_profile_mimetype = #{userProfileMimeType}
+            user_profile_mimetype = #{userProfileMimeType},
+            introduction_title = #{introductionTitle},
+            introduction_content = #{introductionContent}
         WHERE
             user_id = #{userId}
     </update>

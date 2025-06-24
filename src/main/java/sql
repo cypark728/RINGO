@@ -15,6 +15,8 @@ CREATE TABLE users (
     user_interest     VARCHAR(100),             -- 관심분야
     user_create_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 생성일
     user_profile_mimetype VARCHAR(50) --프로필이미지 타입(png, jpeg, jpg등등 )
+    introduction_title VARCHAR(100) - 고수 소개(제목)
+    introduction_content VARCHAR(1000) -고수 소개(내용)
 );
 
 --모집글 테이블 만들기

@@ -250,6 +250,33 @@ public class UsersController {
         }
     }
 
+    @PutMapping("/api/user/introduction")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateIntroduction(
+            @RequestBody Map<String, String> body,
+            HttpSession session
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            response.put("success", false);
+            response.put("message", "로그인이 필요합니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        String title = body.get("introductionTitle");
+        String content = body.get("introductionContent");
+
+        loginUser.setIntroductionTitle(title);
+        loginUser.setIntroductionContent(content);
+        usersService.updateUserInfo(loginUser);
+
+        session.setAttribute("loginUser", loginUser);
+
+        response.put("success", true);
+        response.put("message", "소개글이 저장되었습니다.");
+        return ResponseEntity.ok(response);
+    }
+
 
 
 }
