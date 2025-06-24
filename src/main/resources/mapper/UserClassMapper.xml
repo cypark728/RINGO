@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ringo.mypage.mapperJava.UserClassMapper">
+
+
+    <select id="getMyStudyClass" parameterType="int" resultType="ClassManageVO">
+        SELECT
+            class_manage_id,
+            class_manage_status,
+            class_manage_start_date,
+            class_manage_finish_date,
+            recruitment_post_id,
+            user_primary_id
+        FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+    </select>
+
+
+</mapper>

@@ -71,7 +71,7 @@ function InterestsSection() {
                 <div className="interests-categories">
                     <div className="interests-title">
                         <span className="circle">
-                            {loginUser && loginUser.userName ? loginUser.userName : '●●●'}
+                            {loginUser && loginUser.userNickName ? loginUser.userNickName : '●●●'}
                         </span>
                         님의<br />
                         관심분야 입니다.

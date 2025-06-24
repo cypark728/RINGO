@@ -1,5 +1,6 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.RecruitmentPostVO;
 import com.example.ringo.lecture.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,12 @@ public class LectureController {
     public RecruitmentPostVO getOneLecture(@RequestParam Integer lectureId) {
 
         return lectureService.getOneLecture(lectureId);
+    }
+
+    @PostMapping("/enroll")
+    public ResponseEntity<?> enrollClass(@RequestBody ClassManageVO vo) {
+        lectureService.enrollClass(vo);
+        return ResponseEntity.ok().body("신청이 완료되었습니다.");
     }
 
 }

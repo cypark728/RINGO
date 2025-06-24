@@ -1,5 +1,6 @@
 package com.example.ringo.controller;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.MyPageVO;
 import com.example.ringo.command.ScheduleVO;
 import com.example.ringo.mypage.mapperJava.UserClassMapper;
@@ -17,10 +18,10 @@ public class MyPageRestController {
     @Autowired
     private UserClassService userClassService;
 
-    @GetMapping("/mystudyclass")
-    public List<MyPageVO> getMyApplyClass(@RequestParam int userPrimaryId) {
-        return userClassService.getMyApplyClass(userPrimaryId);
-    }
+//    @GetMapping("/mystudyclass")
+//    public List<MyPageVO> getMyApplyClass(@RequestParam int userPrimaryId) {
+//        return userClassService.getMyApplyClass(userPrimaryId);
+//    }
 
     @GetMapping("/mywish")
     public List<MyPageVO> getMyWish(@RequestParam int userPrimaryId) {
@@ -47,6 +48,11 @@ public class MyPageRestController {
     public ResponseEntity<?> saveTimetable(@RequestBody MyPageVO vo) {
         userClassService.saveTimetable(vo);
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/mystudyclass")
+    public List<ClassManageVO> getMyStudyClass(@RequestParam Integer userPrimaryId) {
+        return userClassService.getMyStudyClass(userPrimaryId);
     }
 
 
