@@ -29,7 +29,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public ClassVO getClassByRoomId(String roomId) {
-        return null;
+        return classMapper.selectClassByRoomId(roomId);
     }
 
     @Override
