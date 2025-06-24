@@ -51,6 +51,9 @@ function Meeting() {
 
     const [roomId, setRoomId] = useState(window.roomId || '');
 
+    const [meetingTitle] = useState(window.meetingTitle || 'Ringo Meeting');
+
+    const [userId] = useState(window.userId || 'guest');
 
 
     const toggleFullScreen = () => {
@@ -124,7 +127,7 @@ function Meeting() {
     useEffect(() => {
         if (!roomId) return;
 
-        const socket = io("http://localhost:8687"); // ✅ 시그널링 서버 주소로 수정
+        const socket = io("http://172.30.1.12:8687"); // ✅ 시그널링 서버 주소로 수정
         socketRef.current = socket;
 
         const pc = new RTCPeerConnection({
@@ -213,13 +216,13 @@ function Meeting() {
         // 7. 방 입장 후 offer 보내기
         socket.on("room-joined", async () => {
             console.log("🟢 방에 누군가 입장함, offer 생성");
-            await getMedia();
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            sendMessage({
-                event: "offer",
-                data: offer,
-            });
+            // await getMedia();
+            // const offer = await pc.createOffer();
+            // await pc.setLocalDescription(offer);
+            // sendMessage({
+            //     event: "offer",
+            //     data: offer,
+            // });
         });
 
         socket.on("room-full", () => {
@@ -410,7 +413,7 @@ function Meeting() {
                         <li>
                             <figure><img src="/img/me.jpg" alt=""/></figure>
                             <div>
-                                <p>edfj_56</p>
+                                <p>{userId}</p>
                                 <span>고수</span>
                             </div>
 
@@ -421,7 +424,6 @@ function Meeting() {
                                 <p>edfj_5678</p>
                                 <span>제자</span>
                             </div>
-
                         </li>
                     </ul>
 
@@ -429,7 +431,7 @@ function Meeting() {
                         <div className="main-content">
                             <div className={`header ${isFullScreen ? 'hidden' : ''}`}>
                                 <p>{date}</p>
-                                <h2>ringo meeting title</h2>
+                                <h2>{meetingTitle}</h2>
                                 <span>  <img
                                     src="/img/clock.png"
                                     alt="clock"

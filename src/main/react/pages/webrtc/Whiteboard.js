@@ -7,7 +7,7 @@ import "./WhiteBoard.css";
 import io from "socket.io-client";
 
 
-const socket = io('localhost:8687');
+const socket = io('172.30.1.12:8687');
 
 function Whiteboard() {
     const canvasRef = useRef(null);

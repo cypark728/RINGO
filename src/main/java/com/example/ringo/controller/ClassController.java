@@ -21,12 +21,6 @@ public class ClassController {
     @Autowired
     private ClassService classService;
 
-//    @PostMapping
-//    public String createClass(@RequestBody ClassVO classVO) {
-//        classService.createClass(classVO);
-//        return classVO.getRoomId();
-//    }
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String createClass(
             @RequestParam("title") String title,
@@ -96,6 +90,5 @@ public class ClassController {
 
         return result;
     }
-
 
 }
