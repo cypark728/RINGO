@@ -9,6 +9,7 @@ import MyBookmark from "./MyBookmark/MyBookmark";
 import MyReview from "./MyReview/MyReview";
 import Timetable from "./Timetable/Timetable";
 import Example from "./Timetable/example";
+import FinishClass from "./FinishClass/FinishClass";
 
 
 export default function MyPageUser({onConvert}) {
@@ -25,15 +26,15 @@ export default function MyPageUser({onConvert}) {
 
                     {activeTab === "home" &&
                         <>
-                        <MyStudyClass />
-                        <MyBookmark />
-                        <MyReview />
-                        <Timetable />
+                            <MyStudyClass showAll={false} setActiveTab={setActiveTab} />
+                            <FinishClass showAll={false} setActiveTab={setActiveTab}/>
+                            <MyBookmark />
+                            <MyReview />
+                            <Timetable />
                         </>
                     }
                     {activeTab === "study" &&
-                     // 내가 수강중인 수업
-                    <MyStudyClass />
+                        <MyStudyClass showAll={true} />
                     }
                     {activeTab === "bookmark" &&
                      // 내가 찜한 수업
@@ -46,6 +47,10 @@ export default function MyPageUser({onConvert}) {
                     {activeTab === "timetable" &&
                         // 시간표
                     <Timetable />
+                    }
+                    {activeTab === "finish" &&
+                        // 수강완료
+                    <FinishClass showAll={true}/>
                     }
 
                     {/*<Example />*/}

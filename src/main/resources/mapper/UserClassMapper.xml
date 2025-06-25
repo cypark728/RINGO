@@ -15,6 +15,64 @@
             user_primary_id
         FROM class_manage
         WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업중'
+        ORDER BY class_manage_id DESC
+    </select>
+
+    <select id="getMyStudyClassLatest3" parameterType="int" resultType="ClassManageVO">
+        SELECT
+            class_manage_id,
+            class_manage_status,
+            class_manage_start_date,
+            class_manage_finish_date,
+            recruitment_post_id,
+            user_primary_id
+        FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업중'
+        ORDER BY class_manage_id DESC
+            LIMIT 3
+    </select>
+
+    <select id="getMyFinishedClass" parameterType="int" resultType="ClassManageVO">
+        SELECT
+            class_manage_id,
+            class_manage_status,
+            class_manage_start_date,
+            class_manage_finish_date,
+            recruitment_post_id,
+            user_primary_id
+        FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업완료'
+        ORDER BY class_manage_id DESC
+    </select>
+
+    <select id="getMyFinishedClassLatest3" parameterType="int" resultType="ClassManageVO">
+        SELECT
+            class_manage_id,
+            class_manage_status,
+            class_manage_start_date,
+            class_manage_finish_date,
+            recruitment_post_id,
+            user_primary_id
+        FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업완료'
+        ORDER BY class_manage_id DESC
+            LIMIT 3
+    </select>
+
+    <select id="getMyStudyClassCount" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업중'
+    </select>
+
+    <select id="getMyFinishedClassCount" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+          AND class_manage_status = '수업완료'
     </select>
 
 
