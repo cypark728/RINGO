@@ -1,14 +1,15 @@
 package com.example.ringo.controller;
 
-import com.example.ringo.command.ClassManageVO;
-import com.example.ringo.command.MyPageVO;
-import com.example.ringo.command.ScheduleVO;
+import com.example.ringo.command.*;
+import com.example.ringo.lecture.service.LectureService;
 import com.example.ringo.mypage.mapperJava.UserClassMapper;
 import com.example.ringo.mypage.service.UserClassService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -17,6 +18,8 @@ public class MyPageRestController {
 
     @Autowired
     private UserClassService userClassService;
+    @Autowired
+    private LectureService lectureService;
 
 //    @GetMapping("/mystudyclass")
 //    public List<MyPageVO> getMyApplyClass(@RequestParam int userPrimaryId) {
@@ -53,6 +56,22 @@ public class MyPageRestController {
     @GetMapping("/mystudyclass")
     public List<ClassManageVO> getMyStudyClass(@RequestParam Integer userPrimaryId) {
         return userClassService.getMyStudyClass(userPrimaryId);
+    }
+
+
+    @PostMapping("/lecturereviewwrite")
+    @ResponseBody
+    public ResponseEntity<?> writeLectureReview(@RequestBody RecruitmentReviewVO vo, HttpSession session) {
+        UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+
+        if (loginUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        vo.setUserPrimaryId(Integer.valueOf(loginUser.getUserPrimaryId())); // 세션 기반 작성자 ID
+        lectureService.writeLectureReview(vo);
+
+        return ResponseEntity.ok("리뷰 등록 완료");
     }
 
 

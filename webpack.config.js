@@ -32,6 +32,7 @@ module.exports = {
         lectureregistration: './pages/Product/ProductRegistration/ProductRegistration.js',
         aipopup: './pages/webrtc/AIPopup',
         exitconfirmpopup: './pages/webrtc/ExitConfirmPopup',
+        lecturereviewwrite: './pages/Product/ProductDetails/ProductDetailReviewWrite/ProductDetailReviewWrite.js',
     },
     output: {
         path: path.resolve(__dirname),

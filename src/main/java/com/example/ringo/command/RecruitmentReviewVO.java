@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +18,10 @@ public class RecruitmentReviewVO {
     private String recruitmentReviewScore;
     private Integer recruitmentPostId;
     private Integer userPrimaryId;
+    private Timestamp recruitmentReviewTime;
+
+    private String userNickName;
+    private String userProfile;
+    private String userProfileMimetype;
 }
 

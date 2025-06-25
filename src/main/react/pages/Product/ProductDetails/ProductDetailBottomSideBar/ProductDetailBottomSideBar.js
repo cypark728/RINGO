@@ -74,7 +74,7 @@ function ProductDetailBottomSideBar({title, price, priceBasis, weeklySessions, s
 
                 <div>
                     <button className="enroll-btn" onClick={handleEnroll}>
-                    상담신청하기
+                    수강신청하기
                     </button>
                 </div>
             </div>

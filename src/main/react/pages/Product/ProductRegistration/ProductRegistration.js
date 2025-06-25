@@ -81,7 +81,17 @@ function ProductRegistration() {
     const [contactTime, setContactTime] = useState('');
     const [responseTime, setResponseTime] = useState('');
     const [avgResponseTime, setAvgResponseTime] = useState('');
+    const [userInfo, setUserInfo] = useState(null);
 
+    useEffect(() => {
+        fetch('/users/api/user/info', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setUserInfo(data.user);
+                }
+            });
+    }, []);
 
     useEffect(() => {
         if (priceType === "협의가능") {
@@ -156,7 +166,7 @@ function ProductRegistration() {
             recruitmentPostContactStartTime: contactTime,
             recruitmentPostContactEndTime: responseTime,
             recruitmentPostAvgResponseTime: avgResponseTime, // 이 부분은 상태값 추가 필요
-            userPrimaryId: 0 //나중에 세션에서 추가해야 함.
+            userPrimaryId: userInfo.userPrimaryId,
         };
 
         fetch('/lecture/writeRecruitmentPost', {

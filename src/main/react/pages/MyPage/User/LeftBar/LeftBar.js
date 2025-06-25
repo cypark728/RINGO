@@ -57,6 +57,7 @@ export default function LeftBar({activeTab, setActiveTab, onConvert }) {
                         시간표
                     </li>
                 </ul>
+
                 <button className="convert-button" onClick={onConvert}>
                     고수 전환
                 </button>

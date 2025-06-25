@@ -2,7 +2,10 @@ package com.example.ringo.lecture.mapperJava;
 
 import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.RecruitmentPostVO;
+import com.example.ringo.command.RecruitmentReviewVO;
+import com.example.ringo.command.UsersVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +15,10 @@ public interface LectureMapper {
     List<RecruitmentPostVO> getLectures(String category, String search);
     RecruitmentPostVO getOneLecture(Integer lectureId);
     void enrollClass(ClassManageVO vo);
+
+    UsersVO getUserById(@Param("userPrimaryId") int userPrimaryId);
+
+    void insertLectureReview(RecruitmentReviewVO vo);
+
+    List<RecruitmentReviewVO> getLectureReviews(@Param("lectureId")Integer lectureId);
 }
