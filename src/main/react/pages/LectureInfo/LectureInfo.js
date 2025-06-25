@@ -4,67 +4,25 @@ import "./LectureInfo.css";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 
-const services = [
-    {
-        img: "/img/makeBlogThumbnail.png",
-        title: "내 블로그가 핫한 브랜드가 되다! 블로그 제작",
-        rating: "4.8",
-        reviews: "158",
-        price: "1,123,123원~",
-        provider: "중앙개발원",
-    },
-    {
-        img: "/img/animationThumbnail.png",
-        title: "Quick 애니메이션 모션 그래픽!",
-        rating: "4.8",
-        reviews: "158",
-        price: "1,123,123원~",
-        provider: "중앙개발원",
-    },
-    {
-        img: "/img/thumbnail.png",
-        title: "이거는 사진이 도대체 뭔지 모르겠다!",
-        rating: "4.8",
-        reviews: "158",
-        price: "1,123,123원~",
-        provider: "중앙개발원",
-    },
-    {
-        img: "/img/Ga4Thumbnail.png",
-        title: "GoogleGA4설치! 이정도는 혼자 할줄 알아야겠죠?",
-        rating: "4.8",
-        reviews: "158",
-        price: "1,123,123원~",
-        provider: "중앙개발원",
-    },
-    {
-        img: "/img/makeBlogThumbnail.png",
-        title: "내 블로그가 핫한 브랜드가 되다! 블로그 제작",
-        rating: "4.8",
-        reviews: "158",
-        price: "1,123,123원~",
-        provider: "중앙개발원",
-    },
-];
-
 const categories = [
-    { label: "디자인", filename: "design"},
-    { label: "IT•프로그래밍", filename: "programming"},
-    { label: "영상•사진", filename: "photo"},
-    { label: "마케팅", filename: "marketing"},
-    { label: "주식•코인", filename: "invest"},
-    { label: "문서•글쓰기", filename: "document"},
-    { label: "세무•법인•노무", filename: "tax"},
-    { label: "창업•사업", filename: "business"},
-    { label: "전체보기", filename: "all"}
+    { label: "디자인", filename: "design", forQuery:"디자인"},
+    { label: "IT•프로그래밍", filename: "programming", forQuery:"IT"},
+    { label: "영상•사진", filename: "photo", forQuery:"영상"},
+    { label: "마케팅", filename: "marketing", forQuery:"마케팅"},
+    { label: "주식•코인", filename: "invest", forQuery:"주식"},
+    { label: "문서•글쓰기", filename: "document", forQuery:"문서"},
+    { label: "세무•법인•노무", filename: "tax", forQuery:"세무"},
+    { label: "창업•사업", filename: "business", forQuery:"창업"},
+    { label: "전체보기", filename: "all", forQuery:"전체보기"}
 ]
-
-
 
 function LectureInfo() {
 
     const [lectures, setLectures] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("전체보기");
+    const [keyword, setKeyword] = useState("");
 
+    //카테고리와 검색 내용 확인해서 강의 목록 불러오는 함수
     const fetchLectures = async (category, keyword) => {
         const params = new URLSearchParams();
         params.append("category", category);
@@ -77,9 +35,16 @@ function LectureInfo() {
 
     };
 
+    //검색 중 엔터키 누르면 검색 실행하는 함수
+    const handleSearchKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            fetchLectures(selectedCategory, keyword);
+        }
+    };
+
     useEffect(() => {
-        fetchLectures();
-    }, []);
+        fetchLectures(selectedCategory, keyword);
+    }, [selectedCategory]);
 
     return (
         <div className="LectureInfo-container">
@@ -89,14 +54,21 @@ function LectureInfo() {
                         type="text"
                         placeholder="원하는 서비스를 검색해보세요"
                         className="search-input"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        onKeyDown={handleSearchKeyDown}
                     />
-                    <img className="search-button" src="/img/search.png" alt="검색"/>
+                    <img className="search-button"
+                         src="/img/search.png"
+                         alt="검색"
+                         onClick={() => fetchLectures(selectedCategory, keyword)}/>
                 </div>
             </section>
 
             <div className="categories">
                 {categories.map((cat, i) => (
-                    <div className="category">
+                    <div className="category"
+                        onClick={() => setSelectedCategory(cat.forQuery)}>
                         <img src={`/img/${cat.filename}.png`}
                              alt={cat.label}
                              data-category={cat.filename}
