@@ -62,6 +62,13 @@ export default function LeftBar({activeTab, setActiveTab, onBack }) {
 
 
                 </ul>
+                <button className="convert-button"
+                        onClick={() => {
+                            window.location.href = "/lecture/lectureregistration"
+                        }}
+                           >
+                    강의등록
+                </button>
                 <button className="convert-button" onClick={onBack}>제자 전환</button>
             </div>
         </aside>

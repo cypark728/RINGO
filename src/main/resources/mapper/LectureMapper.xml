@@ -61,4 +61,48 @@
             (#{classManageStatus}, #{recruitmentPostId}, #{userPrimaryId})
     </insert>
 
+
+    <select id="getUserById" resultType="com.example.ringo.command.UsersVO">
+        SELECT user_primary_id, user_nick_name, user_profile, user_profile_mimetype
+        FROM users
+        WHERE user_primary_id = #{userPrimaryId}
+    </select>
+
+    <insert id="insertLectureReview" parameterType="RecruitmentReviewVO">
+        INSERT INTO recruitment_review (
+            recruitment_review_title,
+            recruitment_review_content,
+            recruitment_review_score,
+            recruitment_post_id,
+            user_primary_id,
+            recruitment_review_time
+        ) VALUES (
+             #{recruitmentReviewTitle},
+             #{recruitmentReviewContent},
+             #{recruitmentReviewScore},
+             #{recruitmentPostId},
+             #{userPrimaryId},
+             current_timestamp
+         )
+    </insert>
+
+    <select id="getLectureReviews" parameterType="int" resultType="com.example.ringo.command.RecruitmentReviewVO">
+        SELECT
+            rr.recruitment_review_id,
+            rr.recruitment_review_title,
+            rr.recruitment_review_content,
+            rr.recruitment_review_score,
+            rr.recruitment_post_id,
+            rr.user_primary_id,
+            rr.recruitment_review_time,
+            u.user_nick_name,
+            u.user_profile,
+            u.user_profile_mimetype
+        FROM recruitment_review rr
+        JOIN users u ON rr.user_primary_id = u.user_primary_id
+        WHERE rr.recruitment_post_id = #{lectureId}
+        ORDER BY rr.recruitment_review_id DESC
+    </select>
+
+
 </mapper>

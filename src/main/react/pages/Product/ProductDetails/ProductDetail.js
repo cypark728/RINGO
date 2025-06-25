@@ -14,7 +14,7 @@ import ProductDetailOtherClass from "./ProductDetailOtherClass/ProductDetailOthe
 
 function ProductDetail() {
     const [activeTab, setActiveTab] = useState("home");
-    const [lecture, setLecture] = useState([]);
+    const [lecture, setLecture] = useState({});
 
     const getQueryParam = (param) => {
         return new URLSearchParams(window.location.search).get(param);
@@ -24,6 +24,7 @@ function ProductDetail() {
 
     const fetchGetOneLecture = async (lectureId) => {
         const response = await fetch(`/lecture/getOneLecture?lectureId=${lectureId}`);
+        // console.log("fetched lecture data:", await response.json());
         setLecture(await response.json());
     }
 
@@ -33,12 +34,15 @@ function ProductDetail() {
 
     return (
         <>
-            <ProductDetailTop
-                category={lecture.recruitmentPostCategory}
-                title={lecture.recruitmentPostTitle}
-                contactStartTime={lecture.recruitmentPostContactStartTime}
-                contactEndTime={lecture.recruitmentPostContactEndTime}
-            />
+            {lecture.userPrimaryId && (
+                <ProductDetailTop
+                    category={lecture.recruitmentPostCategory}
+                    title={lecture.recruitmentPostTitle}
+                    contactStartTime={lecture.recruitmentPostContactStartTime}
+                    contactEndTime={lecture.recruitmentPostContactEndTime}
+                    userPrimaryId={lecture.userPrimaryId}
+                />
+            )}
 
             {/*<div className="topBox">*/}
             {/*    <div className="leftTop">*/}
@@ -76,7 +80,9 @@ function ProductDetail() {
                                 content={lecture.recruitmentPostContent}
                             />
                                 <div className="betweenSpace"></div>
-                            <ProductDetailReview />
+                            <ProductDetailReview
+                                lectureId={lectureId}
+                            />
                             </>
                         }
                         {activeTab === "content" &&
@@ -85,7 +91,8 @@ function ProductDetail() {
                             />
                         }
                         {activeTab === "review" &&
-                            <ProductDetailReview />
+                            <ProductDetailReview
+                                lectureId={lectureId}/>
                         }
 
                     </div>

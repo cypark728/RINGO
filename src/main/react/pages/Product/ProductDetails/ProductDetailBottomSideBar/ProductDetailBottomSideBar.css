@@ -1,6 +1,6 @@
 .rightBottom {
     width: 25%;
-    border: 1px solid #777;
+    border: 1px solid #a5a5a5;
     border-radius: 10px;
     padding: 20px;
     position: sticky;
@@ -75,4 +75,5 @@
     color: #fff;
     padding-bottom: 5px;
     width: 100%;
+    cursor: pointer;
 }
