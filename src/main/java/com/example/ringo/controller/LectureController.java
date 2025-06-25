@@ -6,6 +6,7 @@ import com.example.ringo.command.RecruitmentReviewVO;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.lecture.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class LectureController {
 
     @PostMapping("/writeRecruitmentPost")
     @ResponseBody
-    public ResponseEntity<String> writeRecruitmentPost(@RequestBody RecruitmentPostVO recruitmentPostVO){
+    public ResponseEntity<String> writeRecruitmentPost(@RequestBody RecruitmentPostVO recruitmentPostVO) {
         lectureService.writeRecruitmentPost(recruitmentPostVO);
         return ResponseEntity.ok("success");
     }
@@ -75,8 +76,18 @@ public class LectureController {
 
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollClass(@RequestBody ClassManageVO vo) {
-        lectureService.enrollClass(vo);
-        return ResponseEntity.ok().body("신청이 완료되었습니다.");
+        try {
+            lectureService.enrollClass(vo);
+            return ResponseEntity.ok().body("신청이 완료되었습니다.");
+        } catch (DataIntegrityViolationException e) {
+            // 유니크 인덱스 위반 시
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("이미 수강중인 수업입니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류가 발생했습니다.");
+        }
+
     }
 
     @GetMapping("lecturereview")

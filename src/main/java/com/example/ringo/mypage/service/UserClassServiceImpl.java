@@ -71,5 +71,29 @@ public class UserClassServiceImpl implements UserClassService {
         return userClassMapper.getMyStudyClass(userPrimaryId);
     }
 
+    @Override
+    public List<ClassManageVO> getMyStudyClassLatest3(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClassLatest3(userPrimaryId);
+    }
+
+    @Override
+    public List<ClassManageVO> getMyFinishedClass(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClass(userPrimaryId);
+    }
+
+    @Override
+    public List<ClassManageVO> getMyFinishedClassLatest3(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClassLatest3(userPrimaryId);
+    }
+
+    @Override
+    public int getMyStudyClassCount(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClassCount(userPrimaryId);
+    }
+
+    @Override
+    public int getMyFinishedClassCount(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClassCount(userPrimaryId);
+    }
 
 }

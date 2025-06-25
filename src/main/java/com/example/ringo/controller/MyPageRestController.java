@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mypage")
@@ -58,6 +59,32 @@ public class MyPageRestController {
         return userClassService.getMyStudyClass(userPrimaryId);
     }
 
+    @GetMapping("/myfinishedclass")
+    public List<ClassManageVO> getMyFinishedClass(@RequestParam Integer userPrimaryId) {
+        return userClassService.getMyFinishedClass(userPrimaryId);
+    }
+
+    @GetMapping("/mystudyclass/latest3")
+    public List<ClassManageVO> getMyStudyClassLatest3(@RequestParam Integer userPrimaryId) {
+        return userClassService.getMyStudyClassLatest3(userPrimaryId);
+    }
+
+    @GetMapping("/myfinishedclass/latest3")
+    public List<ClassManageVO> getMyFinishedClasslatest3(@RequestParam Integer userPrimaryId) {
+        return userClassService.getMyFinishedClass(userPrimaryId);
+    }
+
+    @GetMapping("/mystudyclass/count")
+    public Map<String, Integer> getMyStudyClassCount(@RequestParam Integer userPrimaryId) {
+        int count = userClassService.getMyStudyClassCount(userPrimaryId);
+        return Map.of("count", count); // {"count": 4} 형태로 반환
+    }
+
+    @GetMapping("/myfinishedclass/count")
+    public Map<String, Integer> getMyFinishedClassCount(@RequestParam Integer userPrimaryId) {
+        int count = userClassService.getMyFinishedClassCount(userPrimaryId);
+        return Map.of("count", count);
+    }
 
     @PostMapping("/lecturereviewwrite")
     @ResponseBody

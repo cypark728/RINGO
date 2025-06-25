@@ -44,6 +44,10 @@ export default function LeftBar({activeTab, setActiveTab, onConvert }) {
                         className={`menu-item ${activeTab === "study" ? "selected" : ""}`}>
                         수강 중인 수업
                     </li>
+                    <li onClick={() => setActiveTab("finish")}
+                        className={`menu-item ${activeTab === "finish" ? "selected" : ""}`}>
+                        수강 완료한 수업
+                    </li>
                     <li onClick={() => setActiveTab("bookmark")}
                         className={`menu-item ${activeTab === "bookmark" ? "selected" : ""}`}>
                         찜한 강의

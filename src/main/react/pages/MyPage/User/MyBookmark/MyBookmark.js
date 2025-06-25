@@ -4,6 +4,8 @@ import ReactDOM from "react-dom/client";
 
 function MyBookmark() {
     const [myBookmarks, setMyBookmarks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [totalCount, setTotalCount] = useState(0);
 
     useEffect(() => {
         fetch("/api/mypage/mywish?userPrimaryId=789")

@@ -26,5 +26,15 @@ public interface UserClassService {
 
     List<ClassManageVO> getMyStudyClass(Integer userPrimaryId);
 
+    List<ClassManageVO> getMyStudyClassLatest3(Integer userPrimaryId);
+
+    List<ClassManageVO> getMyFinishedClass(Integer userPrimaryId);
+
+    List<ClassManageVO> getMyFinishedClassLatest3(Integer userPrimaryId);
+
+    int getMyStudyClassCount(Integer userPrimaryId);
+
+    int getMyFinishedClassCount(Integer userPrimaryId);
+
 }
 
