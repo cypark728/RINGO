@@ -36,9 +36,11 @@ function ProductDetailBottomSideBar({title, price, priceBasis, weeklySessions, s
             body: JSON.stringify(payload),
             credentials: 'include'
         });
-
         if (enrollResponse.ok) {
             alert("신청이 완료되었습니다!");
+        } else if (enrollResponse.status === 409) {
+            const msg = await enrollResponse.text();
+            alert(msg); // "이미 수강중인 수업입니다."
         } else {
             alert("신청에 실패했습니다.");
         }
