@@ -4,12 +4,15 @@ import com.example.ringo.command.CommentVO;
 import com.example.ringo.command.PostVO;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.community.service.CommunityService;
+import com.example.ringo.config.S3Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -18,6 +21,9 @@ public class CommunityController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private S3Uploader s3Uploader;
 
     @GetMapping("/communitylist")
     public String communityList(Model model) {
@@ -59,12 +65,43 @@ public class CommunityController {
         return "community";
     }
 
+
+//    @PostMapping("/writepost")
+//    @ResponseBody
+//    public ResponseEntity<String> communityWrite(@RequestBody PostVO postVO) {
+//        communityService.writePost(postVO);
+//        return ResponseEntity.ok("success");
+//    }
+
     @PostMapping("/writepost")
     @ResponseBody
-    public ResponseEntity<String> communityWrite(@RequestBody PostVO postVO) {
+    public ResponseEntity<String> communityWrite(
+            @RequestParam("postTitle") String title,
+            @RequestParam("postContent") String content,
+            @RequestParam("postType") String type,
+            @RequestParam("userPrimaryId") int userId,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images
+    ) {
+        PostVO postVO = new PostVO();
+        postVO.setPostTitle(title);
+        postVO.setPostContent(content);
+        postVO.setPostType(type);
+        postVO.setUserPrimaryId(userId);
+
+        List<String> imageUrls = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                String url = s3Uploader.upload(file); // UUID 붙인 파일명
+                imageUrls.add(url);
+            }
+        }
+        postVO.setImageUrls(imageUrls);
+
         communityService.writePost(postVO);
+
         return ResponseEntity.ok("success");
     }
+
 
     @PostMapping("/writeComment")
     @ResponseBody

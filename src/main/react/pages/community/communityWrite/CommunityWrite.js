@@ -20,6 +20,8 @@ function CustomSelect({ value, onChange, options }) {
         };
         document.addEventListener("mousedown", handler);
         return () => document.removeEventListener("mousedown", handler);
+
+
     }, []);
 
     return (
@@ -102,20 +104,21 @@ function CommunityWrite() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const postData = {
-            postTitle: title,
-            postContent: content,
-            postType: category,
-            userPrimaryId: 0 //이거 나중에 세션에서 받아오는 userId로 교체해야 함.
-        };
+        const formData = new FormData();
+        formData.append("postTitle", title);
+        formData.append("postContent", content);
+        formData.append("postType", category);
+        formData.append("userPrimaryId", 0); // TODO: 세션에서 가져오기
+
+// 이미지 파일들 추가
+        images.forEach((image, index) => {
+            formData.append("images", image);
+        });
 
         try {
             const response = await fetch('/community/writepost', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData)
+                body: formData
             });
 
             if (response.ok) {

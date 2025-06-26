@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +24,8 @@ public class PostVO {
 
     private String userNickName;
     private Integer postCommentCount;
+
+    private List<String> imageUrls;
+    private List<MultipartFile> images;
 }
 
