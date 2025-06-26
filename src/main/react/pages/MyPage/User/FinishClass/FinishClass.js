@@ -12,7 +12,7 @@ function FinishClass({ showAll = false, setActiveTab }) {
             const userRes = await fetch('/users/api/user/info', { credentials: 'include' });
             const userData = await userRes.json();
             if (!userData.success) {
-                alert("로그인이 필요합니다.");
+                window.location.href = '/users/login';
                 setLoading(false);
                 return;
             }
@@ -23,7 +23,6 @@ function FinishClass({ showAll = false, setActiveTab }) {
 
             const userPrimaryId = userData.user.userPrimaryId;
 
-            // "수강완료" 전체 개수 fetch (여기만 수정!)
             const countRes = await fetch(`/api/mypage/myfinishedclass/count?userPrimaryId=${userPrimaryId}`);
             const countData = await countRes.json();
             setTotalCount(countData.count);
@@ -57,9 +56,9 @@ function FinishClass({ showAll = false, setActiveTab }) {
                         </div>
                         <p className="card-title">{myClass.recruitmentPostTitle}</p>
                         <p className="card-desc">{myClass.recruitmentPostContent}</p>
-                        <p className="card-price">
-                            {myClass.classManageStartDate?.slice(2, 10)} ~ {myClass.classManageFinishDate?.slice(2, 10)}
-                        </p>
+                        {/*<p className="card-price">*/}
+                        {/*    {myClass.classManageStartDate?.slice(2, 10)} ~ {myClass.classManageFinishDate?.slice(2, 10)}*/}
+                        {/*</p>*/}
                     </div>
                 ))}
                 {totalCount > 3 && !showAll && (

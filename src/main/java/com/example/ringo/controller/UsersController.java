@@ -19,10 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -125,13 +122,22 @@ public class UsersController {
 
     @PostMapping("/find-id-action")
     public ResponseEntity<Map<String, Object>> findIdAction(@RequestBody Map<String, String> params) {
-        // ... (이하 모든 메소드에 닫는 중괄호 '}' 추가)
         String name = params.get("name");
         String phone = params.get("phone");
         List<UsersVO> foundUsers = usersService.findId(name, phone);
         Map<String, Object> response = new HashMap<>();
         if (foundUsers != null && !foundUsers.isEmpty()) {
-            // ... 로직 생략 ...
+
+            List<Map<String, Object>> idList = new ArrayList<>();
+            for (UsersVO user : foundUsers) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("id", user.getUserId());
+                item.put("date", user.getCreatedAt());
+                idList.add(item);
+            }
+            response.put("success", true);
+            response.put("userName", foundUsers.get(0).getUserName());
+            response.put("idList", idList);
         } else {
             response.put("success", false);
             response.put("message", "일치하는 회원 정보가 없습니다.");
@@ -142,15 +148,45 @@ public class UsersController {
     @PostMapping("/verify-user-for-reset")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> verifyUser(@RequestBody UsersVO vo, HttpServletRequest request) {
-        // ... 로직 생략 ...
-        return ResponseEntity.ok(new HashMap<>());
+        Map<String, Object> response = new HashMap<>();
+        // 서비스에서 회원 정보 조회
+        UsersVO foundUser = usersService.findUserForReset(vo.getUserName(), vo.getUserId(), vo.getUserPhone());
+        if (foundUser != null) {
+            // 인증 성공: 세션에 아이디 저장 (비밀번호 재설정 단계에서 사용)
+            request.getSession().setAttribute("resetUserId", vo.getUserId());
+            response.put("success", true);
+        } else {
+            response.put("success", false);
+            response.put("message", "입력하신 정보와 일치하는 회원이 없습니다.");
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reset-password-action")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> resetPassword(@RequestBody Map<String, String> params, HttpSession session) {
-        // ... 로직 생략 ...
-        return ResponseEntity.ok(new HashMap<>());
+        Map<String, Object> response = new HashMap<>();
+        // 세션에서 인증된 아이디 꺼냄
+        String userId = (String) session.getAttribute("resetUserId");
+        String newPassword = params.get("password");
+
+        if (userId == null) {
+            response.put("success", false);
+            response.put("message", "비정상적인 접근입니다. 비밀번호 찾기를 처음부터 다시 시도해주세요.");
+            return ResponseEntity.ok(response);
+        }
+
+        try {
+            usersService.updatePassword(userId, newPassword);
+            // 비밀번호 변경 성공 시 세션 정보 삭제
+            session.removeAttribute("resetUserId");
+            response.put("success", true);
+            response.put("message", "비밀번호가 성공적으로 변경되었습니다.");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+        }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/user/info")

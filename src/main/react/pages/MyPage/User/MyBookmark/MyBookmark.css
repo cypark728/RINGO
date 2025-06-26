@@ -1,5 +1,43 @@
 .section {
     margin-bottom: 2.5rem;
+    position: relative;
+    width: 100%;
+}
+
+figure{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 45px;
+    transform: translateY(-50%);
+    transition: .4s;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.blank{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 45px;
+    transform: translateY(-50%);
+    transition: .4s;
+    z-index: 1;
+    height: 100%;
+}
+
+.section:hover .blank,
+figure:hover {
+    right: -45px;
+}
+
+.section:hover figure,
+figure:hover {
+    right: -130px;
+}
+
+figure img{
+    width: 100%;
 }
 
 .section-title {

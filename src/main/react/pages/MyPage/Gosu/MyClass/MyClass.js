@@ -4,15 +4,26 @@ import ReactDOM from "react-dom/client";
 import RoomCreatePopup from "../Popup/RoomCreatePopup";
 import PasswordPopup from "../Popup/PasswordPopup";
 
-function MyClass() {
+function MyClass({ showAll = false, setActiveTab }) {
     const [showPopup, setShowPopup] = useState(false);
     const [classes, setClasses] = useState([]);
     const [showPasswordPopup, setShowPasswordPopup] = useState(false);
     const [selectedClass, setSelectedClass] = useState(null);
+<<<<<<< dakco
+
+    const displayedClasses = showAll ? classes : classes.slice(0, 3);
+
+    // const fetchClasses = async () => {
+    //     const res = await fetch('/api/classes');
+    //     const data = await res.json();
+    //     setClasses(data);
+    // };
+=======
     const [userId, setUserId] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [classToEdit, setClassToEdit] = useState(null);
     const [userName, setUserName] = useState('');
+>>>>>>> main
 
     const fetchClasses = async () => {
         const res = await fetch('/api/classes', {
@@ -82,13 +93,23 @@ function MyClass() {
 
 
     useEffect(() => {
+
         fetchClasses();
+
     }, []);
 
     return (
         <section className="section">
-            <h2 className="section-title">내가 수업중인 수업 <span className="section-total">Total 3</span></h2>
+            <h2 className="section-title">내가 수업중인 수업 <span className="section-total">Total {classes.length}</span></h2>
             <div className="card-grid">
+<<<<<<< dakco
+                {displayedClasses.map((classItem, i) => (
+                    <div key={i} className="card"
+                         onClick={() => handleCardClick(classItem)}
+                    >
+                        <div className="exampleImageBlack">
+                            <img src={classItem.imageUrl} alt="class" />
+=======
                 {classes.map((classItem, i) => (
                     <React.Fragment key={i}>
                         <div className="card" onClick={() => handleCardClick(classItem)}>
@@ -109,11 +130,23 @@ function MyClass() {
                                     handleDeleteClick(classItem);
                                 }}>삭제</button>
                             </div>
+>>>>>>> main
                         </div>
 
                     </React.Fragment>
                 ))}
+<<<<<<< dakco
+                {classes.length > 3 && !showAll && setActiveTab && (
+                    <>
+                        <div className="blank"></div>
+                        <figure onClick={() => setActiveTab && setActiveTab("study")}>
+                            <img src={"/img/right.png"} alt="더보기" />
+                        </figure>
+                    </>
+                )}
+=======
 
+>>>>>>> main
             </div>
             <div className="makeClassBtn">
                 <button className="roomBtn" onClick={() => setShowPopup(true)}>방 만들기</button>

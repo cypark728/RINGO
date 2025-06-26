@@ -19,8 +19,25 @@ export default function Timetable() {
     const [editingId, setEditingId] = useState(null);
     const editingRef = useRef(null);
     const [hoveredId, setHoveredId] = useState(null);        // 실제로 보여줄 블록 id
-    const hoverTimer = useRef(null);                         // hover 타이머
-    const [schedule, setSchedule] = useState([]);
+
+    const hoverTimer = useRef(null);                          // hover 타이머
+    const [userPrimaryId, setUserPrimaryId] = useState(null);
+   const [schedule, setSchedule] = useState([]);
+    useEffect(() => {
+        fetch('/users/api/user/info')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user && data.user.userPrimaryId) {
+                    setUserPrimaryId(data.user.userPrimaryId);
+                } else {
+                }
+            })
+            .catch(err => {
+                console.error('유저 정보 불러오기 실패', err);
+            });
+    }, []);
+
+
 
     const snapToGrid = (value, size) => Math.round(value / size) * size;
 
@@ -69,13 +86,13 @@ export default function Timetable() {
     };
 
     const handleSave = () => {
-
         setEditMode(false);
         setSavedBlocks([...blocks]);
         setEditingId(null);
 
-        const userPrimaryId = 789; //userPrimaryId로 수정필요
-
+        if (!userPrimaryId) {
+            return;
+        }
 
         fetch('/api/mypage/timetablesave', {
             method: 'POST',
@@ -101,7 +118,6 @@ export default function Timetable() {
             .catch(error => {
                 console.error('실패', error);
             });
-
     };
 
     const handleTitleChange = (id, value) => {
@@ -132,7 +148,7 @@ export default function Timetable() {
 
     //시간표 불러오기
     useEffect(() => {
-        const userPrimaryId = 789; // 실제 로그인된 사용자 id로 교체 필요
+        if (!userPrimaryId) return; // 아직 userPrimaryId가 없으면 실행 안 함
 
         fetch(`/api/mypage/timetable?userPrimaryId=${userPrimaryId}`)
             .then((res) => {
@@ -141,7 +157,7 @@ export default function Timetable() {
             })
             .then((data) => {
                 const loadedBlocks = data.map((item, index) => ({
-                    id: index + 1, // 고유 ID 생성
+                    id: index + 1,
                     x: item.timetableScheduleX,
                     y: item.timetableScheduleY,
                     width: item.timetableScheduleWidth,
@@ -157,8 +173,7 @@ export default function Timetable() {
             .catch(err => {
                 console.error('시간표 로딩 실패', err);
             })
-
-    }, []);
+    }, [userPrimaryId]);
 
 
     // ✅ 외부 클릭 시 편집 종료
