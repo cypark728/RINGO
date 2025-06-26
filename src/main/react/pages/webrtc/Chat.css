@@ -88,3 +88,11 @@
 .chat-box::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
 }
+
+.system-message {
+    text-align: center;
+    color: #888;
+    font-size: 0.85em;
+    margin: 12px 0;
+    font-style: italic;
+}

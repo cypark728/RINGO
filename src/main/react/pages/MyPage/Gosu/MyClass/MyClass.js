@@ -7,13 +7,12 @@ import PasswordPopup from "../Popup/PasswordPopup";
 function MyClass() {
     const [showPopup, setShowPopup] = useState(false);
     const [classes, setClasses] = useState([]);
-
     const [showPasswordPopup, setShowPasswordPopup] = useState(false);
     const [selectedClass, setSelectedClass] = useState(null);
     const [userId, setUserId] = useState(null);
-
     const [editMode, setEditMode] = useState(false);
     const [classToEdit, setClassToEdit] = useState(null);
+    const [userName, setUserName] = useState('');
 
     const fetchClasses = async () => {
         const res = await fetch('/api/classes', {
@@ -54,7 +53,8 @@ function MyClass() {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    setUserId(data.user.userId); // ✅ 저장
+                    setUserId(data.user.userId);
+                    setUserName(data.user.userName);
                 } else {
                     alert("로그인이 필요합니다.");
                 }
@@ -67,13 +67,13 @@ function MyClass() {
             setSelectedClass(classItem);
             setShowPasswordPopup(true);
         } else {
-            window.location.href = `/meeting.do?roomId=${classItem.roomId}&userId=${userId}`;
+            window.location.href = `/meeting.do?roomId=${classItem.roomId}&userId=${userId}&userName=${encodeURIComponent(userName)}`;
         }
     };
 
     const handlePasswordSubmit = (enteredPassword) => {
         if (enteredPassword === selectedClass.password) {
-            window.location.href = `/meeting.do?roomId=${selectedClass.roomId}&userId=${userId}`;
+            window.location.href = `/meeting.do?roomId=${selectedClass.roomId}&userId=${userId}&userName=${encodeURIComponent(userName)}`;
         } else {
             alert("비밀번호가 틀렸습니다.");
             setShowPasswordPopup(false);

@@ -325,8 +325,6 @@ img {
     cursor: pointer;
 }
 
-
-
 .volume-container {
     position: absolute;
     bottom: -180px;
@@ -424,6 +422,19 @@ img {
 
 .seeAll img {
     width: 20px;
+}
+
+.schedule-container{
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
 }
 
 /* ----------우측 패널--------------- -*/
