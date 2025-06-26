@@ -37,8 +37,9 @@ public class MyPageRestController {
 
     @PostMapping("/updatewish")
     public ResponseEntity<String> updateWish(@RequestBody MyPageVO vo) {
-        userClassService.updateWish(vo);
+        userClassService.saveOrUpdateWish(vo);
         return ResponseEntity.ok("");
+
     }
 
     @GetMapping("/myreview")

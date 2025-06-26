@@ -12,7 +12,7 @@ public interface UserClassService {
 
     List<MyPageVO> getMyWish(@Param("userPrimaryId") int userPrimaryId);
 
-    void updateWish(MyPageVO vo);
+    void saveOrUpdateWish(MyPageVO vo);
 
     List<MyPageVO> getMyReview(@Param("userPrimaryId") int userPrimaryId);
 

@@ -14,7 +14,11 @@ public interface UserClassMapper {
 
     List<MyPageVO> getMyWish(@Param("userPrimaryId") int userPrimaryId);
 
+    int checkWishExists(MyPageVO vo);
+
     void updateWish(MyPageVO vo);
+
+    void insertWish(MyPageVO vo);
 
     List<MyPageVO> getMyReview(@Param("userPrimaryId") int userPrimaryId);
 

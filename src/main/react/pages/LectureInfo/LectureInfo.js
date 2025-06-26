@@ -21,6 +21,8 @@ function LectureInfo() {
     const [lectures, setLectures] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("전체보기");
     const [keyword, setKeyword] = useState("");
+    const [userWishList, setUserWishList] = useState([]);
+    const [userPrimaryId, setUserPrimaryId] = useState(null);
 
     //카테고리와 검색 내용 확인해서 강의 목록 불러오는 함수
     const fetchLectures = async (category, keyword) => {
@@ -31,7 +33,16 @@ function LectureInfo() {
         }
 
         const response = await fetch(`/lecture/getLectures?${params.toString()}`);
-        setLectures(await response.json());
+        // setLectures(await response.json());
+
+        const lectureData = await response.json();
+
+        const merged = lectureData.map(lecture => ({
+            ...lecture,
+            isWish: userWishList.includes(lecture.recruitmentPostId)
+        }));
+
+        setLectures(merged);
 
     };
 
@@ -43,8 +54,25 @@ function LectureInfo() {
     };
 
     useEffect(() => {
+        fetch("/users/api/user/info")
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    setUserPrimaryId(data.user.userPrimaryId);
+                    const userId = data.user.userPrimaryId;
+                    fetch(`/api/mypage/mywish?userPrimaryId=${userId}`)
+                        .then(res => res.json())
+                        .then(wishData => {
+                            const wishedIds = wishData.map(item => item.recruitmentPostId);
+                            setUserWishList(wishedIds);
+                        });
+                }
+            });
+    }, []);
+
+    useEffect(() => {
         fetchLectures(selectedCategory, keyword);
-    }, [selectedCategory]);
+    }, [selectedCategory, userWishList]);
 
     return (
         <div className="LectureInfo-container">
@@ -84,6 +112,39 @@ function LectureInfo() {
                          key={idx}
                          onClick={() => window.location.href = `/lecture/lecturedetail?lectureId=${lecture.recruitmentPostId}`}
                     >
+
+                        <div className="wishTopBox">
+                            <div
+                                className={`wish ${lecture.isWish ? 'wishHeart' : 'notWishHeart'}`}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+
+                                    if(!userPrimaryId) return alert("로그인이 필요합니다.");
+
+
+                                    const updated = !lecture.isWish;
+                                    const updatedLectures = [...lectures];
+                                    updatedLectures[idx] = { ...lecture, isWish: updated };
+                                    setLectures(updatedLectures);
+
+                                    fetch('/api/mypage/updatewish', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            recruitmentPostId: lecture.recruitmentPostId,
+                                            isWish: updated,
+                                            userPrimaryId: userPrimaryId
+                                        }),
+                                    });
+                                }}
+                            >
+                                <div>❤️</div>
+                                <div>🤍</div>
+                            </div>
+                        </div>
+
+
                         {/*사진 수정해야 함*/}
                         <img src="/img/makeBlogThumbnail.png" alt={lecture.recruitmentPostTitle} />
                         <div className="service-title">{lecture.recruitmentPostTitle}</div>
