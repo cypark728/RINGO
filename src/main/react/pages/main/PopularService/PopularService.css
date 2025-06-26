@@ -28,7 +28,7 @@
 
 .popular-services-grid {
     display: grid;
-    grid-template-columns: repeat(2, 360px);
+    grid-template-columns: repeat(2, 450px);
     grid-template-rows: repeat(2, 1fr);
     gap: 32px 36px;
 }

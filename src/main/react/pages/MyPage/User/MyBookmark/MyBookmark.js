@@ -56,15 +56,11 @@ function MyBookmark() {
             </h2>
             <div className="card-grid">
                 {myBookmarks.map((myBookmark, index) => {
-                    // ✅ 여기에 로그 찍기
-                    console.log('typeof isWish:', typeof myBookmark.isWish, 'value:', myBookmark.isWish);
-
                     return (
                         <div key={index} className="card">
                             <div className="exampleImageBlack">
                                 <div className={`wish ${myBookmark.isWish === true || myBookmark.isWish === 'true' ? 'wishHeart' : 'notWishHeart'}`}
                                     onClick={() => {
-                                        console.log('하트 클릭됨', myBookmark.applyWishId);
                                         const updatedWish = !myBookmark.isWish; //반대로
 
                                         // 1. UI 업데이트

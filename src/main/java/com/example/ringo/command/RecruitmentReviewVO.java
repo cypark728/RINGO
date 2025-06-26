@@ -21,7 +21,7 @@ public class RecruitmentReviewVO {
     private Timestamp recruitmentReviewTime;
 
     private String userNickName;
-    private String userProfile;
+    private byte[] userProfile;
     private String userProfileMimetype;
 }
 

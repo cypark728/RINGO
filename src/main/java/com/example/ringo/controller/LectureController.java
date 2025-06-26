@@ -14,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/lecture")
@@ -65,10 +62,42 @@ public class LectureController {
         return lectureService.getOneLecture(lectureId);
     }
 
+//    @GetMapping("/getLectureReviews")
+//    @ResponseBody
+//    public List<RecruitmentReviewVO> getLectureReviews(@RequestParam("lectureId") Integer lectureId) {
+//        return lectureService.getLectureReviews(lectureId);
+//    }
+
     @GetMapping("/getLectureReviews")
     @ResponseBody
-    public List<RecruitmentReviewVO> getLectureReviews(@RequestParam("lectureId") Integer lectureId) {
-        return lectureService.getLectureReviews(lectureId);
+    public List<Map<String, Object>> getLectureReviews(@RequestParam("lectureId") Integer lectureId) {
+        List<RecruitmentReviewVO> reviews = lectureService.getLectureReviews(lectureId);
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (RecruitmentReviewVO review : reviews) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("recruitmentReviewId", review.getRecruitmentReviewId());
+            item.put("recruitmentPostId", review.getRecruitmentPostId());
+            item.put("recruitmentReviewTitle", review.getRecruitmentReviewTitle());
+            item.put("recruitmentReviewContent", review.getRecruitmentReviewContent());
+            item.put("recruitmentReviewTime", review.getRecruitmentReviewTime());
+            item.put("userNickName", review.getUserNickName());
+            item.put("userPrimaryId", review.getUserPrimaryId());
+
+            // Base64 인코딩한 이미지 URL 형태로 전달
+            if (review.getUserProfile() != null && review.getUserProfileMimetype() != null) {
+                String base64Image = Base64.getEncoder().encodeToString(review.getUserProfile());
+                String imageSrc = "data:" + review.getUserProfileMimetype() + ";base64," + base64Image;
+                item.put("userProfileImage", imageSrc);
+            } else {
+                item.put("userProfileImage", null);
+            }
+
+            result.add(item);
+        }
+
+        return result;
     }
 
 
@@ -135,7 +164,11 @@ public class LectureController {
         return ResponseEntity.ok("리뷰 등록 완료");
     }
 
-
+    @GetMapping("/api/posts/byCategory")
+    @ResponseBody
+    public List<RecruitmentPostVO> getPostsByCategory(@RequestParam("category") String category) {
+        return lectureService.getPostsByCategory(category);
+    }
 
 
 }

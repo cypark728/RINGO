@@ -19,4 +19,11 @@ public interface LectureService {
 
     List<RecruitmentReviewVO> getLectureReviews(Integer lectureId);
 
+    // LectureService.java
+    List<RecruitmentPostVO> getPostsByCategory(String category);
+
+
+
+
+
 }

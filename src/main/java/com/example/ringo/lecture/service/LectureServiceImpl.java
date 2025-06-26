@@ -53,5 +53,10 @@ public class LectureServiceImpl implements LectureService {
         return lectureMapper.getLectureReviews(lectureId);
     }
 
+    // LectureServiceImpl.java
+    @Override
+    public List<RecruitmentPostVO> getPostsByCategory(String category) {
+        return lectureMapper.getPostsByCategory(category);
+    }
 
 }

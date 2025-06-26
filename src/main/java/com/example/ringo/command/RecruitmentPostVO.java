@@ -27,4 +27,6 @@ public class RecruitmentPostVO {
     private LocalTime recruitmentPostContactEndTime;
     private String recruitmentPostAvgResponseTime;
     private Integer userPrimaryId;
+
+    private String userId;
 }

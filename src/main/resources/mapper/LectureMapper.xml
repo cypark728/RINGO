@@ -103,5 +103,13 @@
         ORDER BY rr.recruitment_review_id DESC
     </select>
 
+    <!-- LectureMapper.xml -->
+    <select id="getPostsByCategory" parameterType="string" resultType="RecruitmentPostVO">
+        SELECT rp.*, u.user_id
+        FROM recruitment_post rp
+        JOIN users u ON rp.user_primary_id = u.user_primary_id
+        WHERE rp.recruitment_post_category = #{category}
+    </select>
+
 
 </mapper>

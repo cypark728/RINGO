@@ -21,4 +21,8 @@ public interface LectureMapper {
     void insertLectureReview(RecruitmentReviewVO vo);
 
     List<RecruitmentReviewVO> getLectureReviews(@Param("lectureId")Integer lectureId);
+
+    List<RecruitmentPostVO> getPostsByCategory(String category);
+
+
 }

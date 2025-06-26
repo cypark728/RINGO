@@ -4,10 +4,10 @@ import 'keen-slider/keen-slider.min.css';
 import './HighScoreService.css';
 
 const images = [
-    "/img/makeBlogThumbnail.png",
-    "/img/animationThumbnail.png",
-    "/img/thumbnail.png",
-    "/img/Ga4Thumbnail.png",
+    { src: "/img/makeBlogThumbnail.png", lectureId: 1},
+    { src: "/img/animationThumbnail.png", lectureId: 2},
+    { src: "/img/thumbnail.png", lectureId: 3},
+    { src: "/img/Ga4Thumbnail.png", lectureId: 4}
 ];
 
 const HighScoreService = () => {
@@ -46,18 +46,18 @@ const HighScoreService = () => {
     return (
         <>
             <section className="scrolling-section">
-                <div className="scrolling-title">링고가 검증한 <br/>4.8점 이상 서비스</div>
+                <div className="scrolling-title">링고가 추천하는 <br/>최신 서비스</div>
                 <div
                     ref={sliderRef}
                     className="keen-slider"
                     onMouseEnter={stopAutoSlide}
                     onMouseLeave={startAutoSlide}
                 >
-                    {images.map((src, idx) => (
+                    {images.map((image, idx) => (
                         <div className="keen-slider__slide slide" key={idx}>
-                            <img src={src}
+                            <img src={image.src}
                                  alt={`Slide ${idx}`}
-                                 onClick={() => window.location.href = "/lecture/lecturedetail"}
+                                 onClick={() => window.location.href = `/lecture/lecturedetail?lectureId=${image.lectureId}`}
                             />
                         </div>
                     ))}
