@@ -5,13 +5,15 @@ import ReactDOM from "react-dom/client";
 function MyBookmark({ showAll = false, setActiveTab }) {
     const [myBookmarks, setMyBookmarks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [totalCount, setTotalCount] = useState(0);
+    const [userPrimary, setUserPrimary] = useState(null);
 
     useEffect(() => {
         fetch('/users/api/user/info')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    setUserPrimary(data.user.userPrimaryId)
+
                     const user = data.user;
                     fetch(`/api/mypage/mywish?userPrimaryId=${user.userPrimaryId}`)
                         .then(res => res.json())
@@ -87,6 +89,10 @@ function MyBookmark({ showAll = false, setActiveTab }) {
                                     onClick={e => {
                                         e.preventDefault(); // 상세페이지 이동 막기
                                         e.stopPropagation(); // 부모로 이벤트 전달 막기
+
+                                        if(!userPrimary) return alert("로그인이 필요합니다.");
+
+
                                         const updatedWish = !myBookmark.isWish;
                                         const newBookmarks = [...myBookmarks];
 
@@ -95,11 +101,13 @@ function MyBookmark({ showAll = false, setActiveTab }) {
                                             isWish: updatedWish,
                                         };
                                         setMyBookmarks(newBookmarks);
+
                                         fetch('/api/mypage/updatewish', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
-                                                applyWishId: myBookmark.applyWishId,
+                                                userPrimaryId: userPrimary,
+                                                recruitmentPostId: myBookmark.recruitmentPostId,
                                                 isWish: updatedWish,
                                             }),
                                         });

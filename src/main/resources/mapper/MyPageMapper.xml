@@ -102,11 +102,25 @@
           AND a.is_wish = true
     </select>
 
+    <!-- 1. 찜 여부 확인 (존재하는지) -->
+    <select id="checkWishExists" resultType="int" parameterType="com.example.ringo.command.MyPageVO">
+        SELECT COUNT(*) FROM apply_wish
+        WHERE user_primary_id = #{userPrimaryId}
+          AND recruitment_post_id = #{recruitmentPostId}
+    </select>
+
+    <!-- 2. 찜 등록 -->
+    <insert id="insertWish" parameterType="com.example.ringo.command.MyPageVO">
+        INSERT INTO apply_wish (user_primary_id, recruitment_post_id, is_wish)
+        VALUES (#{userPrimaryId}, #{recruitmentPostId}, #{isWish})
+    </insert>
+
 <!--  찜 하트 버튼 누르면 db 업뎃하기  -->
     <update id="updateWish" parameterType="com.example.ringo.command.MyPageVO">
         UPDATE apply_wish
         SET is_wish = #{isWish}
-        WHERE apply_wish_id = #{applyWishId}
+        WHERE user_primary_id = #{userPrimaryId}
+          AND recruitment_post_id = #{recruitmentPostId}
     </update>
 
 <!--  내 리뷰 가져오기  -->

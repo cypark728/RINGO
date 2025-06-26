@@ -120,3 +120,34 @@ img.search-button {
     color: #222;
     font-weight: 600;
 }
+
+.wish {
+    position: absolute;
+    text-align: right;
+    padding: 5px;
+    top: 5px;             /* 상단에서 5px 위치 */
+    right: 5px;           /* 오른쪽에서 5px 위치 */
+    cursor: pointer;      /* 클릭 커서 추가 */
+
+}
+
+.wishHeart > div:nth-child(1) {
+    display: block;
+}
+
+.wishHeart > div:nth-child(2) {
+    display: none;
+}
+
+.notWishHeart > div:nth-child(1) {
+    display: none;
+}
+
+.notWishHeart > div:nth-child(2) {
+    display: block;
+}
+
+.wishTopBox {
+    position: relative;
+}
+

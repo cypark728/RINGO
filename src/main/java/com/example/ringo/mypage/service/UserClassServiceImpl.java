@@ -27,8 +27,13 @@ public class UserClassServiceImpl implements UserClassService {
     }
 
     @Override
-    public void updateWish(MyPageVO vo) {
-        userClassMapper.updateWish(vo);
+    public void saveOrUpdateWish(MyPageVO vo) {
+        int count = userClassMapper.checkWishExists(vo);
+        if (count > 0) {
+            userClassMapper.updateWish(vo);
+        } else {
+            userClassMapper.insertWish(vo);
+        }
     }
 
     @Override
