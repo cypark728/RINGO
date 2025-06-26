@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import './MyClass.css';
-import ReactDOM from "react-dom/client";
 import RoomCreatePopup from "../Popup/RoomCreatePopup";
 import PasswordPopup from "../Popup/PasswordPopup";
 
@@ -9,26 +8,17 @@ function MyClass({ showAll = false, setActiveTab }) {
     const [classes, setClasses] = useState([]);
     const [showPasswordPopup, setShowPasswordPopup] = useState(false);
     const [selectedClass, setSelectedClass] = useState(null);
-<<<<<<< dakco
-
-    const displayedClasses = showAll ? classes : classes.slice(0, 3);
-
-    // const fetchClasses = async () => {
-    //     const res = await fetch('/api/classes');
-    //     const data = await res.json();
-    //     setClasses(data);
-    // };
-=======
     const [userId, setUserId] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [classToEdit, setClassToEdit] = useState(null);
     const [userName, setUserName] = useState('');
->>>>>>> main
+
+    const displayedClasses = showAll ? classes : classes.slice(0, 3);
 
     const fetchClasses = async () => {
         const res = await fetch('/api/classes', {
             method: 'GET',
-            credentials: 'include'  // 세션 쿠키 포함
+            credentials: 'include'
         });
         const data = await res.json();
         setClasses(data);
@@ -72,7 +62,6 @@ function MyClass({ showAll = false, setActiveTab }) {
             });
     }, []);
 
-
     const handleCardClick = (classItem) => {
         if (classItem.password) {
             setSelectedClass(classItem);
@@ -91,51 +80,30 @@ function MyClass({ showAll = false, setActiveTab }) {
         }
     };
 
-
     useEffect(() => {
-
         fetchClasses();
-
     }, []);
 
     return (
         <section className="section">
-            <h2 className="section-title">내가 수업중인 수업 <span className="section-total">Total {classes.length}</span></h2>
+            <h2 className="section-title">
+                내가 수업중인 수업 <span className="section-total">Total {classes.length}</span>
+            </h2>
             <div className="card-grid">
-<<<<<<< dakco
                 {displayedClasses.map((classItem, i) => (
-                    <div key={i} className="card"
-                         onClick={() => handleCardClick(classItem)}
-                    >
+                    <div key={i} className="card" onClick={() => handleCardClick(classItem)}>
                         <div className="exampleImageBlack">
                             <img src={classItem.imageUrl} alt="class" />
-=======
-                {classes.map((classItem, i) => (
-                    <React.Fragment key={i}>
-                        <div className="card" onClick={() => handleCardClick(classItem)}>
-                            <div className="exampleImageBlack">
-                                <img src={classItem.imageUrl} alt="class" />
-                            </div>
-                            <p className="card-title">{classItem.title}</p>
-                            <p className="card-desc">{classItem.description}</p>
-                            <p className="card-price">${classItem.price}</p>
-
-                            <div className="card-actions">
-                                <button  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEditClick(classItem);
-                                }}>수정</button>
-                                <button    onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteClick(classItem);
-                                }}>삭제</button>
-                            </div>
->>>>>>> main
                         </div>
-
-                    </React.Fragment>
+                        <p className="card-title">{classItem.title}</p>
+                        <p className="card-desc">{classItem.description}</p>
+                        <p className="card-price">${classItem.price}</p>
+                        <div className="card-actions">
+                            <button onClick={(e) => { e.stopPropagation(); handleEditClick(classItem); }}>수정</button>
+                            <button onClick={(e) => { e.stopPropagation(); handleDeleteClick(classItem); }}>삭제</button>
+                        </div>
+                    </div>
                 ))}
-<<<<<<< dakco
                 {classes.length > 3 && !showAll && setActiveTab && (
                     <>
                         <div className="blank"></div>
@@ -144,37 +112,33 @@ function MyClass({ showAll = false, setActiveTab }) {
                         </figure>
                     </>
                 )}
-=======
-
->>>>>>> main
             </div>
             <div className="makeClassBtn">
                 <button className="roomBtn" onClick={() => setShowPopup(true)}>방 만들기</button>
             </div>
-{showPopup && (
-        <RoomCreatePopup
-            onClose={() => {
-                setShowPopup(false);
-                setEditMode(false);
-                setClassToEdit(null);
-            }}
-            onClassCreate={(newClass) => setClasses(prev => [newClass, ...prev])}
-            editMode={editMode}
-            initialData={editMode ? classToEdit : {}}
-            onUpdate={(updatedClass) => {
-                setClasses(prev => prev.map(c => c.roomId === updatedClass.roomId ? updatedClass : c));
-            }}
-        />
-    )}
+            {showPopup && (
+                <RoomCreatePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setEditMode(false);
+                        setClassToEdit(null);
+                    }}
+                    onClassCreate={(newClass) => setClasses(prev => [newClass, ...prev])}
+                    editMode={editMode}
+                    initialData={editMode ? classToEdit : {}}
+                    onUpdate={(updatedClass) => {
+                        setClasses(prev => prev.map(c => c.roomId === updatedClass.roomId ? updatedClass : c));
+                    }}
+                />
+            )}
             {showPasswordPopup && (
                 <PasswordPopup
                     onClose={() => setShowPasswordPopup(false)}
                     onSubmit={handlePasswordSubmit}
                 />
             )}
-
         </section>
-    )
+    );
 }
 
 export default MyClass;
