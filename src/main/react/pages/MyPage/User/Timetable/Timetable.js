@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
 import './Timetable.css';
+import io from 'socket.io-client';
+
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];
 const hourHeight = 60;
 const dayWidth = 100;
 const headerHeight = 30;
 const timeColWidth = 80;
+
+const socket = io('http://172.30.1.12:8687');
 
 export default function Timetable() {
     const [editMode, setEditMode] = useState(false);
@@ -15,9 +19,10 @@ export default function Timetable() {
     const [editingId, setEditingId] = useState(null);
     const editingRef = useRef(null);
     const [hoveredId, setHoveredId] = useState(null);        // 실제로 보여줄 블록 id
-    const hoverTimer = useRef(null);
-    const [userPrimaryId, setUserPrimaryId] = useState(null);// hover 타이머
 
+    const hoverTimer = useRef(null);                          // hover 타이머
+    const [userPrimaryId, setUserPrimaryId] = useState(null);
+   const [schedule, setSchedule] = useState([]);
     useEffect(() => {
         fetch('/users/api/user/info')
             .then(res => res.json())
@@ -31,6 +36,7 @@ export default function Timetable() {
                 console.error('유저 정보 불러오기 실패', err);
             });
     }, []);
+
 
 
     const snapToGrid = (value, size) => Math.round(value / size) * size;
@@ -184,6 +190,25 @@ export default function Timetable() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [editingId]);
+
+    // -------------------소켓---------------
+    useEffect(() => {
+        socket.on("schedule-update", (newSchedule) => {
+            console.log("📥 새 스케줄 수신:", newSchedule);
+            setSchedule(newSchedule);
+        });
+
+        return () => {
+            socket.off("schedule-update");
+        };
+    }, []);
+
+    const handleScheduleChange = (newSchedule) => {
+        socket.emit("schedule-update", {
+            roomId: currentRoomId,
+            schedule: newSchedule,
+        });
+    };
 
     return (
 

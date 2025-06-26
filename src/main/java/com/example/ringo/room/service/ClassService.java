@@ -10,4 +10,8 @@ public interface ClassService {
     ClassVO getClassByRoomId(String roomId);
 
     List<ClassVO> getClassesByUserId(String userId);
+
+    void updateClass(ClassVO classVO);
+    void deleteClass(String roomId);
+
 }

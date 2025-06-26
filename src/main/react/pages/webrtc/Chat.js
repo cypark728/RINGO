@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client'; //root에 리액트 돔방식으로 렌
 // import SocketJS from "sockjs-client";
 import './Chat.css' //css파일 임포트
 import { io }  from 'socket.io-client';
+import socket from '../../socket';
 
 
-const socket = io('http://172.30.1.12:8687');
+// const socket = io('http://172.30.1.12:8687');
 
 function Chat({room}) {
     const [message, setMessage] = useState('');
@@ -14,15 +15,26 @@ function Chat({room}) {
 
 
     useEffect(() => {
-        // 메시지 수신
         socket.on('chat-message', (msg) => {
-            setMessages(prev => [...prev, { from: 'other', ...msg }]);
+            if (typeof msg === 'string') {
+                // 시스템 메시지 ("ㅇㅇㅇ님 입장했습니다.")
+                setMessages(prev => [...prev, { from: 'system', text: msg }]);
+            } else {
+                setMessages(prev => [...prev, { from: 'other', ...msg }]);
+            }
         });
 
-        socket.emit('join room', { room, username: '고수' });
+        socket.emit('join room', {
+            room: window.roomId,
+            username: window.userName
+        });
 
-        return () => socket.off('chat-message');
+        return () => {
+            socket.emit('leave room', window.roomId);
+            socket.off('chat-message');
+        };
     }, []);
+
 
     const sendMessage = () => {
         if (!message.trim()) return;
@@ -51,21 +63,32 @@ function Chat({room}) {
     return (
         <div className="chat">
             <h2>Live Chat</h2>
-
             <div className="chat-box">
-                {messages.map((msg, index) => (
-                    <div
-                        key={index}
-                        className={`chat-message ${msg.from === 'me' ? 'orange' : ''}`}
-                    >
-                        <strong>{msg.from === 'me' ? '나' : '상대'}</strong><br />
-                        {msg.text}
-                        <div className="chat-time">{msg.time}</div>
-                    </div>
+                {messages.map((msg, index) => {
+                    if (msg.from === 'system') {
+                        return (
+                            <div key={index} className="system-message">
+                                {msg.text}
+                            </div>
+                        );
+                    }
 
-                ))}
+                    return (
+                        <div
+                            key={index}
+                            className={`chat-message ${msg.from === 'me' ? 'orange' : ''}`}
+                        >
+                            <strong>{msg.from === 'me' ? '나' : '상대'}</strong>
+                            <br />
+                            {msg.text}
+                            <div className="chat-time">{msg.time}</div>
+                        </div>
+                    );
+                })}
+
                 <div ref={chatEndRef} />
             </div>
+
 
             <div className="chat-input">
                 <input
