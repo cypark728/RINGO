@@ -27,7 +27,7 @@ public class ClassController {
             @RequestParam("description") String description,
             @RequestParam("price") BigDecimal price,
             @RequestParam(value = "password", required = false) String password,
-            @RequestParam("image") MultipartFile imageFile,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
             HttpSession session
     ) throws IOException {
         UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
@@ -90,5 +90,46 @@ public class ClassController {
 
         return result;
     }
+
+    @PutMapping(value = "/{roomId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateClass(
+            @PathVariable String roomId,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("price") BigDecimal price,
+            @RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
+            HttpSession session
+    ) throws IOException {
+        UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+        String userId = loginUser.getUserId();
+
+        ClassVO classVO = new ClassVO();
+        classVO.setRoomId(roomId);
+        classVO.setTitle(title);
+        classVO.setDescription(description);
+        classVO.setPrice(price);
+        classVO.setPassword(password);
+        classVO.setUserId(userId);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            classVO.setImageUrl(imageFile.getBytes());
+            String contentType = imageFile.getContentType();
+            if (contentType != null) {
+                classVO.setImageType(contentType.substring(contentType.lastIndexOf("/") + 1));
+            }
+        }
+
+        classService.updateClass(classVO);
+    }
+
+    @DeleteMapping("/{roomId}")
+    public void deleteClass(@PathVariable String roomId) {
+        classService.deleteClass(roomId);
+    }
+
 
 }

@@ -36,4 +36,14 @@ public class ClassServiceImpl implements ClassService {
     public List<ClassVO> getClassesByUserId(String userId) {
         return classMapper.selectClassesByUserId(userId);
     }
+
+    @Override
+    public void updateClass(ClassVO classVO) {
+        classMapper.updateClass(classVO);
+    }
+
+    @Override
+    public void deleteClass(String roomId) {
+        classMapper.deleteClass(roomId);
+    }
 }

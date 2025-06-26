@@ -13,4 +13,7 @@ public interface ClassMapper {
 
     List<ClassVO> selectClassesByUserId(String userId);
 
+    void updateClass(ClassVO classVO);
+    void deleteClass(String roomId);
+
 }

@@ -1,28 +1,19 @@
-// server.js
-const express = require('express');
-const http = require('http');
-const {Server} = require('socket.io');
-const cors = require('cors');
-
-const userMap = {};
-
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
 
 const app = express();
-app.use(cors()); // CORS 허용
-
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: '*', // methods: ['GET', 'POST']
-    }
-});
+const io = new Server(server, { cors: { origin: "*" } });
 
+const PORT = 8687;
+const maxClientsPerRoom = 2;
+const roomCounts = {};
 
 let lastCanvasData = null;
 let savedCanvasJSON = null;
 
-const maxClientsPerRoom = 2;
-const roomCounts = {};
+const userMap = {};
 
 
 // 클라이언트 연결 시
@@ -84,36 +75,41 @@ io.on('connection', (socket) => {
         savedCanvasJSON = json;
     });
 
+
     // =============✅ webRTC 공유 처리===================
     // 추가 (WebRTC signaling용)
-    socket.on("join", (roomId) => {
-        // 클라이언트가 Room에 조인하려고 할 때, 클라이언트 수를 확인하고 제한.
-        if (roomCounts[roomId] === undefined) {
+    socket.on("join", ({ roomId, userId }) => {
+        socket.userId = userId;
+        socket.roomId = roomId;
+
+        if (!roomCounts[roomId]) {
             roomCounts[roomId] = 1;
         } else if (roomCounts[roomId] < maxClientsPerRoom) {
             roomCounts[roomId]++;
         } else {
-            // 클라이언트 수가 제한을 초과하면 클라이언트를 Room에 입장시키지 않음.
             socket.emit("room-full", roomId);
-            console.log("room full" + roomCounts[roomId]);
             return;
         }
-        socket.join(roomId);
-        console.log(
-            "User joined in a room : " + roomId + " count:" + roomCounts[roomId]
-        );
 
-        // 클라이언트가 Room을 떠날 때 클라이언트 수를 업데이트
-        socket.on("disconnect", () => {
-            console.log('❌ 유저 연결 종료:', socket.id);
-            roomCounts[roomId]--;
-            console.log("disconnect, count:" + roomCounts[roomId]);
-        });
+        socket.join(roomId);
+        console.log(`🟢 User ${userId} joined room ${roomId}`);
     });
 
     socket.on("rtc-message", (data) => {
-        var room = JSON.parse(data).roomId;
-        socket.broadcast.to(room).emit("rtc-message", data);
+        const parsed = JSON.parse(data);
+        const room = parsed.roomId;
+        socket.to(room).emit("rtc-message", data);
+    });
+
+    socket.on("disconnecting", () => {
+        const rooms = Array.from(socket.rooms).filter((r) => r !== socket.id);
+        rooms.forEach((roomId) => {
+            roomCounts[roomId]--;
+            if (roomCounts[roomId] <= 0) {
+                delete roomCounts[roomId];
+            }
+            socket.to(roomId).emit("peer-left", { roomId });
+        });
     });
 
     // =================== 연결 종료===========================
@@ -121,7 +117,6 @@ io.on('connection', (socket) => {
 });
 
 // ==========================서버 시작=================================
-server.listen(8687, () => {
-    console.log('✅ Socket.IO 서버 실행 중: http://localhost:8687');
-
-});
+server.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+})
