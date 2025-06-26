@@ -1,277 +1,273 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './Meeting.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import io from 'socket.io-client';
+import socket from '../../socket';
 import Chat from "./Chat";
 import Code from "./Code";
 import Whiteboard from "./Whiteboard";
 import AIPopup from "./AIPopup";
 import ExitConfirmPopup from "./ExitConfirmPopup";
+import Timetable from "../MyPage/User/Timetable/Timetable";
 
 function Meeting() {
     const localVideoRef = useRef(null);
-    const remoteVideoRef = useRef(null);
-    const pcRef = useRef(null);
+    const peerVideoRef = useRef(null);
     const socketRef = useRef(null);
+    const pcRef = useRef(null);
+    const timerRef = useRef(null);
+    const chunksRef = useRef([]);
 
     const [volume, setVolume] = useState(50);
-
-    // 왼쪽 메뉴바
     const [activeIndex, setActiveIndex] = useState(0);
-
-    // 시간
     const [currentTime, setCurrentTime] = useState(new Date());
-
-    // 전체 화면
     const [isFullScreen, setIsFullScreen] = useState(false);
-
-    // 코드
     const [showCode, setShowCode] = useState(false);
-
-    // 화이트보드
     const [showWhiteBoard, setShowWhiteBoard] = useState(false);
-
-
-    // ai 녹음
     const [recording, setRecording] = useState(false);
     const [seconds, setSeconds] = useState(0);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [showTooltip, setShowTooltip] = useState(true);
-    const timerRef = useRef(null);
-    const chunksRef = useRef([]);
-
     const [aiResponse, setAiResponse] = useState(null);
-
     const [currentUserNickname] = useState("익명사용자");
-
     const [showExitPopup, setShowExitPopup] = useState(false);
     const [exitTarget, setExitTarget] = useState(null);
-
-
     const [roomId, setRoomId] = useState(window.roomId || '');
-
     const [meetingTitle] = useState(window.meetingTitle || 'Ringo Meeting');
-
     const [userId] = useState(window.userId || 'guest');
-
-
-    const toggleFullScreen = () => {
-        setIsFullScreen(prev => !prev);
-    };
+    const [statusText, setStatusText] = useState("상대방 카메라/마이크 상태");
+    const [myStream, setMyStream] = useState(null);
+    const [remoteStream, setRemoteStream] = useState(null);
 
     const icons = [
         'fas fa-camera',
         'fas fa-calendar',
         'fas fa-code',
         'fas fa-pencil',
-
     ];
 
-    // 볼륨 조절
-    const handleChange = (e) => {
-        setVolume(e.target.value);
-    };
-
-    const createOfferAndSend = async () => {
-        const pc = pcRef.current;
-        const socket = socketRef.current;
-        if (!pc || !socket) return;
-
-        // 미디어 트랙 추가
-        let myStream = localVideoRef.current?.srcObject;
-        if (!myStream) {
-            try {
-                myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                localVideoRef.current.srcObject = myStream;
-            } catch (err) {
-                alert("카메라/마이크 권한이 필요합니다.");
-                return;
-            }
-        }
-        myStream.getTracks().forEach(track => pc.addTrack(track, myStream));
-
-        // offer 생성 및 전송
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        socket.emit("rtc-message", JSON.stringify({
-            roomId,
-            event: "offer",
-            data: offer,
-        }));
-    };
-
-
+    // 시간 업데이트
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000)
-
-        return () => clearInterval(interval)
+        const interval = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(interval);
     }, []);
 
-    const date = currentTime.toISOString().slice(0, 10);
-    const time = currentTime.toLocaleTimeString('en-GB')
-
+    // 방 ID 유효성 체크
     useEffect(() => {
-        if (window.roomId && window.roomId.trim() !== "") {
-            setRoomId(window.roomId);
-        } else {
+        if (!window.roomId || window.roomId.trim() === "") {
             alert("방 ID가 없습니다.");
-            window.location.href = "/";  // 방 ID 없으면 홈으로 이동하거나 적절한 처리
+            window.location.href = "/";
+        } else {
+            setRoomId(window.roomId);
         }
     }, []);
 
-
+    // 소켓 연결 및 WebRTC 이벤트 설정
     useEffect(() => {
-        console.log('✅ Meeting.js loaded', window.roomId);
-
-        if (!roomId) return;
-
-        const socket = io("http://172.30.1.12:8687");
-        socketRef.current = socket;
-
-        const pc = new RTCPeerConnection({
-            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-        });
-        pcRef.current = pc;
-
-        let myStream;
-
-        // ✅ 컴포넌트 로드시 항상 내 미디어 먼저 가져오기 (내 화면 표시용)
-        (async function initMyMedia() {
-            try {
-                myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                localVideoRef.current.srcObject = myStream;
-            } catch (err) {
-                console.error("🎥 내 미디어 가져오기 실패", err);
-            }
-        })();
-
-        // 상대방과 연결할 때 다시 트랙을 붙이기 위해 별도 함수로 보관
-        async function getMediaAndAttachTracks() {
-            try {
-                if (!myStream) {
-                    myStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    localVideoRef.current.srcObject = myStream;
-                }
-                myStream.getTracks().forEach(track => pc.addTrack(track, myStream));
-            } catch (e) {
-                console.error("🎥 미디어 가져오기 실패", e);
-            }
+        if (!roomId || !userId) {
+            alert("잘못된 접근입니다.");
+            window.location.href = "/";
+            return;
         }
 
+        // socketRef.current = io("http://172.30.1.12:8687");
+        socket.connect();
+        socketRef.current = socket;
+        socketRef.current.emit("join", { roomId, userId });
 
-        // 2. 메시지 전송 함수
-        const sendMessage = (message) => {
-            socket.emit("rtc-message", JSON.stringify({
-                roomId,
-                ...message,
-            }));
-        };
+        socketRef.current.on("room-full", () => {
+            alert("입장 인원 초과");
+            window.location.href = "/";
+        });
 
-        // 3. ICE 후보 전송
-        pc.onicecandidate = (event) => {
-            if (event.candidate) {
-                sendMessage({
-                    event: "candidate",
-                    data: event.candidate,
-                });
-            }
-        };
+        socketRef.current.on("rtc-message", async (message) => {
+            const content = JSON.parse(message);
+            const pc = pcRef.current;
 
-        // 4. 상대방 스트림 수신
-        pc.ontrack = (event) => {
-            remoteVideoRef.current.srcObject = event.streams[0];
-        };
-
-
-        // 5. socket 메시지 처리
-        socket.on("rtc-message", async (raw) => {
-            const msg = JSON.parse(raw);
-            if (msg.event === "offer") {
-                console.log("📨 offer 수신");
-                await getMedia();
-                await pc.setRemoteDescription(new RTCSessionDescription(msg.data));
-                const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
-                sendMessage({
-                    event: "answer",
-                    data: answer,
-                });
-            } else if (msg.event === "answer") {
-                console.log("📩 answer 수신");
-                await pc.setRemoteDescription(new RTCSessionDescription(msg.data));
-            } else if (msg.event === "candidate") {
-                try {
-                    await pc.addIceCandidate(new RTCIceCandidate(msg.data));
-                } catch (err) {
-                    console.error("ICE 추가 실패", err);
+            switch (content.event) {
+                case "offer": {
+                    const connection = await initConnection();
+                    await connection.setRemoteDescription(content.data);
+                    await getMedia(connection);
+                    const answer = await connection.createAnswer();
+                    await connection.setLocalDescription(answer);
+                    sendSignal("answer", answer);
+                    break;
                 }
+                case "answer": {
+                    if (pc) await pc.setRemoteDescription(content.data);
+                    break;
+                }
+                case "candidate": {
+                    if (content.data && pc) await pc.addIceCandidate(content.data);
+                    break;
+                }
+                case "status": {
+                    updatePeerStatus(content.data);
+                    break;
+                }
+                default:
+                    break;
             }
         });
 
-        // 6. 방 입장
-        socket.emit("join", roomId);
-
-        // 7. 방 입장 후 offer 보내기
-        socket.on("room-joined", async () => {
-            console.log("🟢 방에 누군가 입장함, offer 생성");
-            // await getMedia();
-            // const offer = await pc.createOffer();
-            // await pc.setLocalDescription(offer);
-            // sendMessage({
-            //     event: "offer",
-            //     data: offer,
-            // });
+        socketRef.current.on("peer-left", () => {
+            setStatusText("상대방이 연결을 종료했습니다.");
+            if (peerVideoRef.current) peerVideoRef.current.srcObject = null;
         });
 
-        socket.on("room-full", () => {
-            alert("이 방은 이미 두 명이 참가했습니다.");
-        });
+        createOffer();
 
         return () => {
-            // 컴포넌트 언마운트 시 소켓 연결 해제
-            socket.disconnect();
-            pc.close();
+            leaveRoom();
         };
-    }, [roomId]);
+    }, [roomId, userId]);
+
+    useEffect(() => {
+        if (peerVideoRef.current && remoteStream) {
+            peerVideoRef.current.srcObject = remoteStream;
+        }
+    }, [remoteStream]);
+
+    useEffect(() => {
+        if (activeIndex === 0 && peerVideoRef.current && remoteStream) {
+            peerVideoRef.current.srcObject = remoteStream;
+        }
+    }, [activeIndex, remoteStream]);
 
 
-    // 초를 mm:ss 형식으로 포맷팅
+
+    // PeerConnection 초기화
+    const initConnection = async () => {
+        const pc = new RTCPeerConnection({
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+        });
+
+        pc.onicecandidate = (event) => {
+            if (event.candidate) sendSignal("candidate", event.candidate);
+        };
+
+        pc.ontrack = (event) => {
+            // if (peerVideoRef.current) peerVideoRef.current.srcObject = event.streams[0];
+            setRemoteStream(event.streams[0]);
+        };
+
+        pcRef.current = pc;
+        return pc;
+    };
+
+    // 미디어 스트림 얻기 및 트랙 추가
+    const getMedia = async (pc) => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+            setMyStream(stream);
+            if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+            stream.getTracks().forEach(track => pc.addTrack(track, stream));
+        } catch (e) {
+            console.error("Media Error:", e);
+        }
+    };
+
+    // offer 생성 및 전송
+    const createOffer = async () => {
+        const pc = await initConnection();
+        await getMedia(pc);
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+        sendSignal("offer", offer);
+    };
+
+    // 신호 메세지 전송
+    const sendSignal = (event, data) => {
+        if (socketRef.current && socketRef.current.connected) {
+            socketRef.current.emit("rtc-message", JSON.stringify({ roomId, event, data }));
+        }
+    };
+
+    // 카메라 토글
+    const toggleCamera = () => {
+        if (!myStream) return;
+        const videoTrack = myStream.getVideoTracks()[0];
+        if (!videoTrack) return;
+        videoTrack.enabled = !videoTrack.enabled;
+        notifyStatus();
+    };
+
+    // 마이크 토글
+    const toggleMic = () => {
+        if (!myStream) return;
+        const audioTrack = myStream.getAudioTracks()[0];
+        if (!audioTrack) return;
+        audioTrack.enabled = !audioTrack.enabled;
+        notifyStatus();
+    };
+
+    // 내 상태 상대방에게 알림
+    const notifyStatus = () => {
+        const status = {
+            camera: myStream?.getVideoTracks()[0]?.enabled,
+            mic: myStream?.getAudioTracks()[0]?.enabled,
+        };
+        sendSignal("status", status);
+    };
+
+    // 상대방 상태 업데이트
+    const updatePeerStatus = (data) => {
+        const cam = data.camera ? "켜짐" : "꺼짐";
+        const mic = data.mic ? "켜짐" : "꺼짐";
+        setStatusText(`상대방 카메라: ${cam} / 마이크: ${mic}`);
+    };
+
+    // 방 나가기
+    const leaveRoom = (callback) => {
+        if (socketRef.current && socketRef.current.connected) {
+            socketRef.current.emit("leave room", roomId); // ✅ 퇴장 메시지 명시 전송
+        }
+
+        if (pcRef.current) {
+            pcRef.current.close();
+            pcRef.current = null;
+        }
+
+        setTimeout(() => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+                socketRef.current = null;
+            }
+            if (callback) callback();
+        }, 300); // ✅ 약간의 delay로 서버에 메시지 보낼 시간 확보
+    };
+
+
+    // 시간 포맷팅 mm:ss
     const formatTime = (sec) => {
         const minutes = String(Math.floor(sec / 60)).padStart(2, "0");
         const seconds = String(sec % 60).padStart(2, "0");
         return `${minutes}:${seconds}`;
     };
 
+    // 녹음 시작
     const handleStartRecording = async () => {
         try {
             setShowTooltip(false);
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const recorder = new MediaRecorder(stream);
             setMediaRecorder(recorder);
             chunksRef.current = [];
 
-            recorder.ondataavailable = (e) => {
-                chunksRef.current.push(e.data);
-            };
+            recorder.ondataavailable = (e) => chunksRef.current.push(e.data);
 
             recorder.onstop = async () => {
                 const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-                // const file = new File([blob], "audio.webm", { type: "audio/webm" });
-
-                setSeconds(0); // 타이머 리셋
+                setSeconds(0);
                 clearInterval(timerRef.current);
                 setRecording(false);
                 setShowTooltip(true);
 
-                // 🔁 백엔드로 전송해서 텍스트 받아오기 (STT)
                 const formData = new FormData();
-                // formData.append("file", file);
                 formData.append("file", blob, "audio.webm");
                 formData.append("speaker", currentUserNickname);
-
 
                 try {
                     const res = await fetch("/stt/upload", {
@@ -279,7 +275,7 @@ function Meeting() {
                         body: formData,
                     });
                     const text = await res.text();
-                    setAiResponse(text); // 팝업 띄우기
+                    setAiResponse(text);
                 } catch (error) {
                     console.error("STT 처리 실패", error);
                     setAiResponse("음성 인식에 실패했습니다.");
@@ -289,40 +285,35 @@ function Meeting() {
             recorder.start();
             setRecording(true);
 
-            // 타이머 시작
             timerRef.current = setInterval(() => {
-                setSeconds((prev) => {
+                setSeconds(prev => {
                     if (prev + 1 >= 180) {
-                        // 180초 (3분) 넘으면 자동 중지
-                        if (mediaRecorder && mediaRecorder.state === "recording") {
-                            mediaRecorder.stop();
-                        }
+                        if (recorder.state === "recording") recorder.stop();
                         clearInterval(timerRef.current);
-                        return 180; // 최대 180까지만
+                        return 180;
                     }
                     return prev + 1;
                 });
             }, 1000);
-
         } catch (err) {
             console.error("마이크 권한 오류", err);
         }
     };
 
-    const handleStopRecording = async () => {
+    // 녹음 중지
+    const handleStopRecording = () => {
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
         }
         setRecording(false);
-
         clearInterval(timerRef.current);
         setSeconds(0);
     };
 
+    // 컴포넌트 언마운트 시 타이머 정리
     useEffect(() => {
-        return () => clearInterval(timerRef.current); // 컴포넌트 언마운트 시 타이머 정리
+        return () => clearInterval(timerRef.current);
     }, []);
-
 
     const handleCenterClick = () => {
         setExitTarget('/mypage/mypageuser');
@@ -336,7 +327,9 @@ function Meeting() {
 
     const handleExitConfirm = () => {
         if (exitTarget) {
-            window.location.href = exitTarget;
+            leaveRoom(() => {
+                window.location.href = exitTarget;
+            });
         }
     };
 
@@ -345,25 +338,37 @@ function Meeting() {
         setExitTarget(null);
     };
 
+    const date = currentTime.toISOString().slice(0, 10);
+    const time = currentTime.toLocaleTimeString('en-GB');
+
     return (
         <div>
             <div className="container">
                 <div className="sidebar">
-                    <div className="logo"><img src="/img/logo.png" alt="" onClick={handleLogoClick}/></div>
+                    <div className="logo">
+                        <img src="/img/logo.png" alt="logo" onClick={handleLogoClick} />
+                    </div>
                     <div className="sidebar-btn">
                         <ul>
-                            {icons.map((icon, index) => (
-                                <li key={index} className={activeIndex === index ? 'on' : ''}>
+                            {icons.map((icon, index ) => (
+                                <li key={index } className={activeIndex === index  ? 'on' : ''}>
                                     <button
                                         className={activeIndex === index ? "action" : ""}
                                         onClick={() => {
                                             setActiveIndex(index);
                                             if (icon === "fas fa-code") {
-                                                setShowCode((prev) => !prev);
+                                                setShowCode(true);          // 무조건 켜기
+                                                setShowWhiteBoard(false);   // 다른 건 끄기
                                             } else if (icon === "fas fa-pencil") {
-                                                setShowWhiteBoard((prev) => !prev);
+                                                setShowWhiteBoard(true);
+                                                setShowCode(false);
+                                            } else {
+                                                // 'fas fa-camera'나 다른 아이콘일 경우
+                                                setShowCode(false);
+                                                setShowWhiteBoard(false);
                                             }
                                         }}
+
                                     >
                                         <i className={icon}></i>
                                     </button>
@@ -372,55 +377,47 @@ function Meeting() {
                         </ul>
                     </div>
 
-
                     <div className="ai">
-
-                        {aiResponse && (
-                            <AIPopup message={aiResponse} onClose={() => setAiResponse(null)}/>
-                        )}
-
+                        {aiResponse && <AIPopup message={aiResponse} onClose={() => setAiResponse(null)} />}
 
                         <div>
                             {recording && (
-                                <div style={{
-                                    padding: "5px 10px",
-                                    borderRadius: "8px",
-                                    display: "inline-block"
-                                }}>
+                                <div style={{ padding: "5px 10px", borderRadius: "8px", display: "inline-block" }}>
                                     ⏺️ {formatTime(seconds)}
                                 </div>
                             )}
-
                             {recording && (
-                                <button onClick={handleStopRecording}
-                                        style={{marginTop: "10px", display: "inline-block"}}>
+                                <button
+                                    onClick={handleStopRecording}
+                                    style={{ marginTop: "10px", display: "inline-block" }}
+                                >
                                     <i className="fas fa-stop"></i>
                                 </button>
                             )}
-
-
                         </div>
+
                         {showTooltip && (
                             <div className="tooltip">
-                                <p>링고가 고수의 수업을 정리해드릴게요!<br/>녹음은 3분까지 가능합니다.⏳</p>
+                                <p>링고가 고수의 수업을 정리해드릴게요!<br />녹음은 3분까지 가능합니다.⏳</p>
                             </div>
                         )}
-                        <figure onClick={handleStartRecording}><img src="/img/ai.png" alt=""/></figure>
+                        <figure onClick={handleStartRecording}>
+                            <img src="/img/ai.png" alt="AI 녹음 시작" />
+                        </figure>
                     </div>
                 </div>
 
                 <div className="wrap">
                     <ul className={`top ${isFullScreen ? 'hidden' : ''}`}>
                         <li>
-                            <figure><img src="/img/me.jpg" alt=""/></figure>
+                            <figure><img src="/img/me.jpg" alt="고수 얼굴" /></figure>
                             <div>
                                 <p>{userId}</p>
                                 <span>고수</span>
                             </div>
-
                         </li>
                         <li>
-                            <figure><img src="/img/me2.jpg" alt=""/></figure>
+                            <figure><img src="/img/me2.jpg" alt="제자 얼굴" /></figure>
                             <div>
                                 <p>edfj_5678</p>
                                 <span>제자</span>
@@ -433,50 +430,63 @@ function Meeting() {
                             <div className={`header ${isFullScreen ? 'hidden' : ''}`}>
                                 <p>{date}</p>
                                 <h2>{meetingTitle}</h2>
-                                <span>  <img
-                                    src="/img/clock.png"
-                                    alt="clock"
-                                /> {time}</span>
+                                <span><img src="/img/clock.png" alt="clock" /> {time}</span>
                             </div>
                             <div className="video-section">
-                                {activeIndex === 2 ? (
-                                    <div className="code-container">
-                                        <Code/>
-                                    </div>
-                                ) : activeIndex === 3 && showWhiteBoard ? (
-                                    <div className="white-container">
-                                        <Whiteboard/>
-                                    </div>
-                                ) : (
-                                    <video
-                                        ref={remoteVideoRef}
-                                        autoPlay
-                                        playsInline
-                                        style={{width: "100%", objectFit: "cover", borderRadius: "10px"}}
-                                    />
-                                )}
+                                <video
+                                    id="peerVideo"
+                                    ref={peerVideoRef}
+                                    autoPlay
+                                    playsInline
+                                    style={{
+                                        width: "100%",
+                                        objectFit: "cover",
+                                        borderRadius: "10px",
+                                        display: activeIndex === 0 ? 'block' : 'none',
+                                    }}
+                                />
 
-                                {/*------------------ 🔊 볼륨 조절 UI----------------- */}
+                                <div
+                                    className="schedule-container"
+                                    style={{ display: activeIndex === 1 ? 'block' : 'none' }}
+                                >
+                                    <Timetable />
+                                </div>
+
+                                <div
+                                    className="code-container"
+                                    style={{ display: activeIndex === 2 ? 'block' : 'none' }}
+                                >
+                                    <Code />
+                                </div>
+
+                                <div
+                                    className="white-container"
+                                    style={{ display: activeIndex === 3 ? 'block' : 'none'}}
+                                >
+                                    <Whiteboard />
+                                </div>
+
+                                {/* 볼륨 조절 UI */}
                                 <div className="volume-container">
                                     <input
                                         type="range"
                                         min="0"
                                         max="100"
                                         value={volume}
-                                        onChange={handleChange}
+                                        onChange={e => setVolume(e.target.value)}
                                         className="volume-slider"
                                     />
                                     <div className="volume-level">{volume}%</div>
                                 </div>
 
                                 <div className="video-controls">
-
-                                    <button className="center" style={{backgroundColor: "#f33e3b"}}><img
-                                        src="/img/phone.png" alt="" onClick={handleCenterClick}/></button>
-
+                                    <button className="center" style={{ backgroundColor: "#f33e3b" }}>
+                                        <img src="/img/phone.png" alt="종료" onClick={handleCenterClick} />
+                                    </button>
                                 </div>
-                                <div className="seeAll" onClick={toggleFullScreen}>
-                                    <img src={isFullScreen ? "/img/seeSmall.png" : "/img/seeAll.png"} alt=""/>
+                                <div className="seeAll" onClick={() => setIsFullScreen(prev => !prev)}>
+                                    <img src={isFullScreen ? "/img/seeSmall.png" : "/img/seeAll.png"} alt="전체화면 전환" />
                                 </div>
                             </div>
                         </div>
@@ -484,24 +494,28 @@ function Meeting() {
                         <div className={`side-panel ${isFullScreen ? 'hidden' : ''}`}>
                             <div className="my-screen">
                                 <video
+                                    id="myFace"
                                     ref={localVideoRef}
                                     autoPlay
-                                    muted
                                     playsInline
-                                    style={{width: "100%", borderRadius: "20px"}}
-                                ></video>
+                                    style={{ width: "100%", borderRadius: "20px" }}
+                                />
                                 <div className="my-screen-box">
-                                    <button className="side"><img src="/img/voice.png" alt=""/></button>
-                                    <button className="side" onClick={createOfferAndSend}><img src="/img/camera.png" alt=""/></button>
+                                    <button className="side" id="toggle-mic" onClick={toggleMic}>
+                                        <img src="/img/voice.png" alt="마이크 토글" />
+                                    </button>
+                                    <button className="side" id="toggle-camera" onClick={toggleCamera}>
+                                        <img src="/img/camera.png" alt="카메라 토글" />
+                                    </button>
                                 </div>
                             </div>
 
-                            <Chat/>
-
+                            <Chat />
                         </div>
                     </div>
                 </div>
             </div>
+
             {showExitPopup && (
                 <ExitConfirmPopup
                     message="회의방을 나가면 다시 입장해야 합니다. 정말 나가시겠습니까?"
@@ -516,4 +530,4 @@ function Meeting() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Meeting/>);
+root.render(<Meeting />);

@@ -56,12 +56,12 @@
 
     <select id="findId" resultType="UsersVO">
         SELECT
-        user_id AS userId,
-        user_name AS userName,
-        user_create_date AS createdAt
+            user_id AS userId,
+            user_name AS userName,
+            user_create_date AS createdAt
         FROM users
         WHERE user_name = #{userName}
-        AND user_phone = #{userPhone}
+          AND REPLACE(user_phone, '-', '') = REPLACE(#{userPhone}, '-', '')
     </select>
 
     <select id="findUserForReset" parameterType="UsersVO" resultType="UsersVO">

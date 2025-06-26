@@ -18,5 +18,7 @@ public class ClassManageVO {
     private Timestamp classManageFinishDate;
     private Integer recruitmentPostId;
     private Integer userPrimaryId;
+    private String recruitmentPostTitle;
+    private String recruitmentPostContent;
 }
 

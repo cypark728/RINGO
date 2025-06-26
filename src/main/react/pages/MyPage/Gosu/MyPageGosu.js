@@ -29,8 +29,8 @@ export default function MyPageGosu({onBack}) {
                     {activeTab === "home" &&
                         <>
                             <Introduction />
-                            <MyClass />
-                            <MyClassReview />
+                            <MyClass showAll={false} setActiveTab={setActiveTab} />
+                            <MyClassReview showAll={false} setActiveTab={setActiveTab} />
                             <Timetable />
                         </>
                     }
@@ -40,11 +40,11 @@ export default function MyPageGosu({onBack}) {
                     }
                     {activeTab === "study" &&
                         // 내 수업
-                        <MyClass />
+                        <MyClass  showAll={true}/>
                     }
                     {activeTab === "review" &&
                         // 내 수업 리뷰
-                        <MyClassReview />
+                        <MyClassReview showAll={true} />
                     }
                     {activeTab === "timetable" &&
                         // 시간표

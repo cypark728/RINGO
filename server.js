@@ -1,33 +1,25 @@
-// server.js
-const express = require('express');
-const http = require('http');
-const {Server} = require('socket.io');
-const cors = require('cors');
-
-const userMap = {};
-
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
 
 const app = express();
-app.use(cors()); // CORS 허용
-
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: '*', // methods: ['GET', 'POST']
-    }
-});
+const io = new Server(server, { cors: { origin: "*" } });
 
+const PORT = 8687;
+const maxClientsPerRoom = 2;
+const roomCounts = {};
 
 let lastCanvasData = null;
 let savedCanvasJSON = null;
 
-const maxClientsPerRoom = 2;
-const roomCounts = {};
+const userMap = {};
 
 
 // 클라이언트 연결 시
 io.on('connection', (socket) => {
     console.log('🔌 누군가 접속했어요!:', socket.id);
+    socket.isLeaved = false;
 
     // =============✅ 채팅 공유 처리===================
     // 메시지 받기
@@ -43,14 +35,24 @@ io.on('connection', (socket) => {
     socket.on('join room', ({ room, username }) => {
         socket.join(room);
         userMap[socket.id] = username;
-        io.to(room).emit('chat message', `${username} 입장했습니다.`);
+        io.to(room).emit('chat-message', `${username}님이 입장했습니다.`);
     });
 
     socket.on('leave room', (room) => {
+        if (socket.isLeaved) return; // 🔒 중복 방지
+
         const username = userMap[socket.id] || '알 수 없음';
         socket.leave(room);
-        io.to(room).emit('chat message', `${username} 퇴장했습니다.`);
+        io.to(room).emit('chat-message', `${username}님이 퇴장했습니다.`);
+        socket.isLeaved = true;
         delete userMap[socket.id];
+    });
+
+
+    // =============✅ 스케줄(TimeTable) 공유 처리===================
+    socket.on("schedule-update", ({ roomId, schedule }) => {
+        console.log(`📅 스케줄 변경 - 방: ${roomId}`);
+        socket.to(roomId).emit("schedule-update", schedule); // 나 제외 모두에게 전송
     });
 
 
@@ -78,50 +80,61 @@ io.on('connection', (socket) => {
     socket.on("draw-path", (p) => socket.broadcast.emit("draw-path", p));
     socket.on("add-object", (o) => socket.broadcast.emit("add-object", o));
     socket.on("modify-object", (d) => socket.broadcast.emit("modify-object", d));
-    socket.on("remove-object", (id) => socket.broadcast.emit("remove-obj ect", id));
+    socket.on("remove-object", (id) => socket.broadcast.emit("remove-object", id));
 
     socket.on("save-canvas", (json) => {
         savedCanvasJSON = json;
     });
 
+
     // =============✅ webRTC 공유 처리===================
     // 추가 (WebRTC signaling용)
-    socket.on("join", (roomId) => {
-        // 클라이언트가 Room에 조인하려고 할 때, 클라이언트 수를 확인하고 제한.
-        if (roomCounts[roomId] === undefined) {
+    socket.on("join", ({ roomId, userId }) => {
+        socket.userId = userId;
+        socket.roomId = roomId;
+
+        if (!roomCounts[roomId]) {
             roomCounts[roomId] = 1;
         } else if (roomCounts[roomId] < maxClientsPerRoom) {
             roomCounts[roomId]++;
         } else {
-            // 클라이언트 수가 제한을 초과하면 클라이언트를 Room에 입장시키지 않음.
             socket.emit("room-full", roomId);
-            console.log("room full" + roomCounts[roomId]);
             return;
         }
-        socket.join(roomId);
-        console.log(
-            "User joined in a room : " + roomId + " count:" + roomCounts[roomId]
-        );
 
-        // 클라이언트가 Room을 떠날 때 클라이언트 수를 업데이트
-        socket.on("disconnect", () => {
-            console.log('❌ 유저 연결 종료:', socket.id);
-            roomCounts[roomId]--;
-            console.log("disconnect, count:" + roomCounts[roomId]);
-        });
+        socket.join(roomId);
+        console.log(`🟢 User ${userId} joined room ${roomId}`);
     });
 
     socket.on("rtc-message", (data) => {
-        var room = JSON.parse(data).roomId;
-        socket.broadcast.to(room).emit("rtc-message", data);
+        const parsed = JSON.parse(data);
+        const room = parsed.roomId;
+        socket.to(room).emit("rtc-message", data);
     });
+
+    socket.on('disconnecting', () => {
+        if (socket.isLeaved || !userMap[socket.id]) return; // ✅ userMap 없으면 skip
+
+        const username = userMap[socket.id];
+        const roomId = socket.roomId;
+
+        if (roomId) {
+            socket.to(roomId).emit("chat-message", `${username}님이 퇴장했습니다.`);
+            socket.to(roomId).emit("peer-left", { roomId });
+        }
+
+        socket.isLeaved = true;
+        delete userMap[socket.id];
+    });
+
+
+
 
     // =================== 연결 종료===========================
 
 });
 
 // ==========================서버 시작=================================
-server.listen(8687, () => {
-    console.log('✅ Socket.IO 서버 실행 중: http://localhost:8687');
-
-});
+server.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+})

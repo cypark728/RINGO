@@ -48,6 +48,28 @@
           AND c.class_manage_status = '수업중'
     </select>
 
+    <!-- mylectures: 내가 작성한 강의(글) 목록 조회 -->
+    <select id="findLecturesByUserId" parameterType="long" resultType="RecruitmentPostVO">
+        SELECT * FROM recruitment_post WHERE user_primary_id = #{userPrimaryId}
+    </select>
+
+    <!-- myclassreviews: 내가 작성한 강의 전체에 달린 리뷰 한 번에 조회 -->
+    <select id="findReviewsForMyLectures" parameterType="long" resultType="RecruitmentReviewVO">
+        SELECT
+            r.recruitment_review_id AS recruitmentReviewId,
+            r.recruitment_post_id AS recruitmentPostId,
+            r.user_id AS userId,
+            r.recruitment_review_title AS recruitmentReviewTitle,
+            r.recruitment_review_content AS recruitmentReviewContent,
+            r.recruitment_review_time AS recruitmentReviewTime,
+            u.user_nick_name AS userNickName,
+            u.user_profile AS userProfile,
+            u.user_profile_mimetype AS userProfileMimetype
+        FROM recruitment_review r
+                 JOIN recruitment_post p ON r.recruitment_post_id = p.recruitment_post_id
+                 JOIN users u ON r.user_id = u.user_id
+        WHERE p.user_primary_id = #{userPrimaryId}
+    </select>
 
 
 </mapper>

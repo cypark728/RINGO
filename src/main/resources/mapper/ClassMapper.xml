@@ -16,12 +16,33 @@
     </select>
 
     <select id="selectClassByRoomId" parameterType="string" resultType="com.example.ringo.command.ClassVO">
-        SELECT * FROM class WHERE room_id = #{roomId}
+        SELECT * FROM class WHERE room_id = #{roomId} ORDER BY room_id DESC
     </select>
 
     <select id="selectClassesByUserId" resultType="com.example.ringo.command.ClassVO" parameterType="string">
         SELECT * FROM class WHERE user_id = #{userId}
     </select>
+
+    <update id="updateClass" parameterType="com.example.ringo.command.ClassVO">
+        UPDATE class
+        <set>
+            title = #{title},
+            description = #{description},
+            price = #{price},
+            password = #{password},
+            <if test="imageUrl != null">
+                image_url = #{imageUrl},
+                image_type = #{imageType},
+            </if>
+            user_id = #{userId}
+        </set>
+        WHERE room_id = #{roomId}
+    </update>
+
+
+    <delete id="deleteClass" parameterType="string">
+        DELETE FROM class WHERE room_id = #{roomId}
+    </delete>
 
     <select id="getMyStudyClass" parameterType="int" resultType="ClassManageVO">
         SELECT

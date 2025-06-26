@@ -47,7 +47,9 @@ function IdFindGood() {
                         {userData.idList.map((item, idx) => (
                             <li key={item.id + idx}>
                                 <span className="user-id">{item.id}</span>
-                                <span className="join-date">{item.date}</span>
+                                <span className="join-date">
+                                  {item.date ? item.date.substring(0, 10) : ''}
+                                </span>
                             </li>
                         ))}
                     </ul>
