@@ -39,11 +39,10 @@
         FROM recruitment_post
         <where>
             <if test="category != null and category != '' and category != '전체보기' and category != 'undefined'">
-                recruitment_post_category = #{category}
+                AND recruitment_post_category LIKE CONCAT ('%', #{category}, '%')
             </if>
-
             <if test="search != null and search != ''">
-                recruitment_post_title LIKE CONCAT('%', #{search}, '%')
+                AND recruitment_post_title LIKE CONCAT('%', #{search}, '%')
             </if>
         </where>
     </select>

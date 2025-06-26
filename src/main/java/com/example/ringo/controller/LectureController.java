@@ -56,14 +56,12 @@ public class LectureController {
     @ResponseBody
     public List<RecruitmentPostVO> getLectures(@RequestParam(required = false) String category,
                                                @RequestParam(required = false) String search) {
-
         return lectureService.getLectures(category, search);
     }
 
     @GetMapping("/getOneLecture")
     @ResponseBody
     public RecruitmentPostVO getOneLecture(@RequestParam Integer lectureId) {
-
         return lectureService.getOneLecture(lectureId);
     }
 
