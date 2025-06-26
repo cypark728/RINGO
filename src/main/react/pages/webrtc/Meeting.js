@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './Meeting.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import io from 'socket.io-client';
+import socket from '../../socket';
 import Chat from "./Chat";
 import Code from "./Code";
 import Whiteboard from "./Whiteboard";
 import AIPopup from "./AIPopup";
 import ExitConfirmPopup from "./ExitConfirmPopup";
+import Timetable from "../MyPage/User/Timetable/Timetable";
 
 function Meeting() {
     const localVideoRef = useRef(null);
@@ -69,7 +71,9 @@ function Meeting() {
             return;
         }
 
-        socketRef.current = io("http://172.30.1.12:8687");
+        // socketRef.current = io("http://172.30.1.12:8687");
+        socket.connect();
+        socketRef.current = socket;
         socketRef.current.emit("join", { roomId, userId });
 
         socketRef.current.on("room-full", () => {
@@ -216,17 +220,25 @@ function Meeting() {
     };
 
     // 방 나가기
-    const leaveRoom = () => {
+    const leaveRoom = (callback) => {
+        if (socketRef.current && socketRef.current.connected) {
+            socketRef.current.emit("leave room", roomId); // ✅ 퇴장 메시지 명시 전송
+        }
+
         if (pcRef.current) {
             pcRef.current.close();
             pcRef.current = null;
         }
-        if (socketRef.current) {
-            socketRef.current.disconnect();
-            socketRef.current = null;
-        }
-        window.location.href = "/";
+
+        setTimeout(() => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+                socketRef.current = null;
+            }
+            if (callback) callback();
+        }, 300); // ✅ 약간의 delay로 서버에 메시지 보낼 시간 확보
     };
+
 
     // 시간 포맷팅 mm:ss
     const formatTime = (sec) => {
@@ -314,7 +326,11 @@ function Meeting() {
     };
 
     const handleExitConfirm = () => {
-        if (exitTarget) window.location.href = exitTarget;
+        if (exitTarget) {
+            leaveRoom(() => {
+                window.location.href = exitTarget;
+            });
+        }
     };
 
     const handleExitCancel = () => {
@@ -429,6 +445,13 @@ function Meeting() {
                                         display: activeIndex === 0 ? 'block' : 'none',
                                     }}
                                 />
+
+                                <div
+                                    className="schedule-container"
+                                    style={{ display: activeIndex === 1 ? 'block' : 'none' }}
+                                >
+                                    <Timetable />
+                                </div>
 
                                 <div
                                     className="code-container"

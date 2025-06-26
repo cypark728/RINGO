@@ -19,6 +19,7 @@ const userMap = {};
 // 클라이언트 연결 시
 io.on('connection', (socket) => {
     console.log('🔌 누군가 접속했어요!:', socket.id);
+    socket.isLeaved = false;
 
     // =============✅ 채팅 공유 처리===================
     // 메시지 받기
@@ -34,14 +35,24 @@ io.on('connection', (socket) => {
     socket.on('join room', ({ room, username }) => {
         socket.join(room);
         userMap[socket.id] = username;
-        io.to(room).emit('chat message', `${username} 입장했습니다.`);
+        io.to(room).emit('chat-message', `${username}님이 입장했습니다.`);
     });
 
     socket.on('leave room', (room) => {
+        if (socket.isLeaved) return; // 🔒 중복 방지
+
         const username = userMap[socket.id] || '알 수 없음';
         socket.leave(room);
-        io.to(room).emit('chat message', `${username} 퇴장했습니다.`);
+        io.to(room).emit('chat-message', `${username}님이 퇴장했습니다.`);
+        socket.isLeaved = true;
         delete userMap[socket.id];
+    });
+
+
+    // =============✅ 스케줄(TimeTable) 공유 처리===================
+    socket.on("schedule-update", ({ roomId, schedule }) => {
+        console.log(`📅 스케줄 변경 - 방: ${roomId}`);
+        socket.to(roomId).emit("schedule-update", schedule); // 나 제외 모두에게 전송
     });
 
 
@@ -69,7 +80,7 @@ io.on('connection', (socket) => {
     socket.on("draw-path", (p) => socket.broadcast.emit("draw-path", p));
     socket.on("add-object", (o) => socket.broadcast.emit("add-object", o));
     socket.on("modify-object", (d) => socket.broadcast.emit("modify-object", d));
-    socket.on("remove-object", (id) => socket.broadcast.emit("remove-obj ect", id));
+    socket.on("remove-object", (id) => socket.broadcast.emit("remove-object", id));
 
     socket.on("save-canvas", (json) => {
         savedCanvasJSON = json;
@@ -101,16 +112,23 @@ io.on('connection', (socket) => {
         socket.to(room).emit("rtc-message", data);
     });
 
-    socket.on("disconnecting", () => {
-        const rooms = Array.from(socket.rooms).filter((r) => r !== socket.id);
-        rooms.forEach((roomId) => {
-            roomCounts[roomId]--;
-            if (roomCounts[roomId] <= 0) {
-                delete roomCounts[roomId];
-            }
+    socket.on('disconnecting', () => {
+        if (socket.isLeaved || !userMap[socket.id]) return; // ✅ userMap 없으면 skip
+
+        const username = userMap[socket.id];
+        const roomId = socket.roomId;
+
+        if (roomId) {
+            socket.to(roomId).emit("chat-message", `${username}님이 퇴장했습니다.`);
             socket.to(roomId).emit("peer-left", { roomId });
-        });
+        }
+
+        socket.isLeaved = true;
+        delete userMap[socket.id];
     });
+
+
+
 
     // =================== 연결 종료===========================
 
