@@ -1,8 +1,13 @@
-.interests-section {
+.interests-section.show {
+    display: block;
     background: #F6F7F9;
     border-radius: 12px;
     padding: 40px 150px;
     margin: 0 auto;
+}
+
+.interests-section {
+    display: none;
 }
 
 .interests-grid {
@@ -109,7 +114,7 @@
 }
 
 .service-rating {
-    color: #facc15;
+    color: #838383;
     font-weight: bold;
 }
 

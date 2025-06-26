@@ -38,10 +38,15 @@ function ProductDetailReview({lectureId}) {
                             <div key={index} className="review-item" onClick={() => handleToggle(index)}>
                                 <div className="reviewProfileAndTitle">
                                     <div className="exampleImageBlack review-image">
-                                        {reviews.userProfile && reviews.userProfileMimetype ? (
+                                        {reviews.userProfileImage ? (
                                             <img
-                                                src={`data:${reviews.userProfileMimetype};base64,${reviews.userProfile}`}
+                                                src={reviews.userProfileImage}
                                                 alt="유저프로필 사진"
+
+                                            //     String base64Image = Base64.getEncoder().encodeToString(loginUser.getUserProfile());
+                                            // String imageSrc = "data:" + loginUser.getUserProfileMimeType() + ";base64," + base64Image;
+
+
                                             />
                                         ) : (
                                             <img

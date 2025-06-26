@@ -72,6 +72,7 @@ function MyBookmark({ showAll = false, setActiveTab }) {
                 내가 찜한 수업 <span className="section-total">Total {myBookmarks.length}</span>
             </h2>
             <div className="card-grid">
+
                 {displayedBookmarks.map((myBookmark, index) => (
                     <a
                         key={index}
@@ -88,6 +89,7 @@ function MyBookmark({ showAll = false, setActiveTab }) {
                                         e.stopPropagation(); // 부모로 이벤트 전달 막기
                                         const updatedWish = !myBookmark.isWish;
                                         const newBookmarks = [...myBookmarks];
+
                                         newBookmarks[index] = {
                                             ...myBookmark,
                                             isWish: updatedWish,
