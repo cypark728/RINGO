@@ -3,6 +3,7 @@ package com.example.ringo.controller;
 import com.example.ringo.command.*;
 import com.example.ringo.lecture.service.LectureService;
 import com.example.ringo.mypage.mapperJava.UserClassMapper;
+import com.example.ringo.mypage.service.GosuClassService;
 import com.example.ringo.mypage.service.UserClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ public class MyPageRestController {
     private UserClassService userClassService;
     @Autowired
     private LectureService lectureService;
+    @Autowired
+    private GosuClassService gosuClassService;
 
 //    @GetMapping("/mystudyclass")
 //    public List<MyPageVO> getMyApplyClass(@RequestParam int userPrimaryId) {
@@ -99,6 +102,18 @@ public class MyPageRestController {
         lectureService.writeLectureReview(vo);
 
         return ResponseEntity.ok("리뷰 등록 완료");
+    }
+
+    // 내가 작성한 강의(글) 목록 조회
+    @GetMapping("/mylectures")
+    public List<RecruitmentPostVO> getMyLectures(@RequestParam Long userPrimaryId) {
+        return gosuClassService.findLecturesByUserId(userPrimaryId);
+    }
+
+    // 내가 작성한 강의 전체에 달린 리뷰 한 번에 조회
+    @GetMapping("/myclassreviews")
+    public List<RecruitmentReviewVO> getMyClassReviews(@RequestParam Long userPrimaryId) {
+        return gosuClassService.findReviewsForMyLectures(userPrimaryId);
     }
 
 

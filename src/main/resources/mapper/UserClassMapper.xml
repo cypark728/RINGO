@@ -7,59 +7,72 @@
 
     <select id="getMyStudyClass" parameterType="int" resultType="ClassManageVO">
         SELECT
-            class_manage_id,
-            class_manage_status,
-            class_manage_start_date,
-            class_manage_finish_date,
-            recruitment_post_id,
-            user_primary_id
-        FROM class_manage
-        WHERE user_primary_id = #{userPrimaryId}
-          AND class_manage_status = '수업중'
-        ORDER BY class_manage_id DESC
+            cm.class_manage_id,
+            cm.class_manage_status,
+            cm.class_manage_start_date,
+            cm.class_manage_finish_date,
+            cm.recruitment_post_id,
+            cm.user_primary_id,
+            rp.recruitment_post_title AS recruitmentPostTitle,
+            rp.recruitment_post_content AS recruitmentPostContent
+        FROM class_manage cm
+                 JOIN recruitment_post rp ON cm.recruitment_post_id = rp.recruitment_post_id
+        WHERE cm.user_primary_id = #{userPrimaryId}
+          AND cm.class_manage_status = '수업중'
+        ORDER BY cm.class_manage_id DESC
     </select>
 
     <select id="getMyStudyClassLatest3" parameterType="int" resultType="ClassManageVO">
         SELECT
-            class_manage_id,
-            class_manage_status,
-            class_manage_start_date,
-            class_manage_finish_date,
-            recruitment_post_id,
-            user_primary_id
-        FROM class_manage
-        WHERE user_primary_id = #{userPrimaryId}
-          AND class_manage_status = '수업중'
-        ORDER BY class_manage_id DESC
+            cm.class_manage_id,
+            cm.class_manage_status,
+            cm.class_manage_start_date,
+            cm.class_manage_finish_date,
+            cm.recruitment_post_id,
+            cm.user_primary_id,
+            rp.recruitment_post_title AS recruitmentPostTitle,
+            rp.recruitment_post_content AS recruitmentPostContent
+        FROM class_manage cm
+                 JOIN recruitment_post rp ON cm.recruitment_post_id = rp.recruitment_post_id
+        WHERE cm.user_primary_id = #{userPrimaryId}
+          AND cm.class_manage_status = '수업중'
+        ORDER BY cm.class_manage_id DESC
             LIMIT 3
     </select>
 
     <select id="getMyFinishedClass" parameterType="int" resultType="ClassManageVO">
         SELECT
-            class_manage_id,
-            class_manage_status,
-            class_manage_start_date,
-            class_manage_finish_date,
-            recruitment_post_id,
-            user_primary_id
-        FROM class_manage
-        WHERE user_primary_id = #{userPrimaryId}
-          AND class_manage_status = '수업완료'
-        ORDER BY class_manage_id DESC
+            cm.class_manage_id,
+            cm.class_manage_status,
+            cm.class_manage_start_date,
+            cm.class_manage_finish_date,
+            cm.recruitment_post_id,
+            cm.user_primary_id,
+            rp.recruitment_post_title AS recruitmentPostTitle,
+            rp.recruitment_post_content AS recruitmentPostContent
+        FROM class_manage cm
+                 JOIN recruitment_post rp ON cm.recruitment_post_id = rp.recruitment_post_id
+        WHERE cm.user_primary_id = #{userPrimaryId}
+          AND cm.class_manage_status = '수업완료'
+        ORDER BY cm.class_manage_id DESC
     </select>
 
     <select id="getMyFinishedClassLatest3" parameterType="int" resultType="ClassManageVO">
+
         SELECT
-            class_manage_id,
-            class_manage_status,
-            class_manage_start_date,
-            class_manage_finish_date,
-            recruitment_post_id,
-            user_primary_id
-        FROM class_manage
-        WHERE user_primary_id = #{userPrimaryId}
-          AND class_manage_status = '수업완료'
-        ORDER BY class_manage_id DESC
+            cm.class_manage_id,
+            cm.class_manage_status,
+            cm.class_manage_start_date,
+            cm.class_manage_finish_date,
+            cm.recruitment_post_id,
+            cm.user_primary_id,
+            rp.recruitment_post_title AS recruitmentPostTitle,
+            rp.recruitment_post_content AS recruitmentPostContent
+        FROM class_manage cm
+                 JOIN recruitment_post rp ON cm.recruitment_post_id = rp.recruitment_post_id
+        WHERE cm.user_primary_id = #{userPrimaryId}
+          AND cm.class_manage_status = '수업완료'
+        ORDER BY cm.class_manage_id DESC
             LIMIT 3
     </select>
 
