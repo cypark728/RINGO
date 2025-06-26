@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,12 +159,21 @@ public class UsersController {
         Map<String, Object> response = new HashMap<>();
         UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
 
-        System.out.println("세션의 loginUser: " + loginUser);
         if (loginUser == null) {
             response.put("success", false);
             response.put("message", "로그인이 필요합니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
+
+        // 프로필 이미지 Base64 인코딩해서 data URL로 반환
+        if (loginUser.getUserProfile() != null && loginUser.getUserProfileMimeType() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(loginUser.getUserProfile());
+            String imageSrc = "data:" + loginUser.getUserProfileMimeType() + ";base64," + base64Image;
+            response.put("userProfileImage", imageSrc);
+        } else {
+            response.put("userProfileImage", null);
+        }
+
         loginUser.setUserPw(null);
         response.put("success", true);
         response.put("user", loginUser);

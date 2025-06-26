@@ -1,6 +1,9 @@
 package com.example.ringo.lecture.service;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.RecruitmentPostVO;
+import com.example.ringo.command.RecruitmentReviewVO;
+import com.example.ringo.command.UsersVO;
 import com.example.ringo.lecture.mapperJava.LectureMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ public class LectureServiceImpl implements LectureService {
 
     @Autowired
     private LectureMapper lectureMapper;
+
 
     @Override
     public void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO) {
@@ -27,4 +31,27 @@ public class LectureServiceImpl implements LectureService {
     public RecruitmentPostVO getOneLecture(Integer lectureId) {
         return lectureMapper.getOneLecture(lectureId);
     }
+
+    @Override
+    public void enrollClass(ClassManageVO vo) {
+        lectureMapper.enrollClass(vo); // Mapper의 insert 메서드 호출
+    }
+
+
+    @Override
+    public UsersVO getUserById(int userPrimaryId) {
+        return lectureMapper.getUserById(userPrimaryId);
+    }
+
+    @Override
+    public void writeLectureReview(RecruitmentReviewVO vo) {
+        lectureMapper.insertLectureReview(vo);
+    }
+
+    @Override
+    public List<RecruitmentReviewVO> getLectureReviews(Integer lectureId) {
+        return lectureMapper.getLectureReviews(lectureId);
+    }
+
+
 }

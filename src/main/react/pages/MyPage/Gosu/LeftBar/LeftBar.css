@@ -63,3 +63,7 @@ body {
     color: #FF8127;
     font-weight: 600;
 }
+
+.profile > button:nth-of-type(3) {
+    margin-top: 10px;
+}

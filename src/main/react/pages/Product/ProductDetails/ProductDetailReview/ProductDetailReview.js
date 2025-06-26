@@ -1,11 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './ProductDetailReview.css';
 import ReactDOM from "react-dom/client";
 
 import ProductDetail from "../ProductDetail";
 
 
-function ProductDetailReview() {
+function ProductDetailReview({lectureId}) {
+    const [reviews, setReviews] = useState([]);
+
+    useEffect(() => {
+        fetch(`/lecture/getLectureReviews?lectureId=${lectureId}`)
+            .then(res => res.json())
+            .then(data => {
+                setReviews(data);
+            });
+    }, [lectureId]);
+
+    const [activeIndex, setActiveIndex] = useState(null);
+    const handleToggle = (index) => {
+        setActiveIndex(activeIndex === index ? null : index);
+    }
 
 
     return (
@@ -13,16 +27,44 @@ function ProductDetailReview() {
 
             <div>
                 <section className="section">
-                    <h2 className="section-title">수업 리뷰</h2>
+                    <div className="section-title">수업 리뷰</div>
+                    <div className="review-write"
+                         onClick={() => window.location.href = `/lecture/lecturereview?lectureId=${lectureId}`}>
+                        리뷰쓰기
+                    </div>
                     <div className="review-list">
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className="review-item">
-                                <div className="exampleImageBlack review-image" />
-                                <div>
-                                    <p className="review-author">사용자{i + 1} • 06/08/2025</p>
-                                    <p className="review-text">쉽긴 하다! 역시 밥아저씨!</p>
+                        {reviews.map((reviews, index) => (
+                            <>
+                            <div key={index} className="review-item" onClick={() => handleToggle(index)}>
+                                <div className="reviewProfileAndTitle">
+                                    <div className="exampleImageBlack review-image">
+                                        {reviews.userProfile && reviews.userProfileMimetype ? (
+                                            <img
+                                                src={`data:${reviews.userProfileMimetype};base64,${reviews.userProfile}`}
+                                                alt="유저프로필 사진"
+                                            />
+                                        ) : (
+                                            <img
+                                                src="/img/profile_default.png"
+                                                alt="기본프로필 사진"
+                                            />
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <p className="review-author">{reviews.recruitmentReviewTitle}</p>
+                                        <p className="review-text">{reviews.userNickName} • {reviews.recruitmentReviewTime?.slice(0,10)}</p>
+                                    </div>
                                 </div>
+
+                                <div className={`review-content ${activeIndex === index ? "active" : ""}`}>
+                                    <p>{reviews.recruitmentReviewContent}</p>
+                                </div>
+
                             </div>
+
+
+                            </>
                         ))}
                     </div>
                 </section>

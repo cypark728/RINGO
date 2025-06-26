@@ -44,7 +44,17 @@
         DELETE FROM class WHERE room_id = #{roomId}
     </delete>
 
-
+    <select id="getMyStudyClass" parameterType="int" resultType="ClassManageVO">
+        SELECT
+            class_manage_id,
+            class_manage_status,
+            class_manage_start_date,
+            class_manage_finish_date,
+            recruitment_post_id,
+            user_primary_id
+        FROM class_manage
+        WHERE user_primary_id = #{userPrimaryId}
+    </select>
 
 
 </mapper>

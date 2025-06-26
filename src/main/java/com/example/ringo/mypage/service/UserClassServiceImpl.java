@@ -1,5 +1,6 @@
 package com.example.ringo.mypage.service;
 
+import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.MyPageVO;
 import com.example.ringo.command.ScheduleVO;
 import com.example.ringo.mypage.mapperJava.UserClassMapper;
@@ -65,5 +66,34 @@ public class UserClassServiceImpl implements UserClassService {
 
     }
 
+    @Override
+    public List<ClassManageVO> getMyStudyClass(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClass(userPrimaryId);
+    }
+
+    @Override
+    public List<ClassManageVO> getMyStudyClassLatest3(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClassLatest3(userPrimaryId);
+    }
+
+    @Override
+    public List<ClassManageVO> getMyFinishedClass(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClass(userPrimaryId);
+    }
+
+    @Override
+    public List<ClassManageVO> getMyFinishedClassLatest3(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClassLatest3(userPrimaryId);
+    }
+
+    @Override
+    public int getMyStudyClassCount(Integer userPrimaryId) {
+        return userClassMapper.getMyStudyClassCount(userPrimaryId);
+    }
+
+    @Override
+    public int getMyFinishedClassCount(Integer userPrimaryId) {
+        return userClassMapper.getMyFinishedClassCount(userPrimaryId);
+    }
 
 }
