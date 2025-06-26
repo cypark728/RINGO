@@ -59,10 +59,9 @@ CREATE TABLE apply_wish (
 -- 이미지 테이블 만들기
 CREATE TABLE image(
 	img_id				SERIAL PRIMARY KEY,			--이미지 아이디
-	img_title 			VARCHAR(200) NOT NULL,		--이미지 제목
-	img_file			BYTEA NOT NULL,				--이미지 파일
-	user_primary_id		INTEGER,					--이미지 업로드한 유저 아이디
-	recruitment_post_id	INTEGER						--이미지가 업로드된 모집글 아이디
+	img_url 			VARCHAR(200) NOT NULL,		--이미지의 s3 경로
+	recruitment_post_id	INTEGER,					--이미지가 업로드된 모집글 아이디
+	post_id 			INTEGER						--커뮤니티 게시글에 사용된 이미지
 );
 
 -- 게시판 테이블 만들기

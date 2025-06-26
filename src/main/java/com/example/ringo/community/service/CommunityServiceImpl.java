@@ -14,9 +14,23 @@ public class CommunityServiceImpl implements CommunityService {
     @Autowired
     private CommunityMapper communityMapper;
 
+//    @Override
+//    public void writePost(PostVO postVO) {
+//        communityMapper.writePost(postVO);
+//    }
+
     @Override
     public void writePost(PostVO postVO) {
+        // 1. 게시글 저장
         communityMapper.writePost(postVO);
+        int generatedPostId = postVO.getPostId();// postVO 내부에 postId가 생성되어 있어야 함 (selectKey 사용)
+
+        // 2. 이미지 URL 저장
+        if (postVO.getImageUrls() != null && !postVO.getImageUrls().isEmpty()) {
+            for (String url : postVO.getImageUrls()) {
+                communityMapper.insertPostImage(generatedPostId, url);
+            }
+        }
     }
 
     @Override
@@ -32,10 +46,19 @@ public class CommunityServiceImpl implements CommunityService {
         return communityMapper.getPostCount(category, search);
     }
 
+//    @Override
+//    public PostVO getOnePost(int postId) {
+//        return communityMapper.getOnePost(postId);
+//    }
+
     @Override
     public PostVO getOnePost(int postId) {
-        return communityMapper.getOnePost(postId);
+        PostVO post = communityMapper.getOnePost(postId);
+        List<String> imageUrls = communityMapper.getImagesByPostId(postId);
+        post.setImageUrls(imageUrls);
+        return post;
     }
+
 
     @Override
     public void writeComment(CommentVO commentVO) {

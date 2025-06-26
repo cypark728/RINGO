@@ -44,18 +44,21 @@ function CommunityDetail() {
                 {/* 게시글 본문 + 이미지가 같은 영역에 */}
                 <div className="community-detail-content">
                     {post.postContent}
-                    {/*{post.images && post.images.length > 0 && (*/}
-                    {/*    <div className="community-detail-images">*/}
-                    {/*        {post.images.map((img, idx) => (*/}
-                    {/*            <img*/}
-                    {/*                key={idx}*/}
-                    {/*                src={img}*/}
-                    {/*                alt={`첨부이미지${idx + 1}`}*/}
-                    {/*            />*/}
-                    {/*        ))}*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
+
+                    {post.imageUrls && post.imageUrls.length > 0 && (
+                        <div className="community-detail-images">
+                            {post.imageUrls.map((img, idx) => (
+                                <img
+                                    key={idx}
+                                    src={img}
+                                    alt={`첨부이미지${idx + 1}`}
+                                    className="community-detail-image"
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
+
                 {/* 댓글/답글 영역 */}
                 {post.userNickName && (
                     <CommentSection

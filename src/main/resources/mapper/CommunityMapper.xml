@@ -4,12 +4,17 @@
 <mapper namespace="com.example.ringo.community.mapperJava.CommunityMapper">
 
 
-    <insert id="writePost" parameterType="PostVO">
+    <insert id="writePost" parameterType="PostVO" useGeneratedKeys="true" keyProperty="postId">
         INSERT INTO post (
             post_title, post_content, post_type, user_primary_id
         ) VALUES (
             #{postTitle}, #{postContent}, #{postType}, #{userPrimaryId}
         )
+    </insert>
+
+    <insert id="insertPostImage">
+        INSERT INTO image (post_id, img_url)
+        VALUES (#{postId}, #{imageUrl})
     </insert>
 
     <select id="getPost" resultType="PostVO">
@@ -75,6 +80,10 @@
             users as u
             ON p.user_primary_id = u.user_primary_id
         where p.post_id = #{post_id};
+    </select>
+
+    <select id="getImagesByPostId" resultType="string">
+        SELECT img_url FROM image WHERE post_id = #{postId}
     </select>
 
     <select id="writeComment" parameterType="CommentVO">
