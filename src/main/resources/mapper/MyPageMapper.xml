@@ -29,6 +29,7 @@
         <result property="recruitmentPostSystime" column="recruitment_post_systime"/>
         <result property="recruitmentPostCategory" column="recruitment_post_category"/>
         <result property="recruitmentPostViewcount" column="recruitment_post_viewcount"/>
+        <result property="mainImageUrl" column="mainImageUrl"/>
 
         <result property="applyWishId" column="apply_wish_id"/>
         <result property="isWish" column="is_wish"/>
@@ -98,11 +99,18 @@
             r.recruitment_post_content,
             r.recruitment_post_systime,
             r.recruitment_post_category,
-            r.recruitment_post_viewcount
+            r.recruitment_post_viewcount,
+            (
+                SELECT img_url
+                FROM image
+                WHERE recruitment_post_id = a.recruitment_post_id AND img_main = true
+                LIMIT 1
+            ) AS mainImageUrl
         FROM apply_wish a
-                 JOIN recruitment_post r ON a.recruitment_post_id = r.recruitment_post_id
+            JOIN recruitment_post r ON a.recruitment_post_id = r.recruitment_post_id
         WHERE a.user_primary_id = #{userPrimaryId}
           AND a.is_wish = true
+        ORDER BY a.apply_wish_id DESC
     </select>
 
     <!-- 1. 찜 여부 확인 (존재하는지) -->

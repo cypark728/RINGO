@@ -20,5 +20,6 @@ public class ClassManageVO {
     private Integer userPrimaryId;
     private String recruitmentPostTitle;
     private String recruitmentPostContent;
+    private String mainImageUrl;
 }
 

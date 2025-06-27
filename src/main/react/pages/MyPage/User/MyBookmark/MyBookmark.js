@@ -84,6 +84,10 @@ function MyBookmark({ showAll = false, setActiveTab }) {
                     >
                         <div className="card">
                             <div className="exampleImageBlack">
+                                <img
+                                    src={myBookmark.mainImageUrl || "/img/screen1.jpg"}
+                                    alt="수업 이미지"
+                                />
                                 <div
                                     className={`wish ${myBookmark.isWish === true || myBookmark.isWish === 'true' ? 'wishHeart' : 'notWishHeart'}`}
                                     onClick={e => {
