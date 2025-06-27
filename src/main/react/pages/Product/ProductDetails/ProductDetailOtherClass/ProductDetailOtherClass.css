@@ -25,7 +25,7 @@
     border: 1px solid #FF8127;
 }
 
-.card:hover .ImageBlackBox > img {
+.card:hover .ImageBlackBox  img {
     transform: scale(1.1);
     transition: transform 0.5s ease;
 }
@@ -38,11 +38,17 @@
 /*    overflow: hidden;*/
 /*}*/
 
-.ImageBlackBox > img {
+.ImageBlackBox  img {
     width: 330px;
     height: 216px;
     object-fit: cover;
     transition: transform 0.3s ease;
+}
+
+.ImageBlackBox figure{
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 .card-title {

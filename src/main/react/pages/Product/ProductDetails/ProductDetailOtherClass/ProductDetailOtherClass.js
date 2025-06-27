@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import './ProductDetailOtherClass.css';
 import ReactDOM from "react-dom/client";
 
-function ProductDetailOtherClass({ userPrimaryId, currentPostId}) {
+function ProductDetailOtherClass({userPrimaryId, currentPostId}) {
 
     const [otherClasses, setOtherClasses] = useState([]);
 
@@ -41,12 +41,15 @@ function ProductDetailOtherClass({ userPrimaryId, currentPostId}) {
                         key={index}
                         href={`/lecture/lecturedetail?lectureId=${item.recruitmentPostId}`}
                         className="card-link"
-                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        style={{textDecoration: 'none', color: 'inherit'}}
                     >
                         <div className="card">
                             <div className="ImageBlackBox">
-                                <img src={item.imgUrl || "/img/screen1.jpg"}
-                                     alt="수업 썸네일" />
+                                <figure>
+                                    <img src={item.imgUrl || "/img/screen1.jpg"}
+                                         alt="수업 썸네일"/>
+                                </figure>
+
                             </div>
                             <p className="card-title">{item.recruitmentPostTitle}</p>
                             <p className="card-desc">{item.recruitmentPostContent}</p>
