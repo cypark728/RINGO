@@ -17,9 +17,28 @@ public class LectureServiceImpl implements LectureService {
     private LectureMapper lectureMapper;
 
 
+//    @Override
+//    public void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO) {
+//        lectureMapper.writeRecruitmentPost(recruitmentPostVO);
+//    }
+
     @Override
     public void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO) {
+        //1. 게시글 저장
         lectureMapper.writeRecruitmentPost(recruitmentPostVO);
+        int generatedRecruitmentPostId = recruitmentPostVO.getRecruitmentPostId();
+
+        //2. 이미지 URL 저장
+        if(recruitmentPostVO.getImageUrls() != null && !recruitmentPostVO.getImageUrls().isEmpty()) {
+            for(String url : recruitmentPostVO.getImageUrls()) {
+                lectureMapper.insertRecruitmentPostImage(generatedRecruitmentPostId, url);
+            }
+        }
+
+        //3. 메인 이미지 저장
+        if(recruitmentPostVO.getMainImageUrl() != null && !recruitmentPostVO.getMainImageUrl().isEmpty()) {
+            lectureMapper.insertRecruitmentPostMainImage(generatedRecruitmentPostId, recruitmentPostVO.getMainImageUrl());
+        }
     }
 
     @Override

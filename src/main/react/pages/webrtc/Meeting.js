@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ReactDOM from 'react-dom/client';
 import './Meeting.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -39,6 +39,12 @@ function Meeting() {
     const [statusText, setStatusText] = useState("상대방 카메라/마이크 상태");
     const [myStream, setMyStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
+    const [isMicOn, setIsMicOn] = useState(true);
+    const [isCameraOn, setIsCameraOn] = useState(true);
+    const [myRole, setMyRole] = useState('고수'); // 기본값 고수, 필요시 '제자'로 변경
+    const [peerId, setPeerId] = useState(null);
+    const [peerRole, setPeerRole] = useState('제자'); // 상대방 역할
+
 
     const icons = [
         'fas fa-camera',
@@ -46,6 +52,7 @@ function Meeting() {
         'fas fa-code',
         'fas fa-pencil',
     ];
+
 
     // 시간 업데이트
     useEffect(() => {
@@ -74,7 +81,7 @@ function Meeting() {
         // socketRef.current = io("http://172.30.1.12:8687");
         socket.connect();
         socketRef.current = socket;
-        socketRef.current.emit("join", { roomId, userId });
+        socketRef.current.emit("join", {roomId, userId});
 
         socketRef.current.on("room-full", () => {
             alert("입장 인원 초과");
@@ -137,11 +144,10 @@ function Meeting() {
     }, [activeIndex, remoteStream]);
 
 
-
     // PeerConnection 초기화
     const initConnection = async () => {
         const pc = new RTCPeerConnection({
-            iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+            iceServers: [{urls: "stun:stun.l.google.com:19302"}],
         });
 
         pc.onicecandidate = (event) => {
@@ -160,7 +166,7 @@ function Meeting() {
     // 미디어 스트림 얻기 및 트랙 추가
     const getMedia = async (pc) => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
             setMyStream(stream);
             if (localVideoRef.current) localVideoRef.current.srcObject = stream;
             stream.getTracks().forEach(track => pc.addTrack(track, stream));
@@ -181,7 +187,7 @@ function Meeting() {
     // 신호 메세지 전송
     const sendSignal = (event, data) => {
         if (socketRef.current && socketRef.current.connected) {
-            socketRef.current.emit("rtc-message", JSON.stringify({ roomId, event, data }));
+            socketRef.current.emit("rtc-message", JSON.stringify({roomId, event, data}));
         }
     };
 
@@ -191,6 +197,7 @@ function Meeting() {
         const videoTrack = myStream.getVideoTracks()[0];
         if (!videoTrack) return;
         videoTrack.enabled = !videoTrack.enabled;
+        setIsCameraOn(videoTrack.enabled);
         notifyStatus();
     };
 
@@ -200,6 +207,7 @@ function Meeting() {
         const audioTrack = myStream.getAudioTracks()[0];
         if (!audioTrack) return;
         audioTrack.enabled = !audioTrack.enabled;
+        setIsMicOn(audioTrack.enabled);
         notifyStatus();
     };
 
@@ -251,7 +259,7 @@ function Meeting() {
     const handleStartRecording = async () => {
         try {
             setShowTooltip(false);
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
             const recorder = new MediaRecorder(stream);
             setMediaRecorder(recorder);
             chunksRef.current = [];
@@ -259,7 +267,7 @@ function Meeting() {
             recorder.ondataavailable = (e) => chunksRef.current.push(e.data);
 
             recorder.onstop = async () => {
-                const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+                const blob = new Blob(chunksRef.current, {type: "audio/webm"});
                 setSeconds(0);
                 clearInterval(timerRef.current);
                 setRecording(false);
@@ -341,17 +349,36 @@ function Meeting() {
     const date = currentTime.toISOString().slice(0, 10);
     const time = currentTime.toLocaleTimeString('en-GB');
 
+    useEffect(() => {
+        // URL 또는 window 변수를 보고 역할 결정
+        // 예시: /meeting/master → 고수, /meeting/student → 제자
+        if (window.location.pathname.includes('student')) {
+            setMyRole('제자');
+            setPeerRole('고수');
+        } else {
+            setMyRole('고수');
+            setPeerRole('제자');
+        }
+    }, []);
+
+// 소켓에서 상대방 userId를 받아올 때
+    useEffect(() => {
+        socketRef.current.on("peer-join", ({userId}) => {
+            setPeerId(userId);
+        });
+    }, []);
+
     return (
         <div>
             <div className="container">
                 <div className="sidebar">
                     <div className="logo">
-                        <img src="/img/logo.png" alt="logo" onClick={handleLogoClick} />
+                        <img src="/img/logo.png" alt="logo" onClick={handleLogoClick}/>
                     </div>
                     <div className="sidebar-btn">
                         <ul>
-                            {icons.map((icon, index ) => (
-                                <li key={index } className={activeIndex === index  ? 'on' : ''}>
+                            {icons.map((icon, index) => (
+                                <li key={index} className={activeIndex === index ? 'on' : ''}>
                                     <button
                                         className={activeIndex === index ? "action" : ""}
                                         onClick={() => {
@@ -378,18 +405,18 @@ function Meeting() {
                     </div>
 
                     <div className="ai">
-                        {aiResponse && <AIPopup message={aiResponse} onClose={() => setAiResponse(null)} />}
+                        {aiResponse && <AIPopup message={aiResponse} onClose={() => setAiResponse(null)}/>}
 
                         <div>
                             {recording && (
-                                <div style={{ padding: "5px 10px", borderRadius: "8px", display: "inline-block" }}>
+                                <div style={{padding: "5px 10px", borderRadius: "8px", display: "inline-block"}}>
                                     ⏺️ {formatTime(seconds)}
                                 </div>
                             )}
                             {recording && (
                                 <button
                                     onClick={handleStopRecording}
-                                    style={{ marginTop: "10px", display: "inline-block" }}
+                                    style={{marginTop: "10px", display: "inline-block"}}
                                 >
                                     <i className="fas fa-stop"></i>
                                 </button>
@@ -398,11 +425,11 @@ function Meeting() {
 
                         {showTooltip && (
                             <div className="tooltip">
-                                <p>링고가 고수의 수업을 정리해드릴게요!<br />녹음은 3분까지 가능합니다.⏳</p>
+                                <p>링고가 고수의 수업을 정리해드릴게요!<br/>녹음은 3분까지 가능합니다.⏳</p>
                             </div>
                         )}
                         <figure onClick={handleStartRecording}>
-                            <img src="/img/ai.png" alt="AI 녹음 시작" />
+                            <img src="/img/ai.png" alt="AI 녹음 시작"/>
                         </figure>
                     </div>
                 </div>
@@ -410,17 +437,17 @@ function Meeting() {
                 <div className="wrap">
                     <ul className={`top ${isFullScreen ? 'hidden' : ''}`}>
                         <li>
-                            <figure><img src="/img/me.jpg" alt="고수 얼굴" /></figure>
+                            <figure><img src={myRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${myRole} 얼굴`} /></figure>
                             <div>
                                 <p>{userId}</p>
-                                <span>고수</span>
+                                <span>{myRole}</span>
                             </div>
                         </li>
                         <li>
-                            <figure><img src="/img/me2.jpg" alt="제자 얼굴" /></figure>
+                            <figure><img src={peerRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${peerRole} 얼굴`} /></figure>
                             <div>
-                                <p>edfj_5678</p>
-                                <span>제자</span>
+                                <p>{peerId}</p>
+                                <span>{peerRole}</span>
                             </div>
                         </li>
                     </ul>
@@ -430,7 +457,7 @@ function Meeting() {
                             <div className={`header ${isFullScreen ? 'hidden' : ''}`}>
                                 <p>{date}</p>
                                 <h2>{meetingTitle}</h2>
-                                <span><img src="/img/clock.png" alt="clock" /> {time}</span>
+                                <span><img src="/img/clock.png" alt="clock"/> {time}</span>
                             </div>
                             <div className="video-section">
                                 <video
@@ -448,24 +475,31 @@ function Meeting() {
 
                                 <div
                                     className="schedule-container"
-                                    style={{ display: activeIndex === 1 ? 'block' : 'none' }}
+                                    style={{display: activeIndex === 1 ? 'block' : 'none'}}
                                 >
-                                    <Timetable />
+                                    <Timetable/>
                                 </div>
 
                                 <div
                                     className="code-container"
-                                    style={{ display: activeIndex === 2 ? 'block' : 'none' }}
+                                    style={{display: activeIndex === 2 ? 'block' : 'none'}}
                                 >
-                                    <Code />
+                                    <Code/>
                                 </div>
 
                                 <div
                                     className="white-container"
-                                    style={{ display: activeIndex === 3 ? 'block' : 'none'}}
+                                    style={{
+                                        visibility: activeIndex === 3 ? 'visible' : 'hidden',
+                                        zIndex: activeIndex === 3 ? 1 : -1,
+                                        position: 'absolute',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
                                 >
-                                    <Whiteboard />
+                                    <Whiteboard isActive={activeIndex === 3}/>
                                 </div>
+
 
                                 {/* 볼륨 조절 UI */}
                                 <div className="volume-container">
@@ -481,12 +515,12 @@ function Meeting() {
                                 </div>
 
                                 <div className="video-controls">
-                                    <button className="center" style={{ backgroundColor: "#f33e3b" }}>
-                                        <img src="/img/phone.png" alt="종료" onClick={handleCenterClick} />
+                                    <button className="center" style={{backgroundColor: "#f33e3b"}}>
+                                        <img src="/img/phone.png" alt="종료" onClick={handleCenterClick}/>
                                     </button>
                                 </div>
                                 <div className="seeAll" onClick={() => setIsFullScreen(prev => !prev)}>
-                                    <img src={isFullScreen ? "/img/seeSmall.png" : "/img/seeAll.png"} alt="전체화면 전환" />
+                                    <img src={isFullScreen ? "/img/seeSmall.png" : "/img/seeAll.png"} alt="전체화면 전환"/>
                                 </div>
                             </div>
                         </div>
@@ -498,19 +532,19 @@ function Meeting() {
                                     ref={localVideoRef}
                                     autoPlay
                                     playsInline
-                                    style={{ width: "100%", borderRadius: "20px" }}
+                                    style={{width: "100%", borderRadius: "20px"}}
                                 />
                                 <div className="my-screen-box">
                                     <button className="side" id="toggle-mic" onClick={toggleMic}>
-                                        <img src="/img/voice.png" alt="마이크 토글" />
+                                        <img src={isMicOn ? "/img/voice.png" : "/img/voice-off.png"} alt="마이크 토글"/>
                                     </button>
                                     <button className="side" id="toggle-camera" onClick={toggleCamera}>
-                                        <img src="/img/camera.png" alt="카메라 토글" />
+                                        <img src={isCameraOn ? "/img/camera.png" : "/img/camera-off.png"} alt="카메라 토글"/>
                                     </button>
                                 </div>
                             </div>
 
-                            <Chat />
+                            <Chat/>
                         </div>
                     </div>
                 </div>
@@ -530,4 +564,4 @@ function Meeting() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Meeting />);
+root.render(<Meeting/>);

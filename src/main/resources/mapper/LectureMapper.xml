@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.ringo.lecture.mapperJava.LectureMapper">
 
-    <insert id="writeRecruitmentPost" parameterType="RecruitmentPostVO">
+    <insert id="writeRecruitmentPost" parameterType="RecruitmentPostVO" useGeneratedKeys="true" keyProperty="recruitmentPostId">
         INSERT INTO recruitment_post (
             recruitment_post_title,
             recruitment_post_content,
@@ -31,7 +31,16 @@
              #{recruitmentPostAvgResponseTime},
              #{userPrimaryId}
          )
+    </insert>
 
+    <insert id="insertRecruitmentPostImage">
+        INSERT INTO image (recruitment_post_id, img_url)
+        VALUES (#{recruitmentPostId}, #{imageUrl})
+    </insert>
+
+    <insert id="insertRecruitmentPostMainImage">
+        INSERT INTO image (recruitment_post_id, img_url, img_main)
+        VALUES (#{recruitmentPostId}, #{imageUrl}, TRUE)
     </insert>
 
     <select id="getLectures" resultType="RecruitmentPostVO">

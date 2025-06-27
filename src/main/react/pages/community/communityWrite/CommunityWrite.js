@@ -110,7 +110,7 @@ function CommunityWrite() {
         formData.append("postType", category);
         formData.append("userPrimaryId", 0); // TODO: 세션에서 가져오기
 
-// 이미지 파일들 추가
+        // 이미지 파일들 추가
         images.forEach((image, index) => {
             formData.append("images", image);
         });

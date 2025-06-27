@@ -5,6 +5,26 @@ function MyStudyClass({ showAll = false, setActiveTab }) {
     const [myStudyClass, setMyStudyClass] = useState([]);
     const [loading, setLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
+    const [userId, setUserId] = useState('');
+    const [userName, setUserName] = useState('');
+
+    const handleCardClick = async (recruitmentPostId) => {
+        try {
+            // recruitment_post_id로 roomId 조회
+            const res = await fetch(`/findRoomIdByRecruitmentPostId?recruitment_post_id=${recruitmentPostId}`);
+            const roomId = await res.text();
+
+            if (!roomId) {
+                alert("해당 수업에 연결된 방이 없습니다.");
+                return;
+            }
+
+            // meeting.do로 이동 (아이디, 이름도 함께)
+            window.location.href = `/meeting.do?roomId=${roomId}&userId=${userId}&userName=${encodeURIComponent(userName)}`;
+        } catch (err) {
+            alert("방 정보 조회에 실패했습니다.");
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,6 +37,10 @@ function MyStudyClass({ showAll = false, setActiveTab }) {
                 return;
             }
             const userPrimaryId = userData.user.userPrimaryId;
+            setUserId(userData.user.userId);
+            setUserName(userData.user.userName);
+
+
 
             // 전체 개수 fetch
             const countRes = await fetch(`/api/mypage/mystudyclass/count?userPrimaryId=${userPrimaryId}`);
@@ -46,7 +70,7 @@ function MyStudyClass({ showAll = false, setActiveTab }) {
             </h2>
             <div className="card-grid">
                 {myStudyClass.map((myClass, index) => (
-                    <div key={index} className="card">
+                    <div key={index} className="card"  onClick={() => handleCardClick(myClass.recruitmentPostId)}>
                         <div className="exampleImageBlack">
                             <img src={"/img/screen1.jpg"} alt="수업 이미지" />
                         </div>

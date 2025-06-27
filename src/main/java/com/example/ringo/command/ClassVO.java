@@ -22,4 +22,5 @@ public class ClassVO {
     private String imageType;
     private Timestamp createdAt;
     private String password;
+    private int recruitmentPostId;
 }

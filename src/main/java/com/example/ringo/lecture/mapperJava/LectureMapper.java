@@ -12,6 +12,8 @@ import java.util.List;
 @Mapper
 public interface LectureMapper {
     void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO);
+    void insertRecruitmentPostImage(@Param("recruitmentPostId") int recruitmentPostId, @Param("imageUrl") String imageUrl);
+    void insertRecruitmentPostMainImage(@Param("recruitmentPostId") int recruitmentPostId, @Param("imageUrl") String imageUrl);
     List<RecruitmentPostVO> getLectures(String category, String search);
     RecruitmentPostVO getOneLecture(Integer lectureId);
     void enrollClass(ClassManageVO vo);

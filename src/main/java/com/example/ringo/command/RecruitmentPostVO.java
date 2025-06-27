@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,8 +32,16 @@ public class RecruitmentPostVO {
 
     private String userId;
 
+
     private Integer imgId;
     private String imgUrl;
     private Integer postId;
     private boolean imgMain;
+
+    private List<String> imageUrls;
+    private List<MultipartFile> images;
+
+    private String mainImageUrl;
+    private MultipartFile mainImage;
+
 }

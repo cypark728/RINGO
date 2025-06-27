@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MeetingController {
@@ -32,5 +33,16 @@ public class MeetingController {
         model.addAttribute("userName", userName);
 
         return "meeting"; // JSP나 Thymeleaf 템플릿 이름
+    }
+
+    @GetMapping("/findRoomIdByRecruitmentPostId")
+    @ResponseBody
+    public String findRoomId(@RequestParam("recruitment_post_id") int recruitmentPostId) {
+        ClassVO classVO = classService.getClassByRecruitmentPostId(recruitmentPostId);
+        if (classVO != null) {
+            return classVO.getRoomId();
+        } else {
+            return ""; // 또는 에러 메시지
+        }
     }
 }

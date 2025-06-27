@@ -4,6 +4,7 @@ import com.example.ringo.command.ClassVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ClassMapper {
@@ -15,5 +16,9 @@ public interface ClassMapper {
 
     void updateClass(ClassVO classVO);
     void deleteClass(String roomId);
+
+    List<Map<String, Object>> selectRecruitmentPostsByUserId(int userPk);
+
+    ClassVO selectClassByRecruitmentPostId(int recruitmentPostId);
 
 }

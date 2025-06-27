@@ -120,9 +120,9 @@ function Community() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="board-thumb">
-                                <img src="/img/sample-thumb.png" alt="썸네일" />
-                            </div>
+                            {/*<div className="board-thumb">*/}
+                            {/*    /!*<img src="/img/sample-thumb.png" alt="썸네일" />*!/*/}
+                            {/*</div>*/}
                         </li>
                     ))}
                 </ul>
