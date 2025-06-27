@@ -40,7 +40,7 @@ public class LectureController {
     }
 
     @GetMapping("/lecturedetail")
-    public String lectureDetail(@RequestParam String lectureId,
+    public String lectureDetail(@RequestParam Integer lectureId,
                                 Model model) {
         model.addAttribute("pageName", "lecturedetail");
         return "lecture";
@@ -242,6 +242,9 @@ public class LectureController {
         return ResponseEntity.ok(list);
     }
 
-
-
+    @GetMapping("/imageLoding")
+    public ResponseEntity<Map<String, Object>> getLectureImages(@RequestParam("lectureId") Integer lectureId) {
+        Map<String, Object> result = lectureService.getLectureImages(lectureId);
+        return ResponseEntity.ok(result);
+    }
 }

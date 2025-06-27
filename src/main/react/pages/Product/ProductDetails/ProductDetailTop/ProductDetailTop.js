@@ -6,25 +6,36 @@ import Footer from "../../../../components/footer/Footer";
 import ProductDetail from "../ProductDetail";
 
 
-function ProductDetailTop({category, title, contactStartTime, contactEndTime, userPrimaryId}) {
+function ProductDetailTop({category, title, contactStartTime, contactEndTime, userPrimaryId, lectureId}) {
 
     const [userInfo, setUserInfo] = useState(null);
-    const [profileImage, setProfileImage] = useState("/img/screen1.jpg");
+    const [profileImage, setProfileImage] = useState("");
+    const [rightImage, setRightImage] = useState("");
 
     useEffect(() => {
         fetch(`/lecture/api/user/info/${userPrimaryId}`)
             .then(res => res.json())
             .then(data => {
+                console.log("받아온 유저 데이터:", data);
+
                 if (data.success) {
                     setUserInfo(data.user);
                     setProfileImage(
-                        data.user.userProfile && data.user.userProfileMimetype
-                            ? `data:${data.user.userProfileMimetype};base64,${data.user.userProfile}`
-                            : "/img/profile_default.png"
+                        data.userProfileImage || "/img/profile_default.png"
                     );
+
                 }
             });
     }, [userPrimaryId]);
+
+    useEffect(() => {
+        fetch(`/lecture/imageLoding?lectureId=${lectureId}`)
+            .then(res => res.json())
+            .then(data => {
+            setRightImage(data.mainUrl || "/img/profile_default.png");
+        })
+    }, [lectureId])
+
 
     return (
         <>
@@ -46,7 +57,10 @@ function ProductDetailTop({category, title, contactStartTime, contactEndTime, us
 
                     </div>
                 </div>
-                <div className="rightTop">유저 배너? 이미지?</div>
+                <div className="rightTop">
+                    <img src={rightImage}
+                         alt="수업 썸네일" />
+                </div>
             </div>
         </>
     );

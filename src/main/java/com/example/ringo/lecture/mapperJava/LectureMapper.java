@@ -28,4 +28,7 @@ public interface LectureMapper {
 
     List<RecruitmentPostVO> getOtherClassByGosu(@Param("userPrimaryId") int userPrimaryId, @Param("excludePostId") int excludePostId);
 
+    List<RecruitmentPostVO> getLectureImages(@Param("lectureId") Integer lectureId);
+
+
 }

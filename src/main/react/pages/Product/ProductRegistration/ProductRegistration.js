@@ -374,17 +374,18 @@ function ProductRegistration() {
                             <span className="radio-visual"></span>
                             1회 기준
                         </label>
-                        <label className="custom-radio">
-                            <input
-                                type="radio"
-                                name="priceType"
-                                value="협의가능"
-                                checked={priceType === "협의가능"}
-                                onChange={e => setPriceType(e.target.value)}
-                            />
-                            <span className="radio-visual"></span>
-                            협의가능
-                        </label>
+                        {/* 협의가능 버튼 */}
+                        {/*<label className="custom-radio">*/}
+                        {/*    <input*/}
+                        {/*        type="radio"*/}
+                        {/*        name="priceType"*/}
+                        {/*        value="협의가능"*/}
+                        {/*        checked={priceType === "협의가능"}*/}
+                        {/*        onChange={e => setPriceType(e.target.value)}*/}
+                        {/*    />*/}
+                        {/*    <span className="radio-visual"></span>*/}
+                        {/*    협의가능*/}
+                        {/*</label>*/}
                     </div>
 
                     <div className="lesson-info-row">
@@ -395,6 +396,7 @@ function ProductRegistration() {
                             value={contactTime}
                             onChange={e => setContactTime(e.target.value)}
                             style={{ width: 120, marginRight: 12 }}
+                            required
                         />
                         <span>~</span>
                         <input
@@ -403,6 +405,7 @@ function ProductRegistration() {
                             value={responseTime}
                             onChange={e => setResponseTime(e.target.value)}
                             style={{ width: 120, marginLeft: 12 }}
+                            required
                         />
                         <span style={{ marginLeft: 24 }}>평균 응답시간</span>
                         <input
@@ -412,6 +415,7 @@ function ProductRegistration() {
                             onChange={e => setAvgResponseTime(e.target.value)}
                             placeholder="예: 1시간 이내"
                             style={{ width: 140, marginLeft: 8 }}
+                            required
                         />
                     </div>
 
