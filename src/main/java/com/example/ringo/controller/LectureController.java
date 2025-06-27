@@ -4,16 +4,20 @@ import com.example.ringo.command.ClassManageVO;
 import com.example.ringo.command.RecruitmentPostVO;
 import com.example.ringo.command.RecruitmentReviewVO;
 import com.example.ringo.command.UsersVO;
+import com.example.ringo.config.S3Uploader;
 import com.example.ringo.lecture.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller
@@ -22,6 +26,9 @@ public class LectureController {
 
     @Autowired
     private LectureService lectureService;
+
+    @Autowired
+    private S3Uploader s3Uploader;
 
     @GetMapping("/lectureinfo")
     public String lectures(Model model) {
@@ -42,12 +49,68 @@ public class LectureController {
         return "lecture";
     }
 
+//    @PostMapping("/writeRecruitmentPost")
+//    @ResponseBody
+//    public ResponseEntity<String> writeRecruitmentPost(@RequestBody RecruitmentPostVO recruitmentPostVO) {
+//        lectureService.writeRecruitmentPost(recruitmentPostVO);
+//        return ResponseEntity.ok("success");
+//    }
+
     @PostMapping("/writeRecruitmentPost")
     @ResponseBody
-    public ResponseEntity<String> writeRecruitmentPost(@RequestBody RecruitmentPostVO recruitmentPostVO) {
+    public ResponseEntity<String> writeRecruitmentPost(
+            @RequestParam("recruitmentPostTitle") String title,
+            @RequestParam("recruitmentPostContent") String content,
+            @RequestParam("recruitmentPostCategory") String category,
+            @RequestParam("recruitmentPostWeeklySessions") String weeklySessions,
+            @RequestParam("recruitmentPostSessionDuration") String sessionDuration,
+            @RequestParam("recruitmentPostPrice") Integer price,
+            @RequestParam("recruitmentPostPriceBasis") String priceBasis,
+            @RequestParam("recruitmentPostContactStartTime")
+            @DateTimeFormat(pattern = "HH:mm") LocalTime contactStartTime,
+            @RequestParam("recruitmentPostContactEndTime")
+            @DateTimeFormat(pattern = "HH:mm") LocalTime contactEndTime,
+            @RequestParam("recruitmentPostAvgResponseTime") String avgResponseTime,
+            @RequestParam("userPrimaryId") int userId,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "mainImage", required = false) MultipartFile mainImage
+    ) {
+        RecruitmentPostVO recruitmentPostVO = new RecruitmentPostVO();
+        recruitmentPostVO.setRecruitmentPostTitle(title);
+        recruitmentPostVO.setRecruitmentPostContent(content);
+        recruitmentPostVO.setRecruitmentPostCategory(category);
+        recruitmentPostVO.setRecruitmentPostWeeklySessions(weeklySessions);
+        recruitmentPostVO.setRecruitmentPostSessionDuration(sessionDuration);
+        recruitmentPostVO.setRecruitmentPostPrice(price);
+        recruitmentPostVO.setRecruitmentPostPriceBasis(priceBasis);
+        recruitmentPostVO.setRecruitmentPostContactStartTime(contactStartTime);
+        recruitmentPostVO.setRecruitmentPostContactEndTime(contactEndTime);
+        recruitmentPostVO.setRecruitmentPostAvgResponseTime(avgResponseTime);
+        recruitmentPostVO.setUserPrimaryId(userId);
+
+        List<String> imageUrls = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                String url = s3Uploader.upload(file); // UUID 붙인 파일명
+                imageUrls.add(url);
+            }
+        }
+
+        recruitmentPostVO.setImageUrls(imageUrls);
+
+        if(mainImage != null && !mainImage.isEmpty()) {
+            String url = s3Uploader.upload(mainImage);
+            recruitmentPostVO.setMainImageUrl(url);
+        }
+
         lectureService.writeRecruitmentPost(recruitmentPostVO);
-        return ResponseEntity.ok("success");
+
+
+        return ResponseEntity.ok("게시글 등록 성공");
     }
+
+
+
 
     @GetMapping("/getLectures")
     @ResponseBody
