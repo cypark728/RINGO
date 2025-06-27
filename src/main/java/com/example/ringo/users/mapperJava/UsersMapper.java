@@ -22,4 +22,8 @@ public interface UsersMapper {
     //회워정보 수정
     void updateUserInfo(UsersVO vo);
 
+    Integer selectUserPrimaryIdByUserId(String userId);
+
+
+
 }
