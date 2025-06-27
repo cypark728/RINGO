@@ -435,22 +435,26 @@ function Meeting() {
                 </div>
 
                 <div className="wrap">
-                    <ul className={`top ${isFullScreen ? 'hidden' : ''}`}>
-                        <li>
-                            <figure><img src={myRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${myRole} 얼굴`} /></figure>
-                            <div>
-                                <p>{userId}</p>
-                                <span>{myRole}</span>
-                            </div>
-                        </li>
-                        <li>
-                            <figure><img src={peerRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${peerRole} 얼굴`} /></figure>
-                            <div>
-                                <p>{peerId}</p>
-                                <span>{peerRole}</span>
-                            </div>
-                        </li>
-                    </ul>
+                    {/*<ul className={`top ${isFullScreen ? 'hidden' : ''}`}>*/}
+                    {/*    <li>*/}
+                    {/*        <figure><img src={myRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${myRole} 얼굴`} /></figure>*/}
+                    {/*        <div>*/}
+                    {/*            <p>{userId}</p>*/}
+                    {/*            <span>{myRole}</span>*/}
+                    {/*        </div>*/}
+                    {/*    </li>*/}
+                    {/*    {peerId && (*/}
+                    {/*        <li>*/}
+                    {/*            <figure>*/}
+                    {/*                <img src={peerRole === '고수' ? "/img/me.jpg" : "/img/me2.jpg"} alt={`${peerRole} 얼굴`} />*/}
+                    {/*            </figure>*/}
+                    {/*            <div>*/}
+                    {/*                <p>{peerId}</p>*/}
+                    {/*                <span>{peerRole}</span>*/}
+                    {/*            </div>*/}
+                    {/*        </li>*/}
+                    {/*    )}*/}
+                    {/*</ul>*/}
 
                     <div className={`contents ${isFullScreen ? 'height' : ''}`}>
                         <div className="main-content">

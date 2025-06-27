@@ -112,8 +112,8 @@ function RoomCreatePopup({ onClose, onClassCreate, editMode = false, initialData
     };
 
     return (
-        <div className="ai-popup-overlay">
-            <div className="ai-popup">
+        <div className="ai-popup-overlay" onClick={onClose}>
+            <div className="ai-popup" onClick={e => e.stopPropagation()}>
                 <h3>{editMode ? "방 수정하기" : "방 만들기"}</h3>
 
                 <label>수업 선택</label>
