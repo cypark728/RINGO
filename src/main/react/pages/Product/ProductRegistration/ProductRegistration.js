@@ -155,28 +155,47 @@ function ProductRegistration() {
     // 등록 버튼 클릭
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = {
-            recruitmentPostTitle: title,
-            recruitmentPostContent: content,
-            recruitmentPostCategory: category,
-            recruitmentPostWeeklySessions: weekValue,
-            recruitmentPostSessionDuration: dayValue,
-            recruitmentPostPrice: price.replace(/,/g, ''),
-            recruitmentPostPriceBasis: priceType,
-            recruitmentPostContactStartTime: contactTime,
-            recruitmentPostContactEndTime: responseTime,
-            recruitmentPostAvgResponseTime: avgResponseTime, // 이 부분은 상태값 추가 필요
-            userPrimaryId: userInfo.userPrimaryId,
-        };
+        // const data = {
+        //     recruitmentPostTitle: title,
+        //     recruitmentPostContent: content,
+        //     recruitmentPostCategory: category,
+        //     recruitmentPostWeeklySessions: weekValue,
+        //     recruitmentPostSessionDuration: dayValue,
+        //     recruitmentPostPrice: price.replace(/,/g, ''),
+        //     recruitmentPostPriceBasis: priceType,
+        //     recruitmentPostContactStartTime: contactTime,
+        //     recruitmentPostContactEndTime: responseTime,
+        //     recruitmentPostAvgResponseTime: avgResponseTime,
+        //     userPrimaryId: userInfo.userPrimaryId,
+        // };
+
+        const formData = new FormData();
+        formData.append("recruitmentPostTitle", title);
+        formData.append("recruitmentPostContent", content);
+        formData.append("recruitmentPostCategory", category);
+        formData.append("recruitmentPostWeeklySessions", weekValue);
+        formData.append("recruitmentPostSessionDuration", dayValue);
+        formData.append("recruitmentPostPrice", price.replace(/,/g, ''));
+        formData.append("recruitmentPostPriceBasis", priceType);
+        formData.append("recruitmentPostContactStartTime", contactTime);
+        formData.append("recruitmentPostContactEndTime", responseTime);
+        formData.append("recruitmentPostAvgResponseTime", avgResponseTime); // 상태값에서 받아와야 함
+        formData.append("userPrimaryId", userInfo.userPrimaryId);
+
+        // 이미지 파일들 추가
+        images.forEach((image) => {
+            formData.append("images", image);
+        });
+
+        formData.append("mainImage", mainImage);
 
         fetch('/lecture/writeRecruitmentPost', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: formData
         })
             .then(res => res.text()) // <-- 여기!
             .then(result => {
-                if (result === "success") {
+                if (result === "게시글 등록 성공") {
                     alert('글이 등록되었습니다!');
                     window.location.href = '/lecture/lectureinfo';
                     // 폼 초기화 등 추가
