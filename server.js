@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
         socket.emit("canvas-update", lastCanvasData);
     }
 
-    socket.join(socket.handshake.query.roomId);
+    // socket.join(socket.handshake.query.roomId);
 
     socket.on("request-canvas-init", () => {
         if (savedCanvasJSON) {
@@ -90,9 +90,7 @@ io.on('connection', (socket) => {
     // =============✅ webRTC 공유 처리===================
     // 추가 (WebRTC signaling용)
     socket.on("join", ({ roomId, userId }) => {
-        socket.userId = userId;
-        socket.roomId = roomId;
-
+        // ❌ 이 순서가 아니면 이미 join된 상태로 room-full 반환 가능
         if (!roomCounts[roomId]) {
             roomCounts[roomId] = 1;
         } else if (roomCounts[roomId] < maxClientsPerRoom) {
@@ -102,7 +100,10 @@ io.on('connection', (socket) => {
             return;
         }
 
-        socket.join(roomId);
+        socket.join(roomId); // ✅ 검증 후에 join
+        socket.userId = userId;
+        socket.roomId = roomId;
+
         console.log(`🟢 User ${userId} joined room ${roomId}`);
     });
 
@@ -113,14 +114,25 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnecting', () => {
-        if (socket.isLeaved || !userMap[socket.id]) return; // ✅ userMap 없으면 skip
+        if (socket.isLeaved) return;
 
-        const username = userMap[socket.id];
-        const roomId = socket.roomId;
+        const username = userMap[socket.id] || '알 수 없음';
+
+        // roomId를 socket 객체가 아니라 socket.rooms에서 찾아본다
+        const joinedRooms = [...socket.rooms].filter((r) => r !== socket.id); // 자기 ID 제외
+        const roomId = joinedRooms[0]; // 첫 번째 참여 방
 
         if (roomId) {
             socket.to(roomId).emit("chat-message", `${username}님이 퇴장했습니다.`);
             socket.to(roomId).emit("peer-left", { roomId });
+
+            // 인원 수 감소 처리
+            if (roomCounts[roomId]) {
+                roomCounts[roomId]--;
+                if (roomCounts[roomId] <= 0) {
+                    delete roomCounts[roomId];
+                }
+            }
         }
 
         socket.isLeaved = true;

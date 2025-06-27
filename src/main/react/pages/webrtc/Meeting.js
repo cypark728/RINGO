@@ -228,23 +228,32 @@ function Meeting() {
     };
 
     // 방 나가기
+// ✅ 개선된 leaveRoom 함수
     const leaveRoom = (callback) => {
-        if (socketRef.current && socketRef.current.connected) {
-            socketRef.current.emit("leave room", roomId); // ✅ 퇴장 메시지 명시 전송
+        if (!socketRef.current || !socketRef.current.connected) {
+            if (callback) callback();
+            return;
         }
 
-        if (pcRef.current) {
-            pcRef.current.close();
-            pcRef.current = null;
-        }
+        socketRef.current.emit("leave room", roomId);
 
+        // ✅ 서버로부터 확인 이벤트가 오면 그때 disconnect
+        socketRef.current.once("left room", () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+                socketRef.current = null;   ``
+            }
+            if (callback) callback();
+        });
+
+        // ⛔ fallback timeout: 1초 후 강제 disconnect (서버 응답 없을 경우)
         setTimeout(() => {
             if (socketRef.current) {
                 socketRef.current.disconnect();
                 socketRef.current = null;
             }
             if (callback) callback();
-        }, 300); // ✅ 약간의 delay로 서버에 메시지 보낼 시간 확보
+        }, 1000);
     };
 
 
