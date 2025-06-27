@@ -52,7 +52,7 @@ public class ClassController {
         classVO.setUserId(userId);
         classVO.setRecruitmentPostId(Integer.parseInt(recruitmentPostId));
 
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             classVO.setImageUrl(imageFile.getBytes());
             String contentType = imageFile.getContentType(); // 예: image/png
             if (contentType != null) {
