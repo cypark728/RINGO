@@ -23,6 +23,20 @@
 
     </resultMap>
 
+    <resultMap id="reviewMap" type="com.example.ringo.command.RecruitmentReviewVO">
+        <id property="recruitmentReviewId" column="recruitment_review_id"/>
+        <result property="recruitmentReviewTitle" column="recruitment_review_title"/>
+        <result property="recruitmentReviewContent" column="recruitment_review_content"/>
+        <result property="recruitmentReviewScore" column="recruitment_review_score"/>
+        <result property="recruitmentPostId" column="recruitment_post_id"/>
+        <result property="userPrimaryId" column="user_primary_id"/>
+        <result property="recruitmentReviewTime" column="recruitment_review_time"/>
+        <result property="userNickName" column="user_nick_name"/>
+        <result property="userProfile" column="user_profile"/>
+        <result property="userProfileMimetype" column="user_profile_mimetype"/>
+        <result property="userProfileBase64" column="user_profile_base64"/>
+    </resultMap>
+
 
 
     <!--  고수 수업 불러오기  -->
@@ -54,7 +68,7 @@
     </select>
 
     <!-- myclassreviews: 내가 작성한 강의 전체에 달린 리뷰 한 번에 조회 -->
-    <select id="findReviewsForMyLectures" parameterType="long" resultType="RecruitmentReviewVO">
+    <select id="findReviewsForMyLectures" parameterType="long" resultMap="reviewMap">
         SELECT
             r.recruitment_review_id AS recruitmentReviewId,
             r.recruitment_post_id AS recruitmentPostId,

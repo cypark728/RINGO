@@ -38,8 +38,13 @@ public class MyPageVO {
     private Timestamp recruitmentReviewTime;
 
     private String userNickName;
+    private String userProfile;
+    private String userProfileMimetype;
+    private byte[] userProfileBytes;
 
     private List<ScheduleVO> schedules;
+
+
 
 
 }

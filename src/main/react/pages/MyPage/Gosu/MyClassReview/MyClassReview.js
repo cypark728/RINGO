@@ -52,11 +52,13 @@ function MyClassReview({ showAll = false, setActiveTab }) {
                         onClick={() => handleToggle(index)}
                         style={{ cursor: "pointer" }}
                     >
+
+
                         <div className="reviewProfileAndTitle">
                             <div className="exampleImageBlack review-image">
-                                {review.userProfile && review.userProfileMimetype ? (
+                                {review.userProfileImage ? (
                                     <img
-                                        src={`data:${review.userProfileMimetype};base64,${review.userProfile}`}
+                                        src={review.userProfileImage}
                                         alt="유저프로필 사진"
                                     />
                                 ) : (
@@ -74,6 +76,8 @@ function MyClassReview({ showAll = false, setActiveTab }) {
                                 </p>
                             </div>
                         </div>
+
+
                         <div className={`review-content ${activeIndex === index ? "active" : ""}`}>
                             <p>{review.recruitmentReviewContent}</p>
                         </div>

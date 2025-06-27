@@ -23,5 +23,6 @@ public class RecruitmentReviewVO {
     private String userNickName;
     private byte[] userProfile;
     private String userProfileMimetype;
+    private String userProfileImage;
 }
 

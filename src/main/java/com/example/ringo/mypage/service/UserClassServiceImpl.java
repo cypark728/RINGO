@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -38,7 +39,15 @@ public class UserClassServiceImpl implements UserClassService {
 
     @Override
     public List<MyPageVO> getMyReview(@Param("userPrimaryId") int userPrimaryId) {
-        return userClassMapper.getMyReview(userPrimaryId);
+        List<MyPageVO> reviewList = userClassMapper.getMyReview(userPrimaryId);
+        for (MyPageVO vo : reviewList) {
+            byte[] userProfileBytes = vo.getUserProfileBytes(); // byte[] 타입 필드
+            if (userProfileBytes != null) {
+                String base64 = Base64.getEncoder().encodeToString(userProfileBytes);
+                vo.setUserProfile(base64); // String 타입 필드에 세팅
+            }
+        }
+        return reviewList;
     }
 
     @Override
