@@ -137,7 +137,10 @@ function ProductDetail() {
             </div>
 
             <div className="otherClassBox">
-                <ProductDetailOtherClass />
+                <ProductDetailOtherClass
+                    userPrimaryId={lecture.userPrimaryId}
+                    currrentPostId={lecture.recruitmentPostId}
+                />
 
             </div>
         </>

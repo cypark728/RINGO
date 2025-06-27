@@ -32,9 +32,16 @@ public class RecruitmentPostVO {
 
     private String userId;
 
+
+    private Integer imgId;
+    private String imgUrl;
+    private Integer postId;
+    private boolean imgMain;
+
     private List<String> imageUrls;
     private List<MultipartFile> images;
 
     private String mainImageUrl;
     private MultipartFile mainImage;
+
 }
