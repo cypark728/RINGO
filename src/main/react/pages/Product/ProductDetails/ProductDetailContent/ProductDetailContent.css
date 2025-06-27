@@ -8,3 +8,15 @@
 .leftService {
     white-space: pre-wrap;
 }
+
+.contentImageGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.detailImage {
+    max-width: 100%;
+    object-fit: cover;
+}

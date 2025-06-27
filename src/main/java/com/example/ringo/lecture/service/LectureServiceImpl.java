@@ -8,7 +8,10 @@ import com.example.ringo.lecture.mapperJava.LectureMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LectureServiceImpl implements LectureService {
@@ -81,6 +84,27 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public List<RecruitmentPostVO> getOtherClassByGosu(int userPrimaryId, int excludePostId) {
         return lectureMapper.getOtherClassByGosu(userPrimaryId, excludePostId);
+    }
+
+    @Override
+    public Map<String, Object> getLectureImages(Integer lectureId) {
+
+        List<RecruitmentPostVO> imageList = lectureMapper.getLectureImages(lectureId);
+        Map<String, Object> result = new HashMap<>();
+
+        for (RecruitmentPostVO img : imageList) {
+            if (img.isImgMain()) {
+                result.put("mainUrl", img.getImgUrl());
+            } else {
+                List<String> notMain = (List<String>) result.getOrDefault("notMainUrl", new ArrayList<>());
+                notMain.add(img.getImgUrl());
+                result.put("notMainUrl", notMain);
+            }
+        }
+
+
+
+        return result;
     }
 
 }

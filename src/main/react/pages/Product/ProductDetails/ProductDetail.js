@@ -41,6 +41,7 @@ function ProductDetail() {
                     contactStartTime={lecture.recruitmentPostContactStartTime}
                     contactEndTime={lecture.recruitmentPostContactEndTime}
                     userPrimaryId={lecture.userPrimaryId}
+                    lectureId={lectureId}
                 />
             )}
 
@@ -78,6 +79,7 @@ function ProductDetail() {
                             <>
                             <ProductDetailContent
                                 content={lecture.recruitmentPostContent}
+                                lectureId={lectureId}
                             />
                                 <div className="betweenSpace"></div>
                             <ProductDetailReview
@@ -88,6 +90,7 @@ function ProductDetail() {
                         {activeTab === "content" &&
                             <ProductDetailContent
                                 content={lecture.recruitmentPostContent}
+                                lectureId={lectureId}
                             />
                         }
                         {activeTab === "review" &&

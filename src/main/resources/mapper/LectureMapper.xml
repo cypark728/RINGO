@@ -57,9 +57,13 @@
     </select>
 
     <select id="getOneLecture" resultType="RecruitmentPostVO">
-        SELECT *
-        FROM recruitment_post
-        WHERE recruitment_post_id = #{lectureId}
+        SELECT rp.*,
+                img.img_url
+        FROM recruitment_post rp
+            LEFT JOIN image img
+            ON rp.recruitment_post_id = img.recruitment_post_id
+            AND img.img_main = true
+        WHERE rp.recruitment_post_id = #{lectureId}
     </select>
 
     <insert id="enrollClass" parameterType="ClassManageVO">
@@ -139,5 +143,14 @@
         ORDER BY rp.recruitment_post_id DESC
             LIMIT 3
     </select>
+
+    <select id="getLectureImages" resultType="com.example.ringo.command.RecruitmentPostVO">
+        SELECT img.*
+        FROM recruitment_post rp
+        LEFT JOIN image img
+        ON rp.recruitment_post_id = img.recruitment_post_id
+        WHERE rp.recruitment_post_id = #{lectureId}
+    </select>
+
 
 </mapper>

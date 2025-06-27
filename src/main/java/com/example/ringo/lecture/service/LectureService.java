@@ -6,6 +6,7 @@ import com.example.ringo.command.RecruitmentReviewVO;
 import com.example.ringo.command.UsersVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LectureService {
     void writeRecruitmentPost(RecruitmentPostVO recruitmentPostVO);
@@ -24,6 +25,6 @@ public interface LectureService {
 
     List<RecruitmentPostVO> getOtherClassByGosu(int userPrimaryId, int excludePostId);
 
-
+    Map<String, Object> getLectureImages(Integer lectureId);
 
 }

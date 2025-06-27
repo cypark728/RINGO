@@ -44,7 +44,7 @@ function ProductDetailOtherClass({ userPrimaryId, currentPostId}) {
                         style={{ textDecoration: 'none', color: 'inherit' }}
                     >
                         <div className="card">
-                            <div className="exampleImageBlack">
+                            <div className="ImageBlackBox">
                                 <img src={item.imgUrl || "/img/screen1.jpg"}
                                      alt="수업 썸네일" />
                             </div>
