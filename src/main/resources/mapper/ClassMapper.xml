@@ -5,8 +5,12 @@
 <mapper namespace="com.example.ringo.room.mapperJava.ClassMapper">
 
     <insert id="insertClass" parameterType="com.example.ringo.command.ClassVO">
-        INSERT INTO class (room_id, title, description, price, image_url, image_type, password, user_id)
-        VALUES (#{roomId}, #{title}, #{description}, #{price}, #{imageUrl}, #{imageType}, #{password}, #{userId})
+        INSERT INTO class (
+            room_id, title, description, price, image_url, image_type, password, user_id, recruitment_post_id
+        )
+        VALUES (
+                   #{roomId}, #{title}, #{description}, #{price}, #{imageUrl}, #{imageType}, #{password}, #{userId}, #{recruitmentPostId}
+               )
     </insert>
 
     <select id="getAllClasses" resultType="com.example.ringo.command.ClassVO">
@@ -56,5 +60,14 @@
         WHERE user_primary_id = #{userPrimaryId}
     </select>
 
+    <select id="selectRecruitmentPostsByUserId" parameterType="int" resultType="map">
+        SELECT recruitment_post_id, recruitment_post_title
+        FROM recruitment_post
+        WHERE user_primary_id = #{userPk}
+    </select>
+
+    <select id="selectClassByRecruitmentPostId" parameterType="int" resultType="com.example.ringo.command.ClassVO">
+        SELECT * FROM class WHERE recruitment_post_id = #{recruitmentPostId}
+    </select>
 
 </mapper>

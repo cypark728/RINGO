@@ -3,6 +3,7 @@ package com.example.ringo.controller;
 import com.example.ringo.command.ClassVO;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.room.service.ClassService;
+import com.example.ringo.users.mapperJava.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ public class ClassController {
     @Autowired
     private ClassService classService;
 
+    @Autowired
+    private UsersMapper usersMapper;
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String createClass(
             @RequestParam("title") String title,
@@ -28,6 +32,7 @@ public class ClassController {
             @RequestParam("price") BigDecimal price,
             @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "image", required = false) MultipartFile imageFile,
+            @RequestParam("recruitment_post_id") String recruitmentPostId,
             HttpSession session
     ) throws IOException {
         UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
@@ -45,6 +50,7 @@ public class ClassController {
         classVO.setPrice(price);
         classVO.setPassword(password);
         classVO.setUserId(userId);
+        classVO.setRecruitmentPostId(Integer.parseInt(recruitmentPostId));
 
         if (!imageFile.isEmpty()) {
             classVO.setImageUrl(imageFile.getBytes());
@@ -131,5 +137,25 @@ public class ClassController {
         classService.deleteClass(roomId);
     }
 
+
+    @GetMapping("/my-classes")
+    public List<Map<String, Object>> getMyRecruitmentPosts(HttpSession session) {
+        UsersVO loginUser = (UsersVO) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+        String userId = loginUser.getUserId();
+
+        // 1. userId(문자열)로 user_primary_id(int) 조회
+        Integer userPrimaryId = usersMapper.selectUserPrimaryIdByUserId(userId);
+        if (userPrimaryId == null) {
+            throw new RuntimeException("유저 PK를 찾을 수 없습니다.");
+        }
+
+        // 2. user_primary_id(int)로 recruitment_post 조회
+        List<Map<String, Object>> postList = classService.getRecruitmentPostsByUserId(userPrimaryId);
+
+        return postList;
+    }
 
 }

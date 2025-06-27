@@ -97,5 +97,8 @@
         WHERE user_id = #{userId}
     </update>
 
+    <select id="selectUserPrimaryIdByUserId" parameterType="String" resultType="int">
+        SELECT user_primary_id FROM users WHERE user_id = #{userId}
+    </select>
 
 </mapper>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RoomCreatePopup.css';
 
 const DEFAULT_IMAGE_URL = '/img/screen1.jpg';
@@ -19,7 +19,15 @@ function RoomCreatePopup({ onClose, onClassCreate, editMode = false, initialData
     const [usePassword, setUsePassword] = useState(!!initialData?.password);
     const [password, setPassword] = useState(initialData?.password || '');
     const [image, setImage] = useState(null);
+    const [myClasses, setMyClasses] = useState([]);
+    const [selectedClassId, setSelectedClassId] = useState('');
 
+    useEffect(() => {
+        fetch('/api/classes/my-classes')
+            .then(res => res.json())
+            .then(data => setMyClasses(data))
+            .catch(err => console.error('수업 목록 불러오기 실패:', err));
+    }, []);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -38,6 +46,7 @@ function RoomCreatePopup({ onClose, onClassCreate, editMode = false, initialData
 
     const buildFormData = () => {
         const formData = new FormData();
+        formData.append("recruitment_post_id", selectedClassId);
         formData.append("title", title);
         formData.append("description", description);
         formData.append("price", parseFloat(price));
@@ -51,6 +60,10 @@ function RoomCreatePopup({ onClose, onClassCreate, editMode = false, initialData
     };
 
     const handleSubmit = async () => {
+        if (!selectedClassId) {
+            alert("수업을 선택하세요.");
+            return;
+        }
         if (!validatePrice()) {
             alert("가격은 99999999.99 이하의 숫자여야 합니다.");
             return;
@@ -102,6 +115,20 @@ function RoomCreatePopup({ onClose, onClassCreate, editMode = false, initialData
         <div className="ai-popup-overlay">
             <div className="ai-popup">
                 <h3>{editMode ? "방 수정하기" : "방 만들기"}</h3>
+
+                <label>수업 선택</label>
+                <select
+                    className="popup-input"
+                    value={selectedClassId}
+                    onChange={e => setSelectedClassId(e.target.value)}
+                >
+                    <option value="">수업을 선택하세요</option>
+                    {myClasses.map(cls => (
+                        <option key={cls.recruitment_post_id} value={cls.recruitment_post_id}>
+                            {cls.recruitment_post_title}
+                        </option>
+                    ))}
+                </select>
 
                 <label>방 제목</label>
                 <input
