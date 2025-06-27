@@ -456,7 +456,7 @@ img {
 
 .my-screen-box{
     position: absolute;
-    bottom: -80px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -478,8 +478,11 @@ button.side {
     cursor: pointer;
     width: 40px;
     height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .my-screen img {
-    height: 50%;
+    height: 77%;
 }
