@@ -22,7 +22,7 @@ public interface LectureService {
     // LectureService.java
     List<RecruitmentPostVO> getPostsByCategory(String category);
 
-
+    List<RecruitmentPostVO> getOtherClassByGosu(int userPrimaryId, int excludePostId);
 
 
 

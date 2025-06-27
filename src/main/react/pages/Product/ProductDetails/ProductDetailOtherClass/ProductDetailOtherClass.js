@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './ProductDetailOtherClass.css';
 import ReactDOM from "react-dom/client";
 
-function ProductDetailOtherClass() {
+function ProductDetailOtherClass({ userPrimaryId, currentPostId}) {
 
     const [otherClasses, setOtherClasses] = useState([]);
 
@@ -45,11 +45,12 @@ function ProductDetailOtherClass() {
                     >
                         <div className="card">
                             <div className="exampleImageBlack">
-                                <img src={item.thumbnailUrl || "/img/screen1.jpg"} alt="수업 썸네일" />
+                                <img src={item.imgUrl || "/img/screen1.jpg"}
+                                     alt="수업 썸네일" />
                             </div>
                             <p className="card-title">{item.recruitmentPostTitle}</p>
                             <p className="card-desc">{item.recruitmentPostContent}</p>
-                            <p className="card-price">{item.recruitmentPostPrice}원</p>
+                            <p className="card-price">{item.userNickName}</p>
                         </div>
                     </a>
                 ))}

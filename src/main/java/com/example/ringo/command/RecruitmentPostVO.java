@@ -31,7 +31,7 @@ public class RecruitmentPostVO {
     private Integer userPrimaryId;
 
     private String userId;
-
+    private String userNickName;
 
     private Integer imgId;
     private String imgUrl;
