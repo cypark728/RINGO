@@ -18,13 +18,13 @@
     border: 2px solid #ff0000;
 }
 
-/*.canvas-container{*/
-/*    height: 1000vh;*/
-/*}*/
+.canvas-container{
+    height: 1000vh;
+}
 
-/*#canvas{*/
-/*    height: 1000vh;*/
-/*}*/
+#canvas{
+    height: 1000vh;
+}
 .whiteboard-container:hover .toolbar{
     right: 20px;
 }
