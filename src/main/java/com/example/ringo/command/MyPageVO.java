@@ -44,6 +44,8 @@ public class MyPageVO {
 
     private List<ScheduleVO> schedules;
 
+    private String mainImageUrl;
+
 
 
 

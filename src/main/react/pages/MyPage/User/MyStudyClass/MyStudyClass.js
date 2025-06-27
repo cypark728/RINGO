@@ -72,7 +72,7 @@ function MyStudyClass({ showAll = false, setActiveTab }) {
                 {myStudyClass.map((myClass, index) => (
                     <div key={index} className="card"  onClick={() => handleCardClick(myClass.recruitmentPostId)}>
                         <div className="exampleImageBlack">
-                            <img src={"/img/screen1.jpg"} alt="수업 이미지" />
+                            <img src={myClass.mainImageUrl || "/img/screen1.jpg"} alt="수업 이미지" />
                         </div>
                         <p className="card-title">{myClass.recruitmentPostTitle}</p>
                         <p className="card-desc">{myClass.recruitmentPostContent}</p>
