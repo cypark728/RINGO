@@ -37,12 +37,30 @@ function LectureInfo() {
 
         const lectureData = await response.json();
 
-        const merged = lectureData.map(lecture => ({
-            ...lecture,
-            isWish: userWishList.includes(lecture.recruitmentPostId)
-        }));
 
-        setLectures(merged);
+        const lectureImage = await Promise.all(
+            lectureData.map(async (lecture) => {
+                let imageUrl = null;
+
+                try {
+                    const imageRes = await fetch(`/lecture/imageLoding?lectureId=${lecture.recruitmentPostId}`);
+                    const imageData = await imageRes.json();
+                    imageUrl = imageData.mainUrl || "/img/default-thumbnail.png";
+                } catch (e) {
+                    imageUrl = "/img/default-thumbnail.png"; // 실패 시 기본 이미지
+                }
+
+                return {
+                    ...lecture,
+                    isWish: userWishList.includes(lecture.recruitmentPostId),
+                    mainImageUrl: imageUrl
+                };
+            })
+        );
+
+        lectureImage.reverse();
+
+        setLectures(lectureImage);
 
     };
 
@@ -146,7 +164,8 @@ function LectureInfo() {
 
 
                         {/*사진 수정해야 함*/}
-                        <img src="/img/makeBlogThumbnail.png" alt={lecture.recruitmentPostTitle} />
+                        <img src={lecture.mainImageUrl}
+                             alt={lecture.recruitmentPostTitle} />
                         <div className="service-title">{lecture.recruitmentPostTitle}</div>
                         <div className="service-info">
                             {/*리뷰 관련 만들고 가져오기 만들어야 할듯.*/}
