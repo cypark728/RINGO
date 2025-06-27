@@ -29,4 +29,9 @@ public class RecruitmentPostVO {
     private Integer userPrimaryId;
 
     private String userId;
+
+    private Integer imgId;
+    private String imgUrl;
+    private Integer postId;
+    private boolean imgMain;
 }

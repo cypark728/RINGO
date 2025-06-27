@@ -111,5 +111,21 @@
         WHERE rp.recruitment_post_category = #{category}
     </select>
 
+    <select id="getOtherClassByFosu" parameterType="map" resultType="RecruitmentPostVO">
+        SELECT
+            rp.recruitment_post_id,
+            rp.recruitment_post_title,
+            rp.recruitment_post_content,
+            rp.recruitment_post_price,
+            img.img_url AS thumbnail_url
+        FROM recruitment_post rp
+            LEFT JOIN image img
+            ON rp.recruitment_post_id = img.recruitment_post_id
+            AND img.img_main = true
+        WHERE rp.user_primary_id = #{userPrimaryId}
+        AND rp.recruitment_post_id != #{excludePostId}
+        ORDER BY rp.recruitment_post_id DESC
+            LIMIT 3
+    </select>
 
 </mapper>

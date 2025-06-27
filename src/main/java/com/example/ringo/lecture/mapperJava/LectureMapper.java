@@ -24,5 +24,6 @@ public interface LectureMapper {
 
     List<RecruitmentPostVO> getPostsByCategory(String category);
 
+    
 
 }
