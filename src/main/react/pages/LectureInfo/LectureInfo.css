@@ -151,3 +151,7 @@ img.search-button {
     position: relative;
 }
 
+.service-card > img {
+    width: 330px;
+    height: 216px;
+}
