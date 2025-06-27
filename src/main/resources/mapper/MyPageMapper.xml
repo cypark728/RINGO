@@ -45,6 +45,9 @@
         <result property="userPrimaryId" column="user_primary_id"/>
         <result property="recruitmentReviewTime" column="recruitment_review_time"/>
         <result property="userNickName" column="user_nick_name"/>
+        <result property="userProfile" column="user_profile"/>
+        <result property="userProfileMimetype" column="user_profile_mimetype"/>
+        <result property="userProfileBytes" column="user_profile"/>
 
     </resultMap>
 
@@ -133,7 +136,9 @@
             r.recruitment_post_id,
             r.user_primary_id,
             r.recruitment_review_time,
-            u.user_nick_name
+            u.user_nick_name,
+            u.user_profile,
+            u.user_profile_mimetype
         FROM recruitment_review r
                  LEFT JOIN users u ON r.user_primary_id = u.user_primary_id
         WHERE r.user_primary_id = #{userPrimaryId}

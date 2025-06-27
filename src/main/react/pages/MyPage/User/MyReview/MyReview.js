@@ -1,23 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import './MyReview.css';
+import ReactDOM from "react-dom/client";
 
 function MyReview({ showAll = false, setActiveTab }) {
     const [myReview, setMyReview] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
 
     useEffect(() => {
-        // 유저 정보 요청
         fetch('/users/api/user/info')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     const user = data.user;
-                    // 내 리뷰 목록 요청
+                    console.log(user);
+
+                    if (data.userProfileImage) {
+                        const img = document.getElementById('profileImg');
+                        if (img) img.src = data.userProfileImage;
+                    }
+
                     fetch(`/api/mypage/myreview?userPrimaryId=${user.userPrimaryId}`)
                         .then(res => res.json())
-                        .then(reviewData => {
-                            setMyReview(Array.isArray(reviewData) ? reviewData : []);
+                        .then(data => {
+                            console.log("리뷰 응답:", data);
+                            setMyReview(data);
                         });
+                } else {
                 }
             })
             .catch(error => {
@@ -35,9 +43,8 @@ function MyReview({ showAll = false, setActiveTab }) {
         <section className="section">
             <h2 className="section-title">내가 작성한 리뷰</h2>
             <div className="review-list">
-                {displayedReviews.length === 0 && (
-                    <div className="review-empty">작성한 리뷰가 없습니다.</div>
-                )}
+
+
                 {displayedReviews.map((review, index) => (
                     <div
                         key={index}
@@ -47,23 +54,16 @@ function MyReview({ showAll = false, setActiveTab }) {
                     >
                         <div className="reviewProfileAndTitle">
                             <div className="exampleImageBlack review-image">
-                                {review.userProfileImage ? (
-                                    <img
-                                        src={review.userProfileImage}
-                                        alt="유저프로필 사진"
-                                    />
+                                {review.userProfile && review.userProfileMimetype ? (
+                                    <img src={`data:${review.userProfileMimetype};base64,${review.userProfile}`} alt="유저프로필 사진" />
                                 ) : (
-                                    <img
-                                        src="/img/profile_default.png"
-                                        alt="기본프로필 사진"
-                                    />
+                                    <img src="/img/profile_default.png" alt="기본프로필 사진" />
                                 )}
                             </div>
                             <div>
                                 <p className="review-author">{review.recruitmentReviewTitle}</p>
                                 <p className="review-text">
-                                    <span>{review.userNickName} • </span>
-                                    <span className="text-time">{review.recruitmentReviewTime?.slice(0, 10)}</span>
+                                    <span>{review.userNickName} • </span> <span className={"text-time"}>{review.recruitmentReviewTime?.slice(0, 10)}</span>
                                 </p>
                             </div>
                         </div>
@@ -82,7 +82,7 @@ function MyReview({ showAll = false, setActiveTab }) {
                 )}
             </div>
         </section>
-    );
+    )
 }
 
 export default MyReview;
