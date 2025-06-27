@@ -6,6 +6,7 @@ import com.example.ringo.command.RecruitmentReviewVO;
 import com.example.ringo.command.UsersVO;
 import com.example.ringo.config.S3Uploader;
 import com.example.ringo.lecture.service.LectureService;
+import com.example.ringo.lecture.service.LectureServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +30,8 @@ public class LectureController {
 
     @Autowired
     private S3Uploader s3Uploader;
+    @Autowired
+    private LectureServiceImpl lectureServiceImpl;
 
     @GetMapping("/lectureinfo")
     public String lectures(Model model) {
@@ -232,6 +235,13 @@ public class LectureController {
     public List<RecruitmentPostVO> getPostsByCategory(@RequestParam("category") String category) {
         return lectureService.getPostsByCategory(category);
     }
+
+    @GetMapping("/other")
+    public ResponseEntity<?> getOtherClassByGosu(@RequestParam int userPrimaryId, @RequestParam int excludePostId) {
+        List<RecruitmentPostVO> list = lectureService.getOtherClassByGosu(userPrimaryId, excludePostId);
+        return ResponseEntity.ok(list);
+    }
+
 
 
 }

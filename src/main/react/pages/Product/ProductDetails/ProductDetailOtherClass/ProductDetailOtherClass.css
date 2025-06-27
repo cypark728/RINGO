@@ -39,8 +39,8 @@
 /*}*/
 
 .exampleImageBlack > img {
-    width: 100%;
-    height: 100%;
+    width: 330px;
+    height: 216px;
     object-fit: cover;
     transition: transform 0.3s ease;
 }

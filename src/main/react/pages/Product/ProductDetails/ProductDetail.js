@@ -139,7 +139,7 @@ function ProductDetail() {
             <div className="otherClassBox">
                 <ProductDetailOtherClass
                     userPrimaryId={lecture.userPrimaryId}
-                    currrentPostId={lecture.recruitmentPostId}
+                    currentPostId={lecture.recruitmentPostId}
                 />
 
             </div>

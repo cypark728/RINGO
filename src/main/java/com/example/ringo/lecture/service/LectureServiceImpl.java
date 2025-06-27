@@ -78,4 +78,9 @@ public class LectureServiceImpl implements LectureService {
         return lectureMapper.getPostsByCategory(category);
     }
 
+    @Override
+    public List<RecruitmentPostVO> getOtherClassByGosu(int userPrimaryId, int excludePostId) {
+        return lectureMapper.getOtherClassByGosu(userPrimaryId, excludePostId);
+    }
+
 }
