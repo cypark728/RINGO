@@ -9,7 +9,7 @@ import io from "socket.io-client";
 
 const socket = io('http://172.30.1.12:8687');
 
-function Whiteboard() {
+function Whiteboard({isActive}) {
     const canvasRef = useRef(null);
     const currentTool = useRef("pen");
     const drawing = useRef(false);
@@ -45,6 +45,8 @@ function Whiteboard() {
     };
 
     useEffect(() => {
+        if (!isActive) return;
+
         document.getElementById("colorPicker").oninput = (e) => {
             color.current = e.target.value;
 
@@ -57,10 +59,16 @@ function Whiteboard() {
         const canvasEl = document.getElementById("canvas");
 
         // 캔버스 크기 동기화
+
+        if (canvasRef.current) {
+            // 이미 초기화된 캔버스라면 크기만 갱신하고 더 이상 초기화하지 않음
+            canvasRef.current.setWidth(canvasEl.clientWidth);
+            canvasRef.current.setHeight(canvasEl.clientHeight);
+            return;
+        }
+
         canvasEl.width = canvasEl.clientWidth;
         canvasEl.height = canvasEl.clientHeight;
-
-
 
         const canvas = new fabric.Canvas("canvas", {
             isDrawingMode: true,
@@ -84,10 +92,9 @@ function Whiteboard() {
         canvas.freeDrawingBrush.width = 5;
 
         // ---------------------------소켓 설정----------------------------
-        // 소켓 이벤트 수신 (서버에서 받은 그리기 정보 반영)
         // const generateId = () => '_' + Math.random().toString(36).substr(2, 9);
 
-        // 🎨 펜 드로잉
+        //  펜 드로잉
         canvas.on("path:created", (e) => {
             const pathData = e.path.toObject(['path','left','top','stroke','strokeWidth','fill','id']);
             socket.emit("draw-path", pathData);
@@ -107,7 +114,7 @@ function Whiteboard() {
             canvas.renderAll();
         });
 
-        // 🧱 도형 추가
+        //  도형 추가
         canvas.on("object:added", (e) => {
             const obj = e.target;
             console.log("도형 추가됨", obj);
@@ -151,7 +158,7 @@ function Whiteboard() {
         });
 
 
-        // ✏️ 수정 (이동/크기/회전)
+        //  수정 (이동/크기/회전)
         canvas.on("object:modified", (e) => {
             const obj = e.target;
             if (!obj.id) return;
@@ -167,7 +174,7 @@ function Whiteboard() {
             }
         });
 
-        // ❌ 삭제
+        //  삭제
         canvas.on("object:removed", (e) => {
             const obj = e.target;
             if (obj && obj.id) {
@@ -183,7 +190,7 @@ function Whiteboard() {
             }
         });
 
-        // 🌀 초기 동기화
+        //  초기 동기화
         socket.emit("request-canvas-init");
         socket.on("canvas-init", (json) => {
             canvas.loadFromJSON(json, () => canvas.renderAll());
@@ -358,10 +365,10 @@ function Whiteboard() {
             socket.off("modify-object");
             socket.off("remove-object");
             socket.off("canvas-init");
-            canvas.dispose();
+
         };
 
-    }, []);
+    }, [isActive]);
 
 
 
