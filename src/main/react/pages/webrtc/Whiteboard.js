@@ -94,7 +94,14 @@ function Whiteboard() {
         });
 
         socket.on("draw-path", (pathObj) => {
-            const path = new fabric.Path(pathObj.path, pathObj);
+            const safeObj = {
+                ...pathObj,
+                left: pathObj.left ?? 0,
+                top: pathObj.top ?? 0,
+                scaleX: pathObj.scaleX ?? 1,
+                scaleY: pathObj.scaleY ?? 1,
+            };
+            const path = new fabric.Path(safeObj.path, safeObj);
             path.id = pathObj.id || generateId();
             canvas.add(path);
             canvas.renderAll();
@@ -122,6 +129,9 @@ function Whiteboard() {
                     break;
                 case "triangle":
                     obj = new fabric.Triangle(rest);
+                    break;
+                case "path": // ✅ 여기에 추가!
+                    obj = new fabric.Path(rest.path, rest);
                     break;
                 default:
                     console.warn("알 수 없는 도형 타입ㅠㅠ:", type);
@@ -287,10 +297,10 @@ function Whiteboard() {
                         'radius', 'rx', 'ry', 'angle', 'scaleX', 'scaleY', 'originX', 'originY'
                     ]);
                     objData.type = objData.type.toLowerCase();
-                    if (shape._wasCreatedNow) {
+                    if (shape._wasCreatedNow && objData.type !== "path") {
                         socket.emit("add-object", objData);
-                        delete shape._wasCreatedNow; // 이후 수정에서는 add가 아니라 modify 되도록
-                    } else {
+                        delete shape._wasCreatedNow;
+                    } else if (objData.type !== "path") {
                         socket.emit("modify-object", objData);
                     }
                 }, 20);
@@ -381,7 +391,7 @@ function Whiteboard() {
                     <input type="color" id="colorPicker" defaultValue="#000000"/>
                 </label>
             </div>
-            <canvas id="canvas" className="canvas"></canvas>
+            <canvas id="canvas" className="canvas" width={window.innerWidth} height={window.innerHeight}></canvas>
         </div>
     );
 }

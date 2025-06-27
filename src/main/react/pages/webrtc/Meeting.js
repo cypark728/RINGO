@@ -460,12 +460,10 @@ function Meeting() {
                                     <Code />
                                 </div>
 
-                                <div
-                                    className="white-container"
-                                    style={{ display: activeIndex === 3 ? 'block' : 'none'}}
-                                >
-                                    <Whiteboard />
+                                <div className="white-container">
+                                    {activeIndex === 3 && <Whiteboard />}
                                 </div>
+
 
                                 {/* 볼륨 조절 UI */}
                                 <div className="volume-container">
