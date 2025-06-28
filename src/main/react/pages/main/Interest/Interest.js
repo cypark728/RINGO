@@ -51,9 +51,29 @@ function InterestsSection() {
 
         fetch(`/lecture/api/posts/byCategory?category=${encodeURIComponent(selectedCategory)}`)
             .then(res => res.json())
-            .then(data => setPosts(data))
+            .then(async (data) => {
+                const postsWithImages = await Promise.all(
+                    data.map(async (post) => {
+                        try {
+                            const imgRes = await fetch(`/lecture/imageLoding?lectureId=${post.recruitmentPostId}`);
+                            const imgData = await imgRes.json();
+                            return {
+                                ...post,
+                                mainImageUrl: imgData.mainUrl || "/img/profile_default.png"
+                            };
+                        } catch {
+                            return {
+                                ...post,
+                                mainImageUrl: "/img/profile_default.png"
+                            };
+                        }
+                    })
+                );
+                setPosts(postsWithImages);
+            })
             .catch(err => console.error("Failed to fetch posts:", err));
     }, [activeIdx, loginUser]);
+
 
 
 
@@ -93,7 +113,7 @@ function InterestsSection() {
                              key={posts.recruitmentPostId}
                              onClick={() => window.location.href = `/lecture/lecturedetail?lectureId=${posts.recruitmentPostId}`}
                         >
-                            <img src="/img/makeBlogThumbnail.png" alt="이미지" />
+                            <img src={posts.mainImageUrl} alt="이미지" />
                             {/*이미지 바꿔야함*/}
                             <div className="service-title">{posts.recruitmentPostTitle}</div>
                             <div className="service-info">

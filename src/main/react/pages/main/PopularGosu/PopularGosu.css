@@ -34,7 +34,7 @@
 
 .popular-gosu-grid {
     display: grid;
-    grid-template-columns: repeat(2, 360px);
+    grid-template-columns: repeat(2, 450px);
     grid-template-rows: repeat(2, 1fr);
     gap: 40px 40px;
 }

@@ -4,10 +4,10 @@ import 'keen-slider/keen-slider.min.css';
 import './HighScoreService.css';
 
 const images = [
-    { src: "/img/makeBlogThumbnail.png", lectureId: 1},
-    { src: "/img/animationThumbnail.png", lectureId: 2},
-    { src: "/img/thumbnail.png", lectureId: 3},
-    { src: "/img/Ga4Thumbnail.png", lectureId: 4}
+    { src: "/img/makeBlogThumbnail.png", lectureId: 29},
+    { src: "/img/animationThumbnail.png", lectureId: 30},
+    { src: "/img/thumbnail.png", lectureId: 31},
+    { src: "/img/Ga4Thumbnail.png", lectureId: 32}
 ];
 
 const HighScoreService = () => {
