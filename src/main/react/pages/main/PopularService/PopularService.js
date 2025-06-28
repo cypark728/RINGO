@@ -9,7 +9,8 @@ const services = [
         rating: "4.8",
         reviews: "158",
         price: "1,123,123원~",
-        provider: "중앙개발원",
+        provider: "고수의강의",
+        lectureId: 29
     },
     {
         img: "/img/animationThumbnail.png",
@@ -17,7 +18,8 @@ const services = [
         rating: "4.8",
         reviews: "158",
         price: "1,123,123원~",
-        provider: "중앙개발원",
+        provider: "고수의강의",
+        lectureId: 30
     },
     {
         img: "/img/thumbnail.png",
@@ -25,7 +27,8 @@ const services = [
         rating: "4.8",
         reviews: "158",
         price: "1,123,123원~",
-        provider: "중앙개발원",
+        provider: "고수의강의",
+        lectureId: 31
     },
     {
         img: "/img/Ga4Thumbnail.png",
@@ -33,7 +36,8 @@ const services = [
         rating: "4.8",
         reviews: "158",
         price: "1,123,123원~",
-        provider: "중앙개발원",
+        provider: "고수의강의",
+        lectureId: 32
     },
 ];
 
@@ -49,7 +53,7 @@ const PopularService = () => (
                 {services.map((svc) => (
                     <div className="popular-service-card"
                          key={svc.id}
-                         onClick={() => window.location.href = "/lecture/lecturedetail"}
+                         onClick={() => window.location.href = `/lecture/lecturedetail?lectureId=${svc.lectureId}`}
                     >
                         <img src={svc.img} alt={svc.title} className="popular-service-img" />
                         <div className="popular-service-title">{svc.title}</div>
@@ -60,7 +64,7 @@ const PopularService = () => (
                         </div>
                         <div className="popular-service-author">
                             <img
-                                src="/img/expertProfile.png"
+                                src="/img/Atext.png"
                                 alt="author"
                                 className="author-avatar"
                             />
