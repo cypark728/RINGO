@@ -6,6 +6,17 @@ import './CommentSection.css';
 function CommentSection({postId, postAuthor}) {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        fetch('/users/api/user/info', {credentials: 'include'})
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setUserInfo(data.user);
+                }
+            });
+    }, []);
 
     //해당 post의 모든 댓글을 가져오기
     const fetchGetAllComments = async (postId) => {
@@ -27,7 +38,7 @@ function CommentSection({postId, postAuthor}) {
             commentContent: newComment,
             commentDepth: 0,
             postId: postId,
-            userPrimaryId: 0 //나중에 현재 세션 userId로 바꿔줘야 함
+            userPrimaryId: userInfo.userPrimaryId //나중에 현재 세션 userId로 바꿔줘야 함
         }
 
         try {
@@ -54,7 +65,7 @@ function CommentSection({postId, postAuthor}) {
             commentDepth: 1,
             postId: postId,
             commentParentId: parentId,
-            userPrimaryId: 0 //나중에 현재 세션 userId로 바꿔줘야 함
+            userPrimaryId: userInfo.userPrimaryId //나중에 현재 세션 userId로 바꿔줘야 함
         };
 
         // db에서 입력받은 parentId, postId를 이용해서 저장

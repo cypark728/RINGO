@@ -12,6 +12,7 @@ function CustomSelect({ value, onChange, options }) {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef();
 
+
     useEffect(() => {
         const handler = (e) => {
             if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -62,6 +63,17 @@ function CommunityWrite() {
     const [content, setContent] = useState("");
     const [images, setImages] = useState([]);
     const fileInputRef = useRef();
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        fetch('/users/api/user/info', {credentials: 'include'})
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setUserInfo(data.user);
+                }
+            });
+    }, []);
 
     // 드래그 오버/드롭 핸들러 추가
     const handleDragOver = (e) => {
@@ -108,7 +120,7 @@ function CommunityWrite() {
         formData.append("postTitle", title);
         formData.append("postContent", content);
         formData.append("postType", category);
-        formData.append("userPrimaryId", 0); // TODO: 세션에서 가져오기
+        formData.append("userPrimaryId", userInfo.userPrimaryId);
 
         // 이미지 파일들 추가
         images.forEach((image, index) => {
