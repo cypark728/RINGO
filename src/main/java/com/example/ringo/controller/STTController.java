@@ -28,7 +28,7 @@ public class STTController {
         String sttText = whisperService.transcribe(file);
 
         // 2. GPT → 요약된 텍스트
-        String prompt = "다음 내용을 이해하기 쉽게 요약하고 핵심만 정리해서 알려줘. 불필요한 말투나 반복은 생략해줘:\n" + sttText;
+        String prompt = "너는 it20년차 전문가야. 전문가답게 대답해줘. ㄴ다음 내용을 이해하기 쉽게 요약하고 핵심만 정리해서 알려줘. 불필요한 말투나 반복은 생략해줘:\n" + sttText;
         String cleaned = gptService.askQuestion(prompt);
 
         return ResponseEntity.ok(cleaned);

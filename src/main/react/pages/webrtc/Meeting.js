@@ -145,6 +145,7 @@ function Meeting() {
 
 
     // PeerConnection 초기화
+    // iceServers 설정 하고, 연결 객체 생성 - RTCPeerConnection
     const initConnection = async () => {
         const pc = new RTCPeerConnection({
             iceServers: [{urls: "stun:stun.l.google.com:19302"}],

@@ -1,47 +1,53 @@
-import ReactDOM from "react-dom/client"
+import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
-import React, {useEffect, useRef, useState} from "react";
-import './Code.css';
-import  io  from 'socket.io-client';
+import io from "socket.io-client";
+import "./Code.css";
 
+// ✅ 서버 주소 맞게
+const socket = io("http://172.30.1.36:8687");
 
-const socket = io('http://172.30.1.12:8687');
-
-function Code(){
-
-    const [code, setCode] = useState("// 시작 코드\nconsole.log('hello~~')");
-    const preventLoop = useRef(false); // 내가 보낸 메시지인지 확인용
+function Code() {
+    const [code, setCode] = useState("// 시작 코드\nconsole.log('hello~~');");
+    const preventLoop = useRef(false);
 
     useEffect(() => {
-        // 상대방 코드 수신
+        const room = window.roomId || "testRoom";
+        const username = window.userName || "익명";
+
+        // ✅ Code 탭 전환 시에도 join room 해서 socket.rooms에 안전하게 방 정보 남김
+        socket.emit("join room", { room, username });
+
         socket.on("code-update", (newCode) => {
             if (!preventLoop.current) {
                 setCode(newCode);
             }
         });
 
-        return () => socket.off("code-update");
+        return () => {
+            socket.off("code-update");
+        };
     }, []);
 
     const handleChange = (value) => {
         setCode(value);
         preventLoop.current = true;
         socket.emit("code-update", value);
-        setTimeout(() => preventLoop.current = false, 100); // 잠시 후 자기 코드 반영 허용
+        setTimeout(() => {
+            preventLoop.current = false;
+        }, 100);
     };
 
-    return(
+    return (
         <div>
             <Editor
-                height="100%"
-                defaultLanguage="java"
-                defaultValue={"// 테스트 코드ㅋ\nconsole.log('Hello world~~');"}
+                height="100vh"
+                defaultLanguage="javascript"
                 theme="vs-dark"
                 value={code}
                 onChange={handleChange}
             />
         </div>
-    )
+    );
 }
 
 export default Code;
