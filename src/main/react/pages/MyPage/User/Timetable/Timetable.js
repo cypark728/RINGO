@@ -10,7 +10,7 @@ const dayWidth = 100;
 const headerHeight = 30;
 const timeColWidth = 80;
 
-const socket = io('http://172.30.1.36:8687');
+const socket = io('http://ringo158.kro.kr:8687');
 
 export default function Timetable() {
     const [editMode, setEditMode] = useState(false);
