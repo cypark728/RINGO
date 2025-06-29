@@ -26,7 +26,8 @@ function Chat({room}) {
 
         socket.emit('join room', {
             room: window.roomId,
-            username: window.userName
+            username: window.userName,
+            module: "chat"
         });
 
         return () => {
