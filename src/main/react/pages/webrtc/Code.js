@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import "./Code.css";
 
 // ✅ 서버 주소 맞게
-const socket = io("http://172.30.1.36:8687");
+const socket = io("http://ringo158.kro.kr:8687");
 
 function Code() {
     const [code, setCode] = useState("// 시작 코드\nconsole.log('hello~~');");

@@ -3,7 +3,7 @@ import * as fabric from "fabric";
 import "./WhiteBoard.css";
 import io from "socket.io-client";
 
-const socket = io("http://172.30.1.36:8687");
+const socket = io("http://ringo158.kro.kr:8687");
 
 function Whiteboard({ isActive }) {
     const canvasRef = useRef(null);
